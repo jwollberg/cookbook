@@ -1,0 +1,84 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Full-bleed pages (planner, shopping) opt out of the centred column. */
+  wide?: boolean;
+}
+
+const {
+  title,
+  description = "A personal cookbook: recipes, meals, weekly plans, and shopping lists generated from them.",
+  wide = false,
+} = Astro.props;
+
+const nav = [
+  { href: "/recipes", label: "Recipes" },
+  { href: "/meals", label: "Meals" },
+  { href: "/plan", label: "Plan" },
+  { href: "/shopping", label: "Shopping" },
+];
+
+// Astro.url.pathname keeps a trailing slash on directory routes; strip it so
+// "/recipes/" still matches the "/recipes" nav href for aria-current.
+const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const isActive = (href: string) => path === href || path.startsWith(href + "/");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#FDFBF7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#17140F" media="(prefers-color-scheme: dark)" />
+    <title>{title}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..700,0..100,0..1&family=Inter:wght@400..700&display=swap"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="site">
+      <div class="wrap nav">
+        <a class="brand" href="/">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+            <path d="M3.2 11.6H20.8A8.8 8.8 0 0 1 3.2 11.6Z" fill="currentColor" stroke="none" />
+            <path d="M2.4 11.6h19.2" />
+            <path d="M9 3.2c-.85 1.05-.85 2.1 0 3.15s.85 2.1 0 3.15" />
+            <path d="M14.6 4.4c-.7.9-.7 1.75 0 2.65s.7 1.75 0 2.65" />
+          </svg>
+          Cookbook
+        </a>
+        <nav class="navlinks" aria-label="Primary">
+          {
+            nav.map((item) => (
+              <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class={wide ? undefined : "wrap"}>
+      <slot />
+    </main>
+
+    <footer class="site">
+      <div class="wrap foot">
+        <span>Cookbook</span>
+        <span>Recipes in, dinner out.</span>
+      </div>
+    </footer>
+  </body>
+</html>

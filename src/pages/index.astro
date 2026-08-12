@@ -1,0 +1,103 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+const features = [
+  {
+    href: "/recipes",
+    title: "Recipes",
+    body: "Ingredients are real records, not free text. That is what lets quantities add up correctly later — and lets any recipe scale to the servings you actually need.",
+    meta: "Scale · Tag · Search",
+  },
+  {
+    href: "/meals",
+    title: "Meals",
+    body: "Group recipes into a meal: a main, its sides, and anything else that belongs on the table. Build it once, reuse it any week after.",
+    meta: "Main + sides",
+  },
+  {
+    href: "/plan",
+    title: "Plan",
+    body: "Drop meals and standalone recipes onto days and slots to build a week. The plan is the single source both generated outputs come from.",
+    meta: "Drag · Drop · Done",
+  },
+  {
+    href: "/shopping",
+    title: "Shopping",
+    body: "One aggregated list: quantities merged across recipes and units, pantry staples removed, everything left grouped by store aisle.",
+    meta: "Merged · Aisle-sorted",
+  },
+];
+
+const flow = [
+  { n: "01", label: "Ingredients", note: "canonical records" },
+  { n: "02", label: "Recipes", note: "reference ingredients" },
+  { n: "03", label: "Meals", note: "group recipes" },
+  { n: "04", label: "Plan", note: "meals per day" },
+  { n: "05", label: "Outputs", note: "steps + list" },
+];
+---
+
+<SiteLayout title="Cookbook — recipes, meals and weekly plans">
+  <section style="padding-block: clamp(48px, 9vw, 88px) 8px;">
+    <p class="lbl">A personal cookbook</p>
+    <h1 style="max-width: 15ch; margin-top: 14px;">
+      Recipes in,<br />
+      <span style="color: var(--accent);">dinner</span> out.
+    </h1>
+    <p
+      style="max-width: 58ch; margin: 22px 0 0; font-size: clamp(1.05rem, 2.2vw, 1.22rem); color: var(--ink-2);"
+    >
+      Recipes compose into meals, meals compose into a week, and the week generates the two
+      things you actually need on the day: a sheet to cook from and a list to shop from.
+    </p>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px;">
+      <a class="btn btn-primary" href="/plan">Build a plan</a>
+      <a class="btn" href="/recipes">Browse recipes</a>
+    </div>
+  </section>
+
+  <!-- Pipeline strip: makes the data model legible at a glance, since the
+       whole app only makes sense once you see that it's a chain. -->
+  <section aria-label="How it fits together" style="margin-top: clamp(40px, 7vw, 72px);">
+    <div
+      class="card"
+      style="display: flex; flex-wrap: wrap; gap: 0; overflow: hidden; background: var(--surface-2);"
+    >
+      {
+        flow.map((f, i) => (
+          <div
+            style={`flex: 1 1 168px; padding: 18px 20px; ${i > 0 ? "border-left: 1px solid var(--hairline);" : ""}`}
+          >
+            <span class="lbl num">{f.n}</span>
+            <div
+              style="font-family: var(--display); font-weight: 600; font-size: 1.08rem; margin-top: 6px;"
+            >
+              {f.label}
+            </div>
+            <div style="font-size: 13px; color: var(--muted);">{f.note}</div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section style="margin-top: clamp(40px, 7vw, 72px);">
+    <div class="grid-cards">
+      {
+        features.map((f) => (
+          <a
+            class="card card-interactive"
+            href={f.href}
+            style="text-decoration: none; padding: 24px 22px 26px; display: flex; flex-direction: column; gap: 10px;"
+          >
+            <span class="chip chip-accent" style="align-self: flex-start;">
+              {f.meta}
+            </span>
+            <h2 style="font-size: 1.6rem;">{f.title}</h2>
+            <p style="margin: 0; color: var(--ink-2); font-size: 0.97rem;">{f.body}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</SiteLayout>

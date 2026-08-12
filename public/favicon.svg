@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Cookbook">
+  <rect width="64" height="64" rx="13" fill="#FDFBF7" />
+  <g stroke="#B4471F" stroke-width="4" stroke-linecap="round" fill="none">
+    <!-- steam -->
+    <path d="M25 12c-2.4 3-2.4 6 0 9s2.4 6 0 9" />
+    <path d="M40 15c-2 2.5-2 5 0 7.5s2 5 0 7.5" />
+  </g>
+  <!-- bowl -->
+  <path d="M9 34h46a23 23 0 0 1-46 0Z" fill="#B4471F" />
+  <path d="M6 34h52" stroke="#B4471F" stroke-width="4.5" stroke-linecap="round" fill="none" />
+</svg>
