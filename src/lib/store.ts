@@ -13,11 +13,13 @@
 
 import {
   IngredientSchema,
+  MealPlanSchema,
   MealSchema,
   PantryItemSchema,
   RecipeSchema,
   type Ingredient,
   type Meal,
+  type MealPlan,
   type PantryItem,
   type Recipe,
 } from "./schema";
@@ -32,6 +34,7 @@ export interface Cookbook {
   ingredients: Ingredient[];
   recipes: Recipe[];
   meals: Meal[];
+  plans: MealPlan[];
   pantry: PantryItem[];
 }
 
@@ -62,6 +65,7 @@ export function getRepoConfig(): RepoConfig | null {
 export interface Stash {
   recipes: Record<string, Recipe>;
   meals: Record<string, Meal>;
+  plans?: Record<string, MealPlan>;
   /** Whole file, because ingredients live in a single JSON array. */
   ingredients?: Ingredient[];
   ingredientsAt?: string;
@@ -120,7 +124,7 @@ export interface LoadResult {
 }
 
 export async function loadCookbook(): Promise<LoadResult> {
-  let published: Cookbook = { ingredients: [], recipes: [], meals: [], pantry: [] };
+  let published: Cookbook = { ingredients: [], recipes: [], meals: [], plans: [], pantry: [] };
   let error: string | undefined;
 
   try {
@@ -157,6 +161,7 @@ function parseBundle(raw: unknown): Cookbook {
     ingredients: safe(bundle.ingredients, (v) => IngredientSchema.parse(v)),
     recipes: safe(bundle.recipes, (v) => RecipeSchema.parse(v)),
     meals: safe(bundle.meals, (v) => MealSchema.parse(v)),
+    plans: safe(bundle.plans, (v) => MealPlanSchema.parse(v)),
     pantry: safe(bundle.pantry, (v) => PantryItemSchema.parse(v)),
   };
 }
@@ -195,6 +200,15 @@ export function mergeStash(
     }
   }
 
+  const plans = new Map(published.plans.map((p) => [p.id, p]));
+  for (const [id, local] of Object.entries(stash.plans ?? {})) {
+    if (isNewer(local.updatedAt, plans.get(id)?.updatedAt)) {
+      plans.set(id, local);
+      nextStash.plans = { ...(nextStash.plans ?? {}), [id]: local };
+      pending++;
+    }
+  }
+
   // Ingredients are one file, so the comparison is file-level: keep the local
   // list only while it is strictly larger or the published one has not moved.
   let ingredients = published.ingredients;
@@ -214,6 +228,9 @@ export function mergeStash(
       ingredients,
       recipes: [...recipes.values()].sort((a, b) => a.title.localeCompare(b.title)),
       meals: [...meals.values()].sort((a, b) => a.name.localeCompare(b.name)),
+      plans: [...plans.values()].sort((a, b) =>
+        (b.days[0]?.date ?? "").localeCompare(a.days[0]?.date ?? ""),
+      ),
       pantry: published.pantry,
     },
     keep: nextStash,
@@ -296,6 +313,33 @@ export async function saveMeal(meal: Meal): Promise<SaveResult> {
   }
 }
 
+/**
+ * Commit a plan.
+ *
+ * Plans are edited constantly while you build a week, so this is explicit
+ * rather than automatic — committing on every drag would bury the repo in
+ * noise. The working copy lives in localStorage until you press save.
+ */
+export async function savePlan(plan: MealPlan): Promise<SaveResult> {
+  const stamped: MealPlan = { ...plan, updatedAt: new Date().toISOString() };
+
+  const stash = readStash();
+  stash.plans = { ...(stash.plans ?? {}), [stamped.id]: stamped };
+  writeStash(stash);
+
+  const cfg = getRepoConfig();
+  if (!cfg) return { committed: false, error: "No token — the plan is saved in this browser only." };
+
+  try {
+    const result = await commitFiles(cfg, `Update plan: ${stamped.name}`, [
+      { path: paths.plan(stamped.id), content: serialise(stamped) },
+    ]);
+    return { committed: true, url: result.url };
+  } catch (e) {
+    return { committed: false, error: e instanceof Error ? e.message : "Commit failed." };
+  }
+}
+
 export async function deleteRecipe(recipe: Recipe): Promise<SaveResult> {
   const stash = readStash();
   delete stash.recipes[recipe.id];
@@ -312,6 +356,36 @@ export async function deleteRecipe(recipe: Recipe): Promise<SaveResult> {
   } catch (e) {
     return { committed: false, error: e instanceof Error ? e.message : "Delete failed." };
   }
+}
+
+// ---------------------------------------------------------------------------
+// Draft plan
+// ---------------------------------------------------------------------------
+
+const DRAFT_KEY = "cookbook:draft-plan";
+
+/**
+ * The plan currently being worked on, kept separate from the stash.
+ *
+ * The planner, the cooking sheet and the shopping list all read this, so
+ * dragging a meal onto Tuesday is reflected on the other two immediately
+ * without a commit. Saving promotes it to a real file in the repo.
+ */
+export function getDraftPlan(): MealPlan | null {
+  if (typeof localStorage === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return null;
+    return MealPlanSchema.parse(JSON.parse(raw));
+  } catch {
+    return null;
+  }
+}
+
+export function setDraftPlan(plan: MealPlan | null): void {
+  if (typeof localStorage === "undefined") return;
+  if (plan) localStorage.setItem(DRAFT_KEY, JSON.stringify(plan));
+  else localStorage.removeItem(DRAFT_KEY);
 }
 
 // ---------------------------------------------------------------------------

@@ -14,11 +14,13 @@ import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import {
   IngredientsFileSchema,
+  MealPlanSchema,
   MealSchema,
   PantryFileSchema,
   RecipeSchema,
   type Ingredient,
   type Meal,
+  type MealPlan,
   type PantryItem,
   type Recipe,
 } from "./schema";
@@ -68,6 +70,20 @@ export function loadMeals(): Meal[] {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
+export function loadPlans(): MealPlan[] {
+  const dir = join(DATA_DIR, "plans");
+  return listJson(dir)
+    .map((file) => {
+      try {
+        return MealPlanSchema.parse(readJson(join(dir, file)));
+      } catch (error) {
+        throw new Error(`Invalid plan in ${file}: ${(error as Error).message}`);
+      }
+    })
+    // Newest first: the plan you want is nearly always the one you just made.
+    .sort((a, b) => (b.days[0]?.date ?? "").localeCompare(a.days[0]?.date ?? ""));
+}
+
 export function loadPantry(): PantryItem[] {
   const path = join(DATA_DIR, "pantry.json");
   if (!existsSync(path)) return [];
@@ -83,6 +99,7 @@ export function loadAll() {
     ingredients,
     recipes,
     meals,
+    plans: loadPlans(),
     pantry: loadPantry(),
     ingredientsById: new Map(ingredients.map((i) => [i.id, i])),
     recipesById: new Map(recipes.map((r) => [r.id, r])),

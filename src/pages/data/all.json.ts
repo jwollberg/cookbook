@@ -13,9 +13,9 @@ import { loadAll } from "../../lib/data.server";
  * writes to.
  */
 export const GET: APIRoute = () => {
-  const { ingredients, recipes, meals, pantry } = loadAll();
+  const { ingredients, recipes, meals, plans, pantry } = loadAll();
 
-  return new Response(JSON.stringify({ ingredients, recipes, meals, pantry }), {
+  return new Response(JSON.stringify({ ingredients, recipes, meals, plans, pantry }), {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       // Short cache: after an edit is committed the rebuild replaces this,

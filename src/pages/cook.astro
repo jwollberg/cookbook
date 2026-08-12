@@ -1,30 +1,30 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
-import ShoppingList from "../components/ShoppingList";
+import CookSheet from "../components/CookSheet";
 ---
 
 <SiteLayout
-  title="Shopping — Cookbook"
-  description="An aggregated shopping list generated from the current meal plan."
+  title="Cooking sheet — Cookbook"
+  description="Every dish in the plan, in order, with quantities at the servings you planned."
 >
   <section style="padding-block: 40px 22px;">
     <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap;">
       <div>
         <p class="lbl">Generated from the plan</p>
-        <h1 style="margin-top: 10px;">Shopping</h1>
+        <h1 style="margin-top: 10px;">Cooking sheet</h1>
       </div>
       <div style="display: flex; gap: 8px;">
         <a class="btn btn-sm" href="/plan">Plan</a>
-        <a class="btn btn-sm" href="/cook">Cooking sheet</a>
+        <a class="btn btn-sm" href="/shopping">Shopping list</a>
       </div>
     </div>
     <p style="max-width: 58ch; margin: 14px 0 0; color: var(--ink-2);">
-      Quantities merged across every recipe in the week, anything in the pantry removed, and the
-      rest grouped by aisle so it follows a store rather than the alphabet.
+      Every dish for the week, day by day, with quantities already scaled to the servings you
+      planned. Meals lead with their order of work, since that interleaves the recipes.
     </p>
   </section>
 
-  <ShoppingList client:only="react" />
+  <CookSheet client:only="react" />
 
   <div style="height: 56px;"></div>
 </SiteLayout>

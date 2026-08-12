@@ -59,6 +59,18 @@ Once the published copy catches up the entry is dropped. Getting this backwards 
 UI and permanent: a stale local copy would shadow every later edit made from another device. It is
 covered by `store.test.ts` — keep it that way.
 
+## The draft plan
+
+`cookbook:draft-plan` in localStorage is the plan currently being worked on. The planner, the
+cooking sheet (`/cook`) and the shopping list (`/shopping`) all read it, so a change on one shows
+on the others immediately without a commit. **Saving is explicit** — committing on every drag would
+bury the repo in noise. Saved plans become files under `public/data/plans/`, and `?plan=<id>`
+targets one directly.
+
+Dates use `src/lib/dates.ts`, which works in local time and formats by hand. `toISOString()`
+converts to UTC first, so near midnight it reports the wrong day and silently moves a dinner onto
+the wrong day's shopping list.
+
 ## Data model
 
 `public/data/`

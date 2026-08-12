@@ -1,29 +1,26 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
-import { loadAll } from "../lib/data.server";
-
-const { meals, recipes } = loadAll();
+import Planner from "../components/Planner";
 ---
 
-<SiteLayout title="Plan — Cookbook" description="Build a weekly meal plan from meals and recipes.">
-  <section style="padding-block: 44px 0;">
-    <p class="lbl">Not built yet</p>
-    <h1 style="margin-top: 10px;">Plan</h1>
-    <p style="max-width: 58ch; margin: 16px 0 0; font-size: 1.08rem; color: var(--ink-2);">
-      This is where meals and standalone recipes get dropped onto days and slots to build a week.
-      The plan then generates both outputs: a cooking sheet and a shopping list.
-    </p>
-    <p style="max-width: 58ch; margin: 14px 0 0; color: var(--muted);">
-      The engine underneath is already done and tested — plan expansion, servings scaling, unit
-      merging, pantry subtraction and aisle grouping all work. What is missing is the drag-and-drop
-      board on top of it.
-    </p>
-    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px;">
-      <a class="btn btn-primary" href="/meals">Browse {meals.length} meal{meals.length === 1 ? "" : "s"}</a>
-      <a class="btn" href="/recipes">Browse {recipes.length} recipes</a>
-    </div>
-    <p style="margin-top: 30px; font-size: 13px; color: var(--muted);">
-      In the meantime, any meal page shows its combined ingredients merged across every recipe in it.
-    </p>
-  </section>
+<SiteLayout
+  title="Plan — Cookbook"
+  description="Build a weekly meal plan from meals and recipes, then generate a cooking sheet and shopping list."
+  wide
+>
+  <div class="wrap">
+    <section style="padding-block: 40px 22px;">
+      <p class="lbl">The week</p>
+      <h1 style="margin-top: 10px;">Plan</h1>
+      <p style="max-width: 58ch; margin: 14px 0 0; color: var(--ink-2);">
+        Drag meals and recipes onto a day. Everything downstream — the cooking sheet and the
+        shopping list — is generated from what lands here.
+      </p>
+    </section>
+
+    {/* client:only — the working plan lives in localStorage. */}
+    <Planner client:only="react" />
+
+    <div style="height: 56px;"></div>
+  </div>
 </SiteLayout>

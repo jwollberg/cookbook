@@ -28,6 +28,7 @@ const cookbook = (recipes: Recipe[], ingredients: Ingredient[] = []): Cookbook =
   recipes,
   ingredients,
   meals: [],
+  plans: [],
   pantry: [],
 });
 

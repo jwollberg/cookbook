@@ -156,6 +156,63 @@ describe("Greek dinner vs. the hand-written master list", () => {
   });
 });
 
+/**
+ * A realistic week: a full meal one night, plus two standalone recipes at
+ * different scales another. This is the path the planner, cooking sheet and
+ * shopping list all run, so the arithmetic is worth pinning down.
+ */
+describe("a multi-day plan with scaled entries", () => {
+  const plan: MealPlan = {
+    id: "week",
+    name: "Week",
+    days: [
+      { date: "2026-08-10", entries: [{ slot: "dinner", mealId: "greek-dinner" }] },
+      {
+        date: "2026-08-12",
+        entries: [
+          { slot: "lunch", recipeId: "greek-salad-horiatiki", servings: 2 }, // half
+          { slot: "dinner", recipeId: "flourless-falafel", servings: 8 }, // double
+        ],
+      },
+    ],
+  };
+
+  const dishes = expandPlan(
+    plan,
+    new Map(recipes.map((r) => [r.id, r])),
+    new Map(meals.map((m) => [m.id, m])),
+  );
+  const list = buildShoppingList(dishes, new Map(ingredients.map((i) => [i.id, i])));
+  const lines = new Map(list.groups.flatMap((g) => g.lines).map((l) => [l.ingredientId, l]));
+  const amount = (id: string) => lines.get(id)!.parts[0].baseAmount;
+
+  it("expands the meal and both standalone recipes", () => {
+    expect(dishes).toHaveLength(6); // 4 from the meal + 2 standalone
+  });
+
+  it("adds the doubled falafel on top of the meal's own", () => {
+    // Garlic: 4 potatoes + 5 falafel + 2 tzatziki on Monday, then 5 x 2 on
+    // Wednesday.
+    expect(amount("garlic")).toBe(21);
+    // Chickpeas: 2 cans + 4 cans.
+    expect(amount("chickpeas-canned")).toBe(6);
+  });
+
+  it("halves the half-scaled salad", () => {
+    // Tomatoes: 4 on Monday + 2 on Wednesday.
+    expect(amount("tomato")).toBe(6);
+    // Cucumber: 0.5 tzatziki + 1 salad, then 0.5 of a salad.
+    expect(amount("english-cucumber")).toBe(2);
+  });
+
+  it("does NOT double a noScale line when the recipe doubles", () => {
+    // Frying oil is 3 tbsp per batch regardless of batch size, so two
+    // appearances give 6 tbsp, not 9. This is the flag earning its keep.
+    const sixTbsp = 6 * 14.78676478125;
+    expect(amount("neutral-oil")).toBeCloseTo(sixTbsp, 4);
+  });
+});
+
 describe("images", () => {
   it("points every recipe image at a file that exists", () => {
     const missing = recipes
