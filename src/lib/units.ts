@@ -175,14 +175,42 @@ export function toGrams(
 
 export type MeasurementSystem = "us" | "metric";
 
-/** Ladders, largest-first. The first unit the amount clears is used. */
-const MASS_LADDER: Record<MeasurementSystem, string[]> = {
-  us: ["lb", "oz"],
-  metric: ["kg", "g"],
+/**
+ * Ladders, largest-first.
+ *
+ * `fractionable` marks the units cooks actually subdivide. Cups and pounds
+ * are routinely halved and quartered, so they are allowed to win below 1
+ * ("½ cup"). Quarts, tablespoons and teaspoons are not — nobody asks for
+ * "¼ quart" when they mean a cup, or "⅓ tbsp" when they mean a teaspoon.
+ * Metric subdivides nothing: 500 g, never 0.5 kg.
+ */
+interface LadderStep {
+  id: string;
+  fractionable: boolean;
+}
+
+const MASS_LADDER: Record<MeasurementSystem, LadderStep[]> = {
+  us: [
+    { id: "lb", fractionable: true },
+    { id: "oz", fractionable: false },
+  ],
+  metric: [
+    { id: "kg", fractionable: false },
+    { id: "g", fractionable: false },
+  ],
 };
-const VOLUME_LADDER: Record<MeasurementSystem, string[]> = {
-  us: ["gal", "qt", "cup", "tbsp", "tsp"],
-  metric: ["l", "ml"],
+const VOLUME_LADDER: Record<MeasurementSystem, LadderStep[]> = {
+  us: [
+    { id: "gal", fractionable: false },
+    { id: "qt", fractionable: false },
+    { id: "cup", fractionable: true },
+    { id: "tbsp", fractionable: false },
+    { id: "tsp", fractionable: false },
+  ],
+  metric: [
+    { id: "l", fractionable: false },
+    { id: "ml", fractionable: false },
+  ],
 };
 
 /** Fractions a cook can actually act on. "0.33 cup" is not one of them. */
@@ -236,6 +264,74 @@ function trimZeros(s: string): string {
   return s.replace(/\.?0+$/, "");
 }
 
+/**
+ * Singular below and at one, plural above it.
+ *
+ * Note this is NOT `value === 1 ? singular : plural`: a half cup is "½ cup",
+ * not "½ cups". Fractions take the singular in English.
+ */
+function pluralise(unit: UnitDef, value: number): string {
+  return value > 1 ? unit.plural : unit.label;
+}
+
+/**
+ * Render a quantity in the unit it was WRITTEN in.
+ *
+ * Distinct from formatQuantity, which walks a ladder to pick the friendliest
+ * unit for a shopping total. On a recipe page that would be wrong: a cook
+ * following "1/2 cup olive oil" wants to see cups, not the 118 ml or 4 fl oz
+ * a ladder might land on. Scaling changes the number, never the unit.
+ */
+export function formatUnitQuantity(
+  quantity: number,
+  unitId: string,
+  system: MeasurementSystem = "us",
+): string {
+  const unit = UNITS[unitId];
+  const amount = formatAmount(quantity, system);
+  if (!unit || unit.label === "") return amount;
+  return `${amount} ${pluralise(unit, quantity)}`;
+}
+
+/** True when a value lands on a whole number or a familiar cooking fraction. */
+function readsCleanly(value: number): boolean {
+  if (value >= 10) return true;
+  const frac = value - Math.floor(value);
+  if (frac < 0.021 || frac > 0.979) return true;
+  return FRACTIONS.some(([n]) => Math.abs(frac - n) < 0.021);
+}
+
+/**
+ * Choose the unit a total is easiest to act on in.
+ *
+ * A plain "first unit at or above 1" walk renders half a cup as "8 tbsp",
+ * which is correct but reads like a machine wrote it. So for US units — where
+ * fractional cups and pounds are how people actually shop — a larger unit is
+ * allowed to win from a quarter upwards, but only when the value lands on a
+ * clean fraction. That gives "1/2 cup" for 118 ml, while 192 ml (0.81 of a
+ * cup, which has no tidy fraction) still falls through to a precise
+ * "13 tbsp" rather than an ugly "0.81 cups".
+ *
+ * Metric keeps the >= 1 rule: 500 g is idiomatic, 0.5 kg is not.
+ */
+function pickDisplayUnit(
+  baseAmount: number,
+  ladder: LadderStep[],
+  system: MeasurementSystem,
+): string {
+  for (const step of ladder) {
+    const value = fromBase(baseAmount, step.id);
+    // A subdividable unit may win from a quarter up, but only on a clean
+    // fraction — otherwise fall through to something precise.
+    if (system === "us" && step.fractionable && value >= 0.25 && readsCleanly(value)) {
+      return step.id;
+    }
+    if (value >= 1) return step.id;
+  }
+  // Smallest unit is the floor, so tiny amounts still render sensibly.
+  return ladder[ladder.length - 1].id;
+}
+
 export interface FormattedQuantity {
   amount: string;
   unit: string;
@@ -259,7 +355,7 @@ export function formatQuantity(
     const unitId = countUnitId ?? (bucket.startsWith("count:") ? bucket.slice(6) : "each");
     const unit = UNITS[unitId];
     const amount = formatAmount(baseAmount, system);
-    const label = !unit || unit.label === "" ? "" : baseAmount === 1 ? unit.label : unit.plural;
+    const label = !unit || unit.label === "" ? "" : pluralise(unit, baseAmount);
     return { amount, unit: label, text: label ? `${amount} ${label}` : amount };
   }
 
@@ -271,20 +367,10 @@ export function formatQuantity(
     return { amount, unit: "", text: amount };
   }
 
-  // Walk down the ladder to the first unit where the amount is at least 1.
-  // The smallest unit is the floor, so tiny amounts still render sensibly.
-  for (let i = 0; i < ladder.length; i++) {
-    const unitId = ladder[i];
-    const value = fromBase(baseAmount, unitId);
-    const isLast = i === ladder.length - 1;
-    if (value >= 1 || isLast) {
-      const unit = UNITS[unitId];
-      const amount = formatAmount(value, system);
-      const label = value === 1 ? unit.label : unit.plural;
-      return { amount, unit: label, text: `${amount} ${label}` };
-    }
-  }
-
-  const amount = formatAmount(baseAmount, system);
-  return { amount, unit: "", text: amount };
+  const unitId = pickDisplayUnit(baseAmount, ladder, system);
+  const value = fromBase(baseAmount, unitId);
+  const unit = UNITS[unitId];
+  const amount = formatAmount(value, system);
+  const label = pluralise(unit, value);
+  return { amount, unit: label, text: `${amount} ${label}` };
 }

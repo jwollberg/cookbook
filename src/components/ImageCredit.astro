@@ -1,0 +1,35 @@
+---
+import type { ImageCredit } from "../lib/schema";
+
+interface Props {
+  credit?: ImageCredit;
+}
+const { credit } = Astro.props;
+---
+
+{
+  /*
+    Not optional decoration: the CC BY and CC BY-SA photos this site uses
+    require visible attribution as a condition of the licence.
+  */
+  credit && (
+    <p class="image-credit">
+      Photo{credit.title ? ` “${credit.title}”` : ""} by{" "}
+      {credit.sourceUrl ? (
+        <a href={credit.sourceUrl} rel="noopener noreferrer nofollow" target="_blank">
+          {credit.author}
+        </a>
+      ) : (
+        credit.author
+      )}
+      {" · "}
+      {credit.licenseUrl ? (
+        <a href={credit.licenseUrl} rel="noopener noreferrer nofollow license" target="_blank">
+          {credit.license}
+        </a>
+      ) : (
+        credit.license
+      )}
+    </p>
+  )
+}

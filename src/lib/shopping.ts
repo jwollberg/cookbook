@@ -168,7 +168,7 @@ export function buildShoppingList(
       });
     }
 
-    const name = ingredient?.name ?? ingredientId;
+    const name = shoppingName(ingredient, ingredientId, parts);
     if (parts.length === 0) {
       lines.push({
         ingredientId,
@@ -200,6 +200,24 @@ export function buildShoppingList(
     splitLines,
     totalLines: lines.length,
   };
+}
+
+/**
+ * Singular or plural for the ingredient name on a list line.
+ *
+ * Only a bare count pluralises the ingredient itself — "4 large ripe
+ * tomatoes". With a measured unit the unit carries the plural instead, so the
+ * name stays singular: "2 cups flour", never "2 cups flours".
+ */
+function shoppingName(
+  ingredient: Ingredient | undefined,
+  fallbackId: string,
+  parts: ShoppingPart[],
+): string {
+  if (!ingredient) return fallbackId;
+  if (!ingredient.plural) return ingredient.name;
+  const bareCount = parts.find((p) => p.bucket === "count:each");
+  return bareCount && bareCount.baseAmount > 1 ? ingredient.plural : ingredient.name;
 }
 
 /**

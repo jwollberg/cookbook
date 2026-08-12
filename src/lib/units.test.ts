@@ -4,6 +4,7 @@ import {
   dimensionOf,
   formatAmount,
   formatQuantity,
+  formatUnitQuantity,
   fromBase,
   resolveUnit,
   toBase,
@@ -130,10 +131,49 @@ describe("formatQuantity", () => {
     expect(formatQuantity(10, "volume", "metric").text).toBe("10 ml");
   });
 
+  it("prefers a larger US unit when it lands on a clean fraction", () => {
+    // Half a cup must not render as "8 tbsp" — technically right, reads like
+    // a machine wrote it.
+    expect(formatQuantity(toBase(0.5, "cup"), "volume", "us").text).toBe("½ cup");
+    expect(formatQuantity(toBase(0.25, "cup"), "volume", "us").text).toBe("¼ cup");
+    expect(formatQuantity(toBase(2.5, "lb"), "mass", "us").text).toBe("2½ lb");
+  });
+
+  it("never subdivides a unit cooks do not subdivide", () => {
+    // A cup of parsley is "1 cup", not "¼ quart".
+    expect(formatQuantity(toBase(1, "cup"), "volume", "us").text).toBe("1 cup");
+    // A teaspoon of pepper is "1 tsp", not "⅓ tbsp".
+    expect(formatQuantity(toBase(1, "tsp"), "volume", "us").text).toBe("1 tsp");
+    expect(formatQuantity(toBase(2, "tsp"), "volume", "us").text).toBe("2 tsp");
+    // 7 oz of feta stays in ounces rather than becoming 0.44 lb.
+    expect(formatQuantity(toBase(7, "oz"), "mass", "us").text).toBe("7 oz");
+  });
+
+  it("falls back to a precise smaller unit when the larger one is untidy", () => {
+    // 192.23 ml is 0.81 of a cup — no tidy fraction, so "13 tbsp" beats
+    // "0.81 cups".
+    expect(formatQuantity(192.23, "volume", "us").text).toBe("13 tbsp");
+  });
+
+  it("keeps metric on whole base units rather than fractions of a big one", () => {
+    // 500 g is idiomatic; 0.5 kg is not.
+    expect(formatQuantity(500, "mass", "metric").text).toBe("500 g");
+    expect(formatQuantity(toBase(0.5, "l"), "volume", "metric").text).toBe("500 ml");
+  });
+
   it("pluralises count units and omits the label for bare counts", () => {
     expect(formatQuantity(1, "count:clove", "us").text).toBe("1 clove");
     expect(formatQuantity(4, "count:clove", "us").text).toBe("4 cloves");
     expect(formatQuantity(3, "count:each", "us").text).toBe("3");
+  });
+
+  it("keeps fractions singular", () => {
+    // English takes the singular below one: "½ cup", not "½ cups".
+    expect(formatQuantity(toBase(0.5, "cup"), "volume", "us").unit).toBe("cup");
+    expect(formatQuantity(0.5, "count:clove", "us").text).toBe("½ clove");
+    expect(formatUnitQuantity(0.5, "cup")).toBe("½ cup");
+    expect(formatUnitQuantity(1, "cup")).toBe("1 cup");
+    expect(formatUnitQuantity(1.5, "cup")).toBe("1½ cups");
   });
 });
 

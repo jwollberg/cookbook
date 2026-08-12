@@ -212,7 +212,9 @@
     "aliases": ["salt", "kosher salt"],
     "isStaple": true,
     "defaultUnit": "tsp",
-    "gramsPerMl": 1.2
+    "gramsPerMl": 1.2,
+    "countWeights": { "pinch": 0.36 },
+    "notes": "A pinch is about 1/16 tsp. Weighted so recipes mixing pinches and teaspoons still total to one line."
   },
   {
     "id": "black-pepper",

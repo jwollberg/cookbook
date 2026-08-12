@@ -1,0 +1,172 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { loadAll, formatMinutes } from "../../lib/data.server";
+import { buildShoppingList, type ResolvedDish } from "../../lib/shopping";
+import type { Role } from "../../lib/schema";
+
+export async function getStaticPaths() {
+  const { meals } = loadAll();
+  return meals.map((meal) => ({ params: { slug: meal.id }, props: { meal } }));
+}
+
+const { meal } = Astro.props;
+const { recipesById, ingredientsById } = loadAll();
+
+const components = meal.components
+  .map((c) => ({ component: c, recipe: recipesById.get(c.recipeId) }))
+  .filter((x): x is { component: typeof x.component; recipe: NonNullable<typeof x.recipe> } =>
+    Boolean(x.recipe),
+  );
+
+const ROLE_ORDER: Role[] = ["starter", "main", "side", "sauce", "dessert", "drink"];
+const byRole = ROLE_ORDER.map((role) => ({
+  role,
+  items: components.filter((c) => c.component.role === role),
+})).filter((g) => g.items.length > 0);
+
+// Everything the meal needs, in one aggregated list. Staples are included
+// here — on a "can I cook this tonight?" page you do want to see the salt.
+const dishes: ResolvedDish[] = components.map(({ component, recipe }) => ({
+  recipe,
+  servings: component.servingsOverride,
+}));
+const shopping = buildShoppingList(dishes, ingredientsById, { includeStaples: true });
+
+const totalActive = components.reduce((n, c) => n + c.recipe.prepMin + c.recipe.cookMin, 0);
+const longest = Math.max(0, ...components.map((c) => c.recipe.prepMin + c.recipe.cookMin));
+---
+
+<SiteLayout title={`${meal.name} — Cookbook`} description={meal.description}>
+  <article style="padding-block: 32px 8px;">
+    <a href="/meals" class="lbl" style="text-decoration: none;">← Meals</a>
+
+    <header style="margin-top: 18px;">
+      <h1>{meal.name}</h1>
+      {
+        meal.description && (
+          <p style="max-width: 62ch; margin: 16px 0 0; font-size: 1.08rem; color: var(--ink-2);">
+            {meal.description}
+          </p>
+        )
+      }
+      <div class="meta-row">
+        <span class="chip num">{components.length} recipes</span>
+        {formatMinutes(longest) && <span class="chip num">About {formatMinutes(longest)}</span>}
+        {meal.tags.map((tag) => <span class="chip">{tag}</span>)}
+      </div>
+      {
+        totalActive > longest && (
+          <p style="margin: 10px 0 0; font-size: 13px; color: var(--muted);">
+            {formatMinutes(totalActive)} of work in total, but the components overlap — follow the
+            timeline and it lands in about {formatMinutes(longest)}.
+          </p>
+        )
+      }
+    </header>
+
+    <section style="margin-top: 36px;">
+      <span class="lbl">On the table</span>
+      <div class="grid-recipes" style="margin-top: 14px;">
+        {
+          byRole.flatMap((group) =>
+            group.items.map(({ component, recipe }) => (
+              <a class="card card-interactive recipe-card" href={`/recipes/${recipe.id}`}>
+                {recipe.image ? (
+                  <img class="recipe-card-img" src={recipe.image} alt="" loading="lazy" />
+                ) : (
+                  <div class="recipe-card-img recipe-card-img--empty" aria-hidden="true" />
+                )}
+                <div style="padding: 14px 16px 16px;">
+                  <span class="chip chip-accent" style="text-transform: capitalize;">
+                    {group.role}
+                  </span>
+                  <h2 style="font-size: 1.15rem; margin-top: 9px;">{recipe.title}</h2>
+                  <p style="margin: 6px 0 0; font-size: 13px; color: var(--muted);">
+                    Serves {component.servingsOverride ?? recipe.servings}
+                  </p>
+                </div>
+              </a>
+            )),
+          )
+        }
+      </div>
+    </section>
+
+    {
+      meal.timeline.length > 0 && (
+        <section style="margin-top: 44px;">
+          <span class="lbl">Game plan</span>
+          <h2 style="font-size: 1.6rem; margin-top: 8px;">Getting it all to the table</h2>
+          <p style="max-width: 58ch; margin: 10px 0 0; color: var(--ink-2);">
+            The useful order interleaves the recipes rather than running them one after another.
+          </p>
+          <ol style="list-style: none; margin: 18px 0 0; padding: 0;">
+            {meal.timeline.map((step, i) => {
+              const recipe = step.recipeId ? recipesById.get(step.recipeId) : undefined;
+              return (
+                <li class="step">
+                  <span class="step-n num">{i + 1}</span>
+                  <div class="step-body">
+                    {step.heading && (
+                      <strong style="display: block; color: var(--ink);">{step.heading}</strong>
+                    )}
+                    {step.text}
+                    {recipe && (
+                      <a
+                        href={`/recipes/${recipe.id}`}
+                        class="chip"
+                        style="text-decoration: none; margin-left: 8px; vertical-align: middle;"
+                      >
+                        {recipe.title}
+                      </a>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+      )
+    }
+
+    <section style="margin-top: 44px;">
+      <span class="lbl">Everything you need</span>
+      <h2 style="font-size: 1.6rem; margin-top: 8px;">Combined ingredients</h2>
+      <p style="max-width: 58ch; margin: 10px 0 18px; color: var(--ink-2);">
+        Merged across all {components.length} recipes and grouped by aisle. Shared ingredients are
+        already added together.
+      </p>
+
+      <div class="grid-cards">
+        {
+          shopping.groups.map((group) => (
+            <div class="card" style="padding: 16px 18px 18px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="aisle-dot" style={`--aisle: var(--aisle-${group.aisle});`} />
+                <span class="lbl" style="text-transform: capitalize;">{group.aisle}</span>
+              </div>
+              <ul style="list-style: none; margin: 10px 0 0; padding: 0;">
+                {group.lines.map((line) => (
+                  <li class="ing-row" style="grid-template-columns: minmax(64px, max-content) 1fr;">
+                    <span class="ing-qty">{line.parts.map((p) => p.text).join(" + ")}</span>
+                    <span class="ing-name">{line.name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+
+      {
+        shopping.splitLines.length > 0 && (
+          <p style="margin-top: 14px; font-size: 13px; color: var(--muted);">
+            {shopping.splitLines.length} ingredient
+            {shopping.splitLines.length === 1 ? " is" : "s are"} listed in more than one unit
+            because a conversion factor is missing — they are shown separately rather than guessed.
+          </p>
+        )
+      }
+    </section>
+  </article>
+</SiteLayout>

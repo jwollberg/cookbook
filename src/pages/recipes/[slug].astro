@@ -1,0 +1,155 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import ImageCredit from "../../components/ImageCredit.astro";
+import IngredientList, { type IngredientName } from "../../components/IngredientList";
+import { loadAll, formatMinutes } from "../../lib/data.server";
+
+export async function getStaticPaths() {
+  const { recipes, ingredientsById, meals } = loadAll();
+  return recipes.map((recipe) => ({
+    params: { slug: recipe.id },
+    props: {
+      recipe,
+      // Only the names this recipe actually needs cross to the client.
+      names: Object.fromEntries(
+        recipe.ingredients.map((line) => {
+          const ing = ingredientsById.get(line.ingredientId);
+          return [
+            line.ingredientId,
+            { name: ing?.name ?? line.ingredientId, plural: ing?.plural } as IngredientName,
+          ];
+        }),
+      ),
+      partOf: meals
+        .filter((m) => m.components.some((c) => c.recipeId === recipe.id))
+        .map((m) => ({ id: m.id, name: m.name })),
+    },
+  }));
+}
+
+const { recipe, names, partOf } = Astro.props;
+
+const times = [
+  { label: "Prep", value: formatMinutes(recipe.prepMin) },
+  { label: "Cook", value: formatMinutes(recipe.cookMin) },
+  { label: "Chill", value: formatMinutes(recipe.restMin) },
+].filter((t) => t.value);
+
+// Group steps the same way the ingredients group, preserving authoring order.
+const stepGroups = recipe.steps.reduce((acc, step) => {
+  const key = step.group ?? "";
+  const existing = acc.find((g) => g.key === key);
+  if (existing) existing.steps.push(step);
+  else acc.push({ key, steps: [step] });
+  return acc;
+}, [] as { key: string; steps: typeof recipe.steps }[]);
+---
+
+<SiteLayout title={`${recipe.title} — Cookbook`} description={recipe.description}>
+  <article style="padding-block: 32px 8px;">
+    <a href="/recipes" class="lbl" style="text-decoration: none;">← Recipes</a>
+
+    <header style="margin-top: 18px;">
+      <h1>{recipe.title}</h1>
+      {
+        recipe.subtitle && (
+          <p style="margin: 6px 0 0; font-size: 1.15rem; color: var(--muted); font-style: italic;">
+            {recipe.subtitle}
+          </p>
+        )
+      }
+      {
+        recipe.description && (
+          <p style="max-width: 62ch; margin: 16px 0 0; font-size: 1.08rem; color: var(--ink-2);">
+            {recipe.description}
+          </p>
+        )
+      }
+
+      <div class="meta-row">
+        {times.map((t) => (
+          <span class="chip num">
+            {t.label} {t.value}
+          </span>
+        ))}
+        {recipe.tags.map((tag) => (
+          <a href={`/recipes?tag=${encodeURIComponent(tag)}`} class="chip" style="text-decoration: none;">
+            {tag}
+          </a>
+        ))}
+      </div>
+    </header>
+
+    {
+      recipe.image && (
+        <figure style="margin: 28px 0 0;">
+          <img class="recipe-hero" src={recipe.image} alt={recipe.title} />
+          <ImageCredit credit={recipe.imageCredit} />
+        </figure>
+      )
+    }
+
+    <div class="recipe-layout">
+      <aside class="recipe-aside">
+        <IngredientList
+          client:load
+          ingredients={recipe.ingredients}
+          baseServings={recipe.servings}
+          names={names}
+          yieldNote={recipe.yieldNote}
+        />
+
+        {
+          partOf.length > 0 && (
+            <div style="margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--hairline);">
+              <span class="lbl">Part of</span>
+              <div style="display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px;">
+                {partOf.map((m) => (
+                  <a href={`/meals/${m.id}`} class="chip chip-olive" style="text-decoration: none;">
+                    {m.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+      </aside>
+
+      <section>
+        <span class="lbl">Method</span>
+        {
+          stepGroups.map((group) => (
+            <div>
+              {group.key && <h2 style="font-size: 1.3rem; margin-top: 26px;">{group.key}</h2>}
+              <ol style="list-style: none; margin: 6px 0 0; padding: 0; counter-reset: step;">
+                {group.steps.map((step, i) => (
+                  <li class="step">
+                    <span class="step-n num">{i + 1}</span>
+                    <div class="step-body">
+                      {step.heading && (
+                        <strong style="display: block; color: var(--ink);">{step.heading}</strong>
+                      )}
+                      {step.text}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))
+        }
+
+        {
+          recipe.notes && (
+            <aside
+              class="card"
+              style="margin-top: 30px; padding: 16px 18px; background: var(--olive-wash); border-color: transparent;"
+            >
+              <span class="lbl" style="color: var(--olive);">Note</span>
+              <p style="margin: 6px 0 0; color: var(--ink-2);">{recipe.notes}</p>
+            </aside>
+          )
+        }
+      </section>
+    </div>
+  </article>
+</SiteLayout>

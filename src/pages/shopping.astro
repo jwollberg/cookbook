@@ -1,0 +1,34 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { loadAll } from "../lib/data.server";
+
+const { meals } = loadAll();
+---
+
+<SiteLayout
+  title="Shopping — Cookbook"
+  description="Aggregated shopping lists generated from a meal plan."
+>
+  <section style="padding-block: 44px 0;">
+    <p class="lbl">Not built yet</p>
+    <h1 style="margin-top: 10px;">Shopping</h1>
+    <p style="max-width: 58ch; margin: 16px 0 0; font-size: 1.08rem; color: var(--ink-2);">
+      Once a plan exists, this generates one list from it: quantities merged across recipes and
+      units, pantry staples removed, everything left grouped by store aisle and tickable as you go.
+    </p>
+    <p style="max-width: 58ch; margin: 14px 0 0; color: var(--muted);">
+      The aggregation itself is built and verified — it reproduces a hand-written master grocery
+      list for the Greek dinner, merging garlic across three recipes and olive oil across three
+      more. It just needs a plan to run against.
+    </p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px;">
+      {
+        meals.map((m) => (
+          <a class="btn" href={`/meals/${m.id}`}>
+            {m.name} ingredients
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</SiteLayout>

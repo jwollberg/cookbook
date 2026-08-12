@@ -130,6 +130,40 @@ describe("merging across units", () => {
   });
 });
 
+describe("list line names", () => {
+  const TOMATO = ing({
+    id: "tomato",
+    name: "large ripe tomato",
+    plural: "large ripe tomatoes",
+    aisle: "produce",
+    countWeights: { each: 180 },
+  });
+  const withTomato = new Map(INGREDIENTS).set("tomato", TOMATO);
+
+  const nameFor = (quantity: number, unit: string, id = "tomato") =>
+    buildShoppingList(
+      [{ recipe: recipe({ id: "a", title: "A", ingredients: [line(id, quantity, unit)] }) }],
+      withTomato,
+    )
+      .groups.flatMap((g) => g.lines)
+      .find((l) => l.ingredientId === id)!.name;
+
+  it("pluralises a bare count above one", () => {
+    expect(nameFor(4, "each")).toBe("large ripe tomatoes");
+  });
+
+  it("keeps a single or fractional count singular", () => {
+    expect(nameFor(1, "each")).toBe("large ripe tomato");
+    expect(nameFor(0.5, "each")).toBe("large ripe tomato");
+  });
+
+  it("keeps the name singular when a measured unit carries the plural", () => {
+    // "500 g large ripe tomato", not "...tomatoes" — the unit is plural, not
+    // the ingredient.
+    expect(nameFor(500, "g")).toBe("large ripe tomato");
+  });
+});
+
 // --- scaling ---------------------------------------------------------------
 
 describe("scaling", () => {

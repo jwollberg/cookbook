@@ -1,0 +1,73 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { loadAll, formatMinutes } from "../../lib/data.server";
+
+const { meals, recipesById } = loadAll();
+
+const cards = meals.map((meal) => {
+  const recipes = meal.components
+    .map((c) => recipesById.get(c.recipeId))
+    .filter((r): r is NonNullable<typeof r> => Boolean(r));
+
+  // The meal's cover is the main course's photo — falling back to whatever
+  // component has one, so a meal is never left with a blank card.
+  const mainId = meal.components.find((c) => c.role === "main")?.recipeId;
+  const cover =
+    (mainId ? recipesById.get(mainId)?.image : undefined) ?? recipes.find((r) => r.image)?.image;
+
+  return {
+    meal,
+    recipes,
+    cover,
+    // Longest cook, not the sum: the components overlap in the oven and on
+    // the counter. Summing them would badly overstate the evening.
+    timeLabel: formatMinutes(Math.max(0, ...recipes.map((r) => r.prepMin + r.cookMin))),
+  };
+});
+---
+
+<SiteLayout
+  title="Meals — Cookbook"
+  description="Recipes grouped into meals: a main, its sides, and everything else on the table."
+>
+  <section style="padding-block: 44px 8px;">
+    <p class="lbl">Built from recipes</p>
+    <h1 style="margin-top: 10px;">Meals</h1>
+    <p style="max-width: 54ch; margin: 16px 0 28px; color: var(--ink-2);">
+      A meal groups recipes by the role they play on the table. Build one once, then drop it onto
+      any day of a plan.
+    </p>
+  </section>
+
+  {
+    cards.length === 0 ? (
+      <p style="color: var(--muted);">No meals yet.</p>
+    ) : (
+      <div class="grid-recipes">
+        {cards.map(({ meal, recipes, cover, timeLabel }) => (
+          <a class="card card-interactive recipe-card" href={`/meals/${meal.id}`}>
+            {cover ? (
+              <img class="recipe-card-img" src={cover} alt="" loading="lazy" />
+            ) : (
+              <div class="recipe-card-img recipe-card-img--empty" aria-hidden="true" />
+            )}
+            <div style="padding: 16px 18px 18px;">
+              <h2 style="font-size: 1.25rem;">{meal.name}</h2>
+              <p style="margin: 8px 0 0; font-size: 13px; color: var(--muted);">
+                {recipes.map((r) => r.title).join(" · ")}
+              </p>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px;">
+                <span class="chip num">
+                  {recipes.length} recipe{recipes.length === 1 ? "" : "s"}
+                </span>
+                {timeLabel && <span class="chip num">{timeLabel}</span>}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    )
+  }
+
+  <div style="height: 40px;"></div>
+</SiteLayout>
