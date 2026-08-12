@@ -1,0 +1,226 @@
+[
+  {
+    "id": "english-cucumber",
+    "name": "English cucumber",
+    "plural": "English cucumbers",
+    "aisle": "produce",
+    "aliases": ["cucumber", "hothouse cucumber"],
+    "defaultUnit": "each",
+    "countWeights": { "each": 300 }
+  },
+  {
+    "id": "tomato",
+    "name": "large ripe tomato",
+    "plural": "large ripe tomatoes",
+    "aisle": "produce",
+    "aliases": ["tomatoes"],
+    "defaultUnit": "each",
+    "countWeights": { "each": 180 }
+  },
+  {
+    "id": "green-bell-pepper",
+    "name": "green bell pepper",
+    "plural": "green bell peppers",
+    "aisle": "produce",
+    "aliases": ["green pepper", "capsicum"],
+    "defaultUnit": "each",
+    "countWeights": { "each": 120 }
+  },
+  {
+    "id": "red-onion",
+    "name": "red onion",
+    "plural": "red onions",
+    "aisle": "produce",
+    "aliases": [],
+    "defaultUnit": "each",
+    "countWeights": { "each": 150 }
+  },
+  {
+    "id": "yellow-onion",
+    "name": "yellow onion",
+    "plural": "yellow onions",
+    "aisle": "produce",
+    "aliases": ["brown onion", "onion"],
+    "defaultUnit": "each",
+    "countWeights": { "each": 150 }
+  },
+  {
+    "id": "garlic",
+    "name": "garlic",
+    "plural": "garlic",
+    "aisle": "produce",
+    "aliases": ["garlic clove", "garlic cloves"],
+    "defaultUnit": "clove",
+    "countWeights": { "clove": 5, "head": 45 },
+    "notes": "About 9-10 cloves per head."
+  },
+  {
+    "id": "lemon",
+    "name": "large lemon",
+    "plural": "large lemons",
+    "aisle": "produce",
+    "aliases": ["lemons"],
+    "defaultUnit": "each",
+    "countWeights": { "each": 100 }
+  },
+  {
+    "id": "lemon-juice",
+    "name": "fresh lemon juice",
+    "aisle": "produce",
+    "aliases": ["juice of lemon"],
+    "defaultUnit": "tbsp",
+    "gramsPerMl": 1.02,
+    "notes": "About 3 tbsp of juice per large lemon — buy lemons accordingly."
+  },
+  {
+    "id": "potato",
+    "name": "Russet or Yukon Gold potato",
+    "plural": "Russet or Yukon Gold potatoes",
+    "aisle": "produce",
+    "aliases": ["potatoes", "russet", "yukon gold"],
+    "defaultUnit": "lb",
+    "countWeights": { "each": 200 }
+  },
+  {
+    "id": "fresh-parsley",
+    "name": "fresh parsley",
+    "aisle": "produce",
+    "aliases": ["parsley", "flat-leaf parsley", "cilantro", "coriander leaves"],
+    "defaultUnit": "cup",
+    "gramsPerMl": 0.25,
+    "countWeights": { "bunch": 60 },
+    "notes": "Cilantro works equally well here, or a mix of both."
+  },
+  {
+    "id": "fresh-dill",
+    "name": "fresh dill",
+    "aisle": "produce",
+    "aliases": ["dill", "mint", "fresh mint"],
+    "defaultUnit": "tbsp",
+    "gramsPerMl": 0.2,
+    "countWeights": { "bunch": 30 },
+    "notes": "Mint is the traditional alternative — use either, or a mix."
+  },
+
+  {
+    "id": "greek-yogurt",
+    "name": "plain Greek yogurt",
+    "aisle": "dairy",
+    "aliases": ["yogurt", "yoghurt"],
+    "defaultUnit": "cup",
+    "gramsPerMl": 1.03,
+    "notes": "Full-fat or 2%. Low-fat will make a watery tzatziki."
+  },
+  {
+    "id": "feta-cheese",
+    "name": "Greek sheep's milk feta",
+    "aisle": "dairy",
+    "aliases": ["feta"],
+    "defaultUnit": "oz",
+    "notes": "Buy the block in brine, not pre-crumbled — it is sold in 7 oz blocks."
+  },
+  {
+    "id": "egg",
+    "name": "large egg",
+    "plural": "large eggs",
+    "aisle": "dairy",
+    "aliases": ["eggs"],
+    "defaultUnit": "each",
+    "countWeights": { "each": 50 }
+  },
+
+  {
+    "id": "chickpeas-canned",
+    "name": "canned chickpeas",
+    "aisle": "pantry",
+    "aliases": ["garbanzo beans", "garbanzos", "chickpeas"],
+    "defaultUnit": "can",
+    "countWeights": { "can": 425 },
+    "notes": "15 oz cans. Drained weight is roughly 250 g per can."
+  },
+  {
+    "id": "kalamata-olives",
+    "name": "Kalamata olives",
+    "aisle": "pantry",
+    "aliases": ["olives"],
+    "defaultUnit": "cup",
+    "gramsPerMl": 0.6,
+    "countWeights": { "jar": 300 }
+  },
+  {
+    "id": "olive-oil",
+    "name": "extra virgin olive oil",
+    "aisle": "pantry",
+    "aliases": ["evoo", "olive oil"],
+    "defaultUnit": "tbsp",
+    "gramsPerMl": 0.918
+  },
+  {
+    "id": "neutral-oil",
+    "name": "high-heat neutral oil",
+    "aisle": "pantry",
+    "aliases": ["avocado oil", "canola oil", "grapeseed oil", "vegetable oil", "frying oil"],
+    "defaultUnit": "tbsp",
+    "gramsPerMl": 0.92,
+    "notes": "Avocado, canola or grapeseed — needs a high smoke point for frying."
+  },
+  {
+    "id": "red-wine-vinegar",
+    "name": "red wine vinegar",
+    "aisle": "pantry",
+    "aliases": ["vinegar"],
+    "defaultUnit": "tbsp",
+    "gramsPerMl": 1.01
+  },
+  {
+    "id": "broth",
+    "name": "vegetable or chicken broth",
+    "aisle": "pantry",
+    "aliases": ["stock", "vegetable stock", "chicken stock"],
+    "defaultUnit": "cup",
+    "gramsPerMl": 1.0
+  },
+
+  {
+    "id": "ground-cumin",
+    "name": "ground cumin",
+    "aisle": "spices",
+    "aliases": ["cumin"],
+    "defaultUnit": "tsp",
+    "gramsPerMl": 0.45
+  },
+  {
+    "id": "ground-coriander",
+    "name": "ground coriander",
+    "aisle": "spices",
+    "aliases": ["coriander"],
+    "defaultUnit": "tsp",
+    "gramsPerMl": 0.42
+  },
+  {
+    "id": "dried-oregano",
+    "name": "dried oregano",
+    "aisle": "spices",
+    "aliases": ["oregano", "Greek oregano"],
+    "defaultUnit": "tsp",
+    "gramsPerMl": 0.15
+  },
+  {
+    "id": "sea-salt",
+    "name": "sea salt",
+    "aisle": "spices",
+    "aliases": ["salt", "kosher salt"],
+    "isStaple": true,
+    "defaultUnit": "tsp",
+    "gramsPerMl": 1.2
+  },
+  {
+    "id": "black-pepper",
+    "name": "black pepper",
+    "aisle": "spices",
+    "aliases": ["pepper", "ground black pepper"],
+    "isStaple": true,
+    "defaultUnit": "tsp",
+    "gramsPerMl": 0.45
+  }
+]

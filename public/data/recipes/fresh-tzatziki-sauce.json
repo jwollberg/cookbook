@@ -1,0 +1,34 @@
+{
+  "id": "fresh-tzatziki-sauce",
+  "title": "Fresh Tzatziki Sauce",
+  "description": "The whole trick is wringing the cucumber genuinely dry — skip it and you get soup.",
+  "servings": 6,
+  "prepMin": 15,
+  "cookMin": 0,
+  "restMin": 0,
+  "tags": ["greek", "sauce", "vegetarian", "no-cook"],
+  "image": "/images/recipes/fresh-tzatziki-sauce.jpg",
+  "imageCredit": {
+    "author": "Nikodem Nijaki",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tzatziki_IMGP1444.jpg",
+    "title": "Tzatziki"
+  },
+  "ingredients": [
+    { "ingredientId": "english-cucumber", "quantity": 0.5, "unit": "each", "note": "grated on the large holes of a box grater, then wrung dry" },
+    { "ingredientId": "greek-yogurt", "quantity": 1, "unit": "cup", "note": "full-fat or 2%" },
+    { "ingredientId": "garlic", "quantity": 2, "unit": "clove", "note": "finely pressed" },
+    { "ingredientId": "lemon-juice", "quantity": 1, "unit": "tbsp", "note": "fresh" },
+    { "ingredientId": "olive-oil", "quantity": 1, "unit": "tbsp" },
+    { "ingredientId": "fresh-dill", "quantity": 2, "unit": "tbsp", "note": "finely chopped — dill or mint" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp" }
+  ],
+  "steps": [
+    { "text": "Grate half an English cucumber on the large holes of a box grater." },
+    { "text": "Gather the grated cucumber into a clean kitchen towel or strong paper towels and squeeze hard to wring out all the internal water." },
+    { "text": "In a bowl, combine the dry squeezed cucumber, Greek yogurt, pressed garlic, lemon juice, olive oil, finely chopped dill and salt." },
+    { "text": "Stir well, cover, and store in the refrigerator until ready to serve." }
+  ],
+  "notes": "Make this early — it is better after an hour in the fridge for the flavours to marry."
+}

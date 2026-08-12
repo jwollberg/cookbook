@@ -1,0 +1,58 @@
+{
+  "id": "flourless-falafel",
+  "title": "Flourless Falafel",
+  "description": "Oven-dried canned chickpeas bound with a single egg instead of flour. The drying step and the chill are both load-bearing.",
+  "servings": 4,
+  "yieldNote": "12–14 small patties",
+  "prepMin": 20,
+  "cookMin": 8,
+  "restMin": 60,
+  "tags": ["greek", "main", "vegetarian", "fried"],
+  "image": "/images/recipes/flourless-falafel.jpg",
+  "imageCredit": {
+    "author": "Popo le Chien",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Falafels_2.jpg",
+    "title": "Falafels"
+  },
+  "ingredients": [
+    { "ingredientId": "chickpeas-canned", "quantity": 2, "unit": "can", "note": "drained and rinsed" },
+    { "ingredientId": "yellow-onion", "quantity": 0.5, "unit": "each", "note": "chopped" },
+    { "ingredientId": "garlic", "quantity": 5, "unit": "clove", "note": "minced" },
+    { "ingredientId": "fresh-parsley", "quantity": 1, "unit": "cup", "note": "packed leaves — parsley, cilantro, or a mix" },
+    { "ingredientId": "ground-cumin", "quantity": 2, "unit": "tsp" },
+    { "ingredientId": "ground-coriander", "quantity": 2, "unit": "tsp" },
+    { "ingredientId": "sea-salt", "quantity": 1.5, "unit": "tsp" },
+    { "ingredientId": "black-pepper", "quantity": 0.5, "unit": "tsp" },
+    { "ingredientId": "egg", "quantity": 1, "unit": "each", "note": "beaten" },
+    { "ingredientId": "neutral-oil", "quantity": 3, "unit": "tbsp", "note": "for frying", "noScale": true }
+  ],
+  "steps": [
+    {
+      "heading": "Oven Dry",
+      "text": "Drain and rinse both cans of chickpeas. Spread them in a single layer on a parchment-lined baking sheet. Slip them into the 400°F oven next to the potatoes for just 10 minutes, until they look matte and dry. Remove and let cool for 5 minutes."
+    },
+    {
+      "heading": "Blend",
+      "text": "Place the dried chickpeas, chopped yellow onion, minced garlic, packed parsley leaves, cumin, coriander, salt and black pepper into a food processor."
+    },
+    {
+      "heading": "Pulse",
+      "text": "Pulse 10 to 12 times. The texture must look like coarse, wet sand — do not puree it into hummus."
+    },
+    {
+      "heading": "Bind & Chill",
+      "text": "Transfer to a bowl. Stir in the beaten egg until uniform. Cover and refrigerate for at least 1 hour. Do not skip this, or the flourless mixture will dissolve in the oil."
+    },
+    {
+      "heading": "Shape",
+      "text": "Gently form the cold mixture into 12 to 14 small, flattened patties, about 1.5 inches wide and 1/2 inch thick."
+    },
+    {
+      "heading": "Pan-Fry",
+      "text": "Heat the neutral oil in a large skillet over medium heat. Fry the patties in batches for 3 to 4 minutes per side, until a deep golden crust forms. Flip carefully with a thin spatula. Drain on paper towels."
+    }
+  ],
+  "notes": "Fry these last, right before serving — they are only good hot and crisp."
+}

@@ -1,0 +1,38 @@
+{
+  "id": "greek-salad-horiatiki",
+  "title": "Authentic Greek Salad",
+  "subtitle": "Horiatiki",
+  "description": "No lettuce. The feta goes on as a whole block, not crumbled — that is what makes it the real thing.",
+  "servings": 4,
+  "prepMin": 15,
+  "cookMin": 0,
+  "restMin": 0,
+  "tags": ["greek", "side", "vegetarian", "no-cook"],
+  "image": "/images/recipes/greek-salad-horiatiki.jpg",
+  "imageCredit": {
+    "author": "zone41 (Flickr)",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Greek_Salad_Choriatiki.jpg",
+    "title": "Greek Salad Choriatiki"
+  },
+  "ingredients": [
+    { "ingredientId": "tomato", "quantity": 4, "unit": "each", "note": "cut into thick, irregular wedges" },
+    { "ingredientId": "english-cucumber", "quantity": 1, "unit": "each", "note": "sliced into thick half-moons" },
+    { "ingredientId": "green-bell-pepper", "quantity": 1, "unit": "each", "note": "sliced into thin rings" },
+    { "ingredientId": "red-onion", "quantity": 0.5, "unit": "each", "note": "sliced into thin half-moons" },
+    { "ingredientId": "olive-oil", "quantity": 0.25, "unit": "cup" },
+    { "ingredientId": "red-wine-vinegar", "quantity": 1, "unit": "tbsp" },
+    { "ingredientId": "sea-salt", "quantity": 1, "unit": "pinch" },
+    { "ingredientId": "kalamata-olives", "quantity": 0.5, "unit": "cup", "note": "a generous handful" },
+    { "ingredientId": "feta-cheese", "quantity": 7, "unit": "oz", "note": "one whole block, left uncut" },
+    { "ingredientId": "dried-oregano", "quantity": 1.5, "unit": "tsp" }
+  ],
+  "steps": [
+    { "text": "Cut the tomatoes into thick, irregular wedges. Slice the English cucumber into thick half-moons. Slice the green bell pepper into thin rings. Slice the red onion into thin half-moons." },
+    { "text": "Arrange the cut vegetables in a large, shallow serving bowl." },
+    { "text": "Whisk together the olive oil, red wine vinegar and a small pinch of salt. Drizzle this evenly over the vegetables and toss gently." },
+    { "text": "Scatter the Kalamata olives across the top." },
+    { "text": "Place the whole block of feta directly on top of the salad bed. Drizzle a tiny bit of olive oil over the cheese block and dust the entire salad with the dried oregano." }
+  ]
+}

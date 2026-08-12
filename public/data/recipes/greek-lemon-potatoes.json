@@ -1,0 +1,37 @@
+{
+  "id": "greek-lemon-potatoes",
+  "title": "Greek Lemon Potatoes",
+  "subtitle": "Patates Sto Fourno",
+  "description": "Slow-roasted until the broth cooks down into a rich lemon-oregano oil and the edges go golden and crisp.",
+  "servings": 6,
+  "prepMin": 15,
+  "cookMin": 55,
+  "restMin": 0,
+  "tags": ["greek", "side", "vegetarian", "oven"],
+  "image": "/images/recipes/greek-lemon-potatoes.jpg",
+  "imageCredit": {
+    "author": "Shixart1985",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Crispy_golden_potato_wedges_on_a_baking_tray_ready_for_serving_at_home.jpg",
+    "title": "Crispy golden potato wedges on a baking tray"
+  },
+  "ingredients": [
+    { "ingredientId": "potato", "quantity": 2.5, "unit": "lb", "note": "peeled, sliced lengthwise into thick wedges" },
+    { "ingredientId": "olive-oil", "quantity": 0.5, "unit": "cup" },
+    { "ingredientId": "broth", "quantity": 0.5, "unit": "cup", "note": "vegetable or chicken" },
+    { "ingredientId": "lemon-juice", "quantity": 0.333, "unit": "cup", "note": "fresh" },
+    { "ingredientId": "garlic", "quantity": 4, "unit": "clove", "note": "minced" },
+    { "ingredientId": "dried-oregano", "quantity": 1, "unit": "tbsp" },
+    { "ingredientId": "sea-salt", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "black-pepper", "quantity": 0.5, "unit": "tsp" }
+  ],
+  "steps": [
+    { "text": "Preheat your oven to 400°F (200°C)." },
+    { "text": "Peel the potatoes and slice them length-wise into thick, robust wedges. Place them directly into a large 9x13-inch baking dish." },
+    { "text": "In a medium bowl, whisk together the olive oil, broth, lemon juice, minced garlic, dried oregano, salt and black pepper." },
+    { "text": "Pour the liquid mixture over the potatoes, tossing them until evenly coated." },
+    { "text": "Place the pan uncovered into the oven. Bake for 50 to 60 minutes, gently flipping the potatoes twice during baking. They are done when the broth evaporates into a rich oil and the potato edges are golden and crisp." }
+  ],
+  "notes": "These take the longest of anything in the Greek dinner — start them first and cook everything else around them."
+}
