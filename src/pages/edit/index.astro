@@ -1,0 +1,25 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import TokenPanel from "../../components/TokenPanel";
+import EditIndex from "../../components/EditIndex";
+---
+
+<SiteLayout title="Edit — Cookbook" description="Add and edit recipes, committed straight to the repo.">
+  <section style="padding-block: 44px 8px;">
+    <p class="lbl">Authoring</p>
+    <h1 style="margin-top: 10px;">Edit</h1>
+    <p style="max-width: 58ch; margin: 16px 0 28px; color: var(--ink-2);">
+      Recipes are files in the repo. Saving here writes them back as a single commit, and the
+      published site rebuilds itself about a minute later.
+    </p>
+  </section>
+
+  {/* client:only — reads localStorage, which does not exist during SSR. */}
+  <TokenPanel client:only="react" />
+
+  <div style="height: 32px;"></div>
+
+  <EditIndex client:only="react" />
+
+  <div style="height: 48px;"></div>
+</SiteLayout>

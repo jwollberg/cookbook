@@ -1,0 +1,20 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import RecipeEditor from "../../components/RecipeEditor";
+---
+
+{/*
+  One static page serves every recipe, reading ?id= on the client. A static
+  host cannot generate a route for a recipe that does not exist yet, and the
+  whole point of this page is creating those.
+*/}
+<SiteLayout title="Edit recipe — Cookbook" description="Add or edit a recipe.">
+  <section style="padding-block: 32px 20px;">
+    <a href="/edit" class="lbl" style="text-decoration: none;">← Edit</a>
+    <h1 style="margin-top: 14px; font-size: clamp(1.8rem, 4vw, 2.6rem);">Recipe</h1>
+  </section>
+
+  <RecipeEditor client:only="react" />
+
+  <div style="height: 48px;"></div>
+</SiteLayout>

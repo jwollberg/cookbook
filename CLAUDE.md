@@ -38,6 +38,27 @@ that was never written.
 `localStorage`. Editing affordances stay hidden unless a token is present, so the public view is
 clean and read-only.
 
+## Client data loading
+
+`/data/all.json` is generated at build time by `src/pages/data/all.json.ts` from the same loader
+the pages use. A static host cannot list a directory, so the browser has no way to discover which
+recipe files exist — this is that index, and it cannot drift because it is derived, not maintained.
+The individual files under `public/data/` remain the source of truth the editor writes to.
+
+Two loaders, deliberately separate — do not cross them:
+- `src/lib/data.server.ts` — build time, uses `node:fs`. Never import from a React island.
+- `src/lib/store.ts` — browser, fetches `/data/all.json`. Never import from Astro frontmatter.
+
+## Reconcile rule (`mergeStash`)
+
+A save writes to a local stash immediately and commits in the background, because a Pages rebuild
+takes ~40–60s. On load the published bundle is fetched and the stash laid over the top.
+
+**A stash entry is kept only while its `updatedAt` is strictly newer than the published copy's.**
+Once the published copy catches up the entry is dropped. Getting this backwards is invisible in the
+UI and permanent: a stale local copy would shadow every later edit made from another device. It is
+covered by `store.test.ts` — keep it that way.
+
 ## Data model
 
 `public/data/`

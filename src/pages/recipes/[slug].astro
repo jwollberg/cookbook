@@ -2,6 +2,7 @@
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import ImageCredit from "../../components/ImageCredit.astro";
 import IngredientList, { type IngredientName } from "../../components/IngredientList";
+import EditLink from "../../components/EditLink";
 import { loadAll, formatMinutes } from "../../lib/data.server";
 
 export async function getStaticPaths() {
@@ -47,7 +48,11 @@ const stepGroups = recipe.steps.reduce((acc, step) => {
 
 <SiteLayout title={`${recipe.title} — Cookbook`} description={recipe.description}>
   <article style="padding-block: 32px 8px;">
-    <a href="/recipes" class="lbl" style="text-decoration: none;">← Recipes</a>
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+      <a href="/recipes" class="lbl" style="text-decoration: none;">← Recipes</a>
+      {/* Only renders once a token is present, so the public view stays clean. */}
+      <EditLink client:only="react" href={`/edit/recipe?id=${recipe.id}`} />
+    </div>
 
     <header style="margin-top: 18px;">
       <h1>{recipe.title}</h1>
