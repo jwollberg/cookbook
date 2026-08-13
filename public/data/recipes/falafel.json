@@ -1,14 +1,14 @@
 {
-  "id": "flourless-falafel",
-  "title": "Flourless Falafel",
-  "description": "Oven-dried canned chickpeas bound with a single egg instead of flour. The drying step and the chill are both load-bearing.",
+  "id": "falafel",
+  "title": "Falafel",
+  "description": "Canned chickpeas bound with chickpea flour and an egg. The flour is what makes these forgiving — it takes up the residual moisture that otherwise has falafel collapsing in the pan.",
   "servings": 4,
   "yieldNote": "12–14 small patties",
   "prepMin": 20,
   "cookMin": 8,
-  "restMin": 60,
-  "tags": ["greek", "main", "vegetarian", "fried"],
-  "image": "/images/recipes/flourless-falafel.jpg",
+  "restMin": 30,
+  "tags": ["greek", "main", "vegetarian", "fried", "gluten-free"],
+  "image": "/images/recipes/falafel.jpg",
   "imageCredit": {
     "author": "Popo le Chien",
     "license": "CC BY-SA 3.0",
@@ -21,6 +21,7 @@
     { "ingredientId": "yellow-onion", "quantity": 0.5, "unit": "each", "note": "chopped" },
     { "ingredientId": "garlic", "quantity": 5, "unit": "clove", "note": "minced" },
     { "ingredientId": "fresh-parsley", "quantity": 1, "unit": "cup", "note": "packed leaves — parsley, cilantro, or a mix" },
+    { "ingredientId": "chickpea-flour", "quantity": 0.25, "unit": "cup", "note": "besan or gram flour" },
     { "ingredientId": "ground-cumin", "quantity": 2, "unit": "tsp" },
     { "ingredientId": "ground-coriander", "quantity": 2, "unit": "tsp" },
     { "ingredientId": "sea-salt", "quantity": 1.5, "unit": "tsp" },
@@ -43,16 +44,16 @@
     },
     {
       "heading": "Bind & Chill",
-      "text": "Transfer to a bowl. Stir in the beaten egg until uniform. Cover and refrigerate for at least 1 hour. Do not skip this, or the flourless mixture will dissolve in the oil."
+      "text": "Transfer to a bowl. Stir in the chickpea flour and the beaten egg by hand until uniform — keep the flour out of the processor, or you will work the mixture into a paste. Cover and refrigerate for at least 30 minutes; the flour goes on taking up moisture while it rests."
     },
     {
       "heading": "Shape",
-      "text": "Gently form the cold mixture into 12 to 14 small, flattened patties, about 1.5 inches wide and 1/2 inch thick."
+      "text": "Gently form the cold mixture into 12 to 14 small, flattened patties, about 1.5 inches wide and 1/2 inch thick. They should hold their edges cleanly — if they slump, work in another tablespoon of chickpea flour and chill for another 10 minutes."
     },
     {
       "heading": "Pan-Fry",
       "text": "Heat the neutral oil in a large skillet over medium heat. Fry the patties in batches for 3 to 4 minutes per side, until a deep golden crust forms. Flip carefully with a thin spatula. Drain on paper towels."
     }
   ],
-  "notes": "Fry these last, right before serving — they are only good hot and crisp."
+  "notes": "Chickpea flour rather than wheat: it is gluten-free, cheap, in most supermarkets and every Indian grocer, and being ground chickpeas it reinforces the flavour instead of muddying it. Fry these last, right before serving — they are only good hot and crisp."
 }

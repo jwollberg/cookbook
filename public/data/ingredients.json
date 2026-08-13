@@ -139,6 +139,15 @@
     "notes": "15 oz cans. Drained weight is roughly 250 g per can."
   },
   {
+    "id": "chickpea-flour",
+    "name": "chickpea flour",
+    "aisle": "pantry",
+    "aliases": ["besan", "gram flour", "garbanzo bean flour", "chana flour"],
+    "defaultUnit": "cup",
+    "gramsPerMl": 0.39,
+    "notes": "Sold as besan or gram flour in Indian groceries, chickpea or garbanzo bean flour elsewhere. Naturally gluten-free."
+  },
+  {
     "id": "kalamata-olives",
     "name": "Kalamata olives",
     "aisle": "pantry",

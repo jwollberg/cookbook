@@ -171,7 +171,7 @@ describe("a multi-day plan with scaled entries", () => {
         date: "2026-08-12",
         entries: [
           { slot: "lunch", recipeId: "greek-salad-horiatiki", servings: 2 }, // half
-          { slot: "dinner", recipeId: "flourless-falafel", servings: 8 }, // double
+          { slot: "dinner", recipeId: "falafel", servings: 8 }, // double
         ],
       },
     ],

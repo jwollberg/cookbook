@@ -4,7 +4,7 @@
   "description": "Falafel with lemon potatoes, horiatiki and tzatziki. Everything lands on the table at once if you follow the timeline.",
   "tags": ["greek", "vegetarian"],
   "components": [
-    { "recipeId": "flourless-falafel", "role": "main" },
+    { "recipeId": "falafel", "role": "main" },
     { "recipeId": "greek-lemon-potatoes", "role": "side" },
     { "recipeId": "greek-salad-horiatiki", "role": "side" },
     { "recipeId": "fresh-tzatziki-sauce", "role": "sauce" }
@@ -18,7 +18,7 @@
     {
       "heading": "Flash-dry the chickpeas",
       "text": "Pop them into the oven right alongside the potatoes for 10 minutes.",
-      "recipeId": "flourless-falafel"
+      "recipeId": "falafel"
     },
     {
       "heading": "Make the tzatziki",
@@ -27,8 +27,8 @@
     },
     {
       "heading": "Make the falafel mix",
-      "text": "Blend the ingredients and chill the mixture for 1 hour so the egg binds it securely.",
-      "recipeId": "flourless-falafel"
+      "text": "Blend the ingredients, then stir in the chickpea flour and egg and chill for 30 minutes so it binds.",
+      "recipeId": "falafel"
     },
     {
       "heading": "Chop the Greek salad",
@@ -38,7 +38,7 @@
     {
       "heading": "Shape and fry the falafel",
       "text": "Fry the patties right before serving so they are hot and crispy.",
-      "recipeId": "flourless-falafel"
+      "recipeId": "falafel"
     }
   ]
 }
