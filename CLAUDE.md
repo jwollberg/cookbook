@@ -174,7 +174,7 @@ First run locally: `npm run db:migrate:local && npm run db:seed:local && npm run
 ## Deploying — pushing to `main` deploys
 
 Cloudflare **Workers Builds** is connected to `jwollberg/cookbook` (build command `npm run ci`,
-deploy command `npx wrangler deploy`), the same model as Homeschool Hero. So `git push` to `main`
+deploy command `npx wrangler deploy`, preview builds off), the same model as Homeschool Hero. So `git push` to `main`
 IS the deploy: hold it to the bar a manual deploy would get — tests green, build clean, the change
 exercised. Non-production branches build but do not deploy.
 

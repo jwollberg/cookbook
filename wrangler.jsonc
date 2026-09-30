@@ -17,6 +17,10 @@
   },
 
   "routes": [{ "pattern": "kitchen.atheosstudios.com", "custom_domain": true }],
+  // One address only. Sign-in is bound to it (the OAuth redirect URI), so a
+  // workers.dev or preview URL could only ever show the sign-in page anyway.
+  "workers_dev": false,
+  "preview_urls": false,
 
   "d1_databases": [
     {
