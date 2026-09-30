@@ -7,23 +7,23 @@ import { describe, it, expect } from "vitest";
 import { canonicalEmail, checkClaims, isAllowed, safeNext, type GoogleClaims } from "./auth";
 import { sign, unsign, pkceChallenge } from "./crypto";
 
-const LIST = "josh.wollberg@gmail.com, reagen.wollberg@gmail.com gwenevere.greenwood@gmail.com";
+const LIST = "sam.cook@gmail.com, alex@example.com pat.baker@gmail.com";
 
 describe("allowlist", () => {
   it("admits listed accounts", () => {
-    expect(isAllowed("josh.wollberg@gmail.com", LIST)).toBe(true);
-    expect(isAllowed("gwenevere.greenwood@gmail.com", LIST)).toBe(true);
+    expect(isAllowed("sam.cook@gmail.com", LIST)).toBe(true);
+    expect(isAllowed("alex@example.com", LIST)).toBe(true);
   });
 
   it("matches Gmail the way Gmail does: no dots, no plus tags, any case", () => {
-    expect(isAllowed("JoshWollberg@Gmail.com", LIST)).toBe(true);
-    expect(isAllowed("josh.wollberg+kitchen@googlemail.com", LIST)).toBe(true);
-    expect(canonicalEmail("j.o.s.h+x@gmail.com")).toBe("josh@gmail.com");
+    expect(isAllowed("SamCook@Gmail.com", LIST)).toBe(true);
+    expect(isAllowed("sam.cook+kitchen@googlemail.com", LIST)).toBe(true);
+    expect(canonicalEmail("s.a.m+x@gmail.com")).toBe("sam@gmail.com");
   });
 
   it("keeps dots meaningful outside Gmail", () => {
     expect(canonicalEmail("first.last@example.com")).toBe("first.last@example.com");
-    expect(isAllowed("joshwollberg@example.com", "josh.wollberg@example.com")).toBe(false);
+    expect(isAllowed("firstlast@example.com", "first.last@example.com")).toBe(false);
   });
 
   it("refuses everyone else", () => {
@@ -32,8 +32,8 @@ describe("allowlist", () => {
   });
 
   it("fails closed when the list is missing or empty", () => {
-    expect(isAllowed("josh.wollberg@gmail.com", undefined)).toBe(false);
-    expect(isAllowed("josh.wollberg@gmail.com", "  ")).toBe(false);
+    expect(isAllowed("sam.cook@gmail.com", undefined)).toBe(false);
+    expect(isAllowed("sam.cook@gmail.com", "  ")).toBe(false);
   });
 });
 
@@ -43,7 +43,7 @@ describe("Google ID token claims", () => {
     iss: "https://accounts.google.com",
     aud: CLIENT,
     sub: "1234",
-    email: "josh.wollberg@gmail.com",
+    email: "sam.cook@gmail.com",
     email_verified: true,
     exp: Math.floor(Date.now() / 1000) + 600,
     ...over,
