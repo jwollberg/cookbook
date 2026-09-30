@@ -1,11 +1,11 @@
 /**
- * Integrity checks on the real contents of public/data.
+ * Integrity checks on the starter library in seed/.
  *
- * The repo is the database, so these files are hand-written today and
- * browser-written tomorrow. Schema validation catches malformed records;
- * the referential checks catch the failure that actually bites — a recipe
- * pointing at an ingredient id that does not exist, which would silently
- * vanish from every shopping list rather than erroring.
+ * These files seed D1 (scripts/seed.mjs), so a bad one would quietly land a
+ * broken record in the live database. Schema validation catches malformed
+ * records; the referential checks catch the failure that actually bites — a
+ * recipe pointing at an ingredient id that does not exist, which would
+ * silently vanish from every shopping list rather than erroring.
  */
 
 import { describe, it, expect } from "vitest";
@@ -14,7 +14,6 @@ import { join } from "node:path";
 import {
   IngredientsFileSchema,
   MealSchema,
-  PantryFileSchema,
   RecipeSchema,
   type Ingredient,
   type Meal,
@@ -23,7 +22,7 @@ import {
 } from "./schema";
 import { buildShoppingList, expandPlan } from "./shopping";
 
-const DATA = join(process.cwd(), "public", "data");
+const DATA = join(process.cwd(), "seed");
 const PUBLIC = join(process.cwd(), "public");
 
 const readJson = (path: string) => JSON.parse(readFileSync(path, "utf8"));
@@ -47,10 +46,6 @@ describe("seed data", () => {
     expect(ingredients.length).toBeGreaterThan(0);
     expect(recipes.length).toBeGreaterThan(0);
     expect(meals.length).toBeGreaterThan(0);
-  });
-
-  it("parses pantry.json", () => {
-    expect(() => PantryFileSchema.parse(readJson(join(DATA, "pantry.json")))).not.toThrow();
   });
 
   it("has no duplicate ingredient ids", () => {

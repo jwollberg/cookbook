@@ -1,30 +1,68 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
 import CookSheet from "../components/CookSheet";
+import Icon from "../components/Icon";
+import { loadKitchen, viewerToday } from "../lib/server/page";
+import { entryCount, resolvePlan } from "../lib/plans";
+import { formatRange } from "../lib/dates";
+
+const { planning, household, recipesById, mealsById, ingredientsById } = await loadKitchen(Astro.locals);
+const today = viewerToday(Astro.locals);
+const plan = resolvePlan(planning.plans, Astro.url.searchParams.get("plan") ?? undefined, today);
+const others = planning.plans.filter((p) => entryCount(p) > 0 && p.id !== plan?.id).slice(0, 6);
 ---
 
-<SiteLayout
-  title="Cooking sheet — Cookbook"
-  description="Every dish in the plan, in order, with quantities at the servings you planned."
->
-  <section style="padding-block: 40px 22px;">
-    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap;">
+<SiteLayout title="Cooking sheet" description="Every dish in the plan, in order, with quantities at the servings you planned.">
+  <div class="wrap">
+    <header class="page-head">
       <div>
-        <p class="lbl">Generated from the plan</p>
-        <h1 style="margin-top: 10px;">Cooking sheet</h1>
+        <span class="eyebrow">{household.name}</span>
+        <h1>Cooking sheet</h1>
+        <p class="lede">
+          {
+            plan
+              ? `Every dish for ${formatRange(plan.days[0].date, plan.days[plan.days.length - 1].date)}, day by day, with quantities scaled to the servings you planned.`
+              : "Every dish in the week's plan, day by day, with quantities already scaled."
+          }
+        </p>
       </div>
-      <div style="display: flex; gap: 8px;">
-        <a class="btn btn-sm" href="/plan">Plan</a>
-        <a class="btn btn-sm" href="/shopping">Shopping list</a>
+      <div class="actions no-print">
+        <a class="btn btn-sm" href={plan ? `/plan?week=${plan.days[0].date}` : "/plan"}>
+          <Icon name="calendar" /> Plan
+        </a>
+        <a class="btn btn-sm" href="/shopping"><Icon name="bag" /> Shopping list</a>
+        <button class="btn btn-sm btn-icon" aria-label="Print" onclick="window.print()">
+          <Icon name="printer" />
+        </button>
       </div>
-    </div>
-    <p style="max-width: 58ch; margin: 14px 0 0; color: var(--ink-2);">
-      Every dish for the week, day by day, with quantities already scaled to the servings you
-      planned. Meals lead with their order of work, since that interleaves the recipes.
-    </p>
-  </section>
+    </header>
 
-  <CookSheet client:only="react" />
+    {
+      others.length > 0 && (
+        <div class="chips no-print" style="margin-bottom: 28px;">
+          <span class="small muted" style="align-self: center;">
+            Other weeks:
+          </span>
+          {others.map((p) => (
+            <a class="chip" href={`/cook?plan=${p.id}`}>
+              {formatRange(p.days[0].date, p.days[p.days.length - 1].date)}
+            </a>
+          ))}
+        </div>
+      )
+    }
 
-  <div style="height: 56px;"></div>
+    {
+      plan && entryCount(plan) > 0 ? (
+        <CookSheet plan={plan} recipesById={recipesById} mealsById={mealsById} ingredientsById={ingredientsById} />
+      ) : (
+        <div class="empty">
+          <p>Nothing to cook yet — the sheet is generated from a plan.</p>
+          <a class="btn btn-primary" href="/plan">
+            <Icon name="calendar" /> Plan the week
+          </a>
+        </div>
+      )
+    }
+  </div>
 </SiteLayout>

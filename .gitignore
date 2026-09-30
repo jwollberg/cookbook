@@ -20,3 +20,8 @@ pnpm-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# cloudflare
+.wrangler/
+.dev.vars
+scripts/seed.sql

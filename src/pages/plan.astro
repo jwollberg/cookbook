@@ -1,26 +1,52 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
-import Planner from "../components/Planner";
+import Planner, { type PlannerMeal, type PlannerRecipe } from "../components/Planner";
+import { loadKitchen, viewerToday } from "../lib/server/page";
+import { mealImages } from "../lib/format";
+import { mondayOf } from "../lib/plans";
+
+const { library, planning, household, recipesById } = await loadKitchen(Astro.locals);
+const today = viewerToday(Astro.locals);
+const requested = Astro.url.searchParams.get("week");
+const monday = mondayOf(requested && /^\d{4}-\d{2}-\d{2}$/.test(requested) ? requested : today);
+
+// Only what the planner shows crosses to the browser.
+const recipes: PlannerRecipe[] = library.recipes.map((r) => ({
+  id: r.id,
+  title: r.title,
+  servings: r.servings,
+  image: r.image,
+}));
+const meals: PlannerMeal[] = library.meals.map((m) => ({
+  id: m.id,
+  name: m.name,
+  dishes: m.components.length,
+  image: mealImages(m, recipesById)[0],
+}));
 ---
 
-<SiteLayout
-  title="Plan — Cookbook"
-  description="Build a weekly meal plan from meals and recipes, then generate a cooking sheet and shopping list."
-  wide
->
+<SiteLayout title="Plan" description="Plan the household's week, then cook and shop from it.">
   <div class="wrap">
-    <section style="padding-block: 40px 22px;">
-      <p class="lbl">The week</p>
-      <h1 style="margin-top: 10px;">Plan</h1>
-      <p style="max-width: 58ch; margin: 14px 0 0; color: var(--ink-2);">
-        Drag meals and recipes onto a day. Everything downstream — the cooking sheet and the
-        shopping list — is generated from what lands here.
-      </p>
-    </section>
+    <header class="page-head">
+      <div>
+        <span class="eyebrow">{household.name}</span>
+        <h1>Plan the week</h1>
+        <p class="lede">
+          Drag meals and recipes onto a day. The cooking sheet and the shopping list follow whatever
+          lands here, and it saves itself.
+        </p>
+      </div>
+    </header>
 
-    {/* client:only — the working plan lives in localStorage. */}
-    <Planner client:only="react" />
-
-    <div style="height: 56px;"></div>
+    <Planner
+      client:load
+      householdId={household.id}
+      householdName={household.name}
+      plans={planning.plans}
+      recipes={recipes}
+      meals={meals}
+      today={today}
+      monday={monday}
+    />
   </div>
 </SiteLayout>

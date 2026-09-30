@@ -369,3 +369,59 @@ describe("expandPlan", () => {
     expect(expandPlan(plan, recipes, meals)).toHaveLength(2);
   });
 });
+
+describe("items added by hand", () => {
+  const soup = recipe({
+    id: "soup",
+    title: "Soup",
+    ingredients: [line("garlic", 4, "clove"), line("chicken", 500, "g")],
+  });
+
+  it("merges a registry item into the recipe's line instead of listing it twice", () => {
+    const list = buildShoppingList([{ recipe: soup }], INGREDIENTS, {
+      items: [{ id: "a", ingredientId: "chicken", quantity: 1, unit: "lb" }],
+    });
+    const chicken = list.groups.flatMap((g) => g.lines).find((l) => l.ingredientId === "chicken")!;
+    expect(chicken.parts).toHaveLength(1);
+    expect(chicken.parts[0].baseAmount).toBeCloseTo(500 + 453.59237, 4);
+    expect(chicken.added).toBe(true);
+    expect(chicken.fromRecipes).toEqual(["Soup"]);
+  });
+
+  it("shows a staple once you ask for it by name", () => {
+    const list = buildShoppingList([], INGREDIENTS, { items: [{ id: "a", ingredientId: "salt" }] });
+    const salt = list.groups.flatMap((g) => g.lines).find((l) => l.ingredientId === "salt");
+    expect(salt?.added).toBe(true);
+    expect(salt?.covered).toBe(false);
+  });
+
+  it("is not netted off against the pantry", () => {
+    // The pantry covers the recipe's 4 cloves with 2 to spare; asking for 3
+    // more cloves by hand still means buying 3.
+    const list = buildShoppingList([{ recipe: soup }], INGREDIENTS, {
+      pantry: [{ ingredientId: "garlic", quantity: 6, unit: "clove" }],
+      items: [{ id: "a", ingredientId: "garlic", quantity: 3, unit: "clove" }],
+    });
+    const garlic = list.groups.flatMap((g) => g.lines).find((l) => l.ingredientId === "garlic")!;
+    expect(garlic.parts.map((p) => p.text)).toEqual(["3 cloves"]);
+  });
+
+  it("keeps free text as its own line under Other, keyed for ticking", () => {
+    const list = buildShoppingList([], INGREDIENTS, {
+      items: [{ id: "x1", name: "paper towels" }, { id: "x2", name: "milk", quantity: 1, unit: "gal" }],
+    });
+    const other = list.groups.find((g) => g.aisle === "other")!;
+    expect(other.lines.map((l) => [l.key, l.name, l.parts.map((p) => p.text).join()])).toEqual([
+      ["item:x2", "milk", "1 gal"],
+      ["item:x1", "paper towels", ""],
+    ]);
+    expect(other.lines.every((l) => l.added && l.ingredientId === undefined)).toBe(true);
+  });
+
+  it("works with no dishes at all — a list without a plan", () => {
+    const list = buildShoppingList([], INGREDIENTS, {
+      items: [{ id: "a", ingredientId: "flour", quantity: 2, unit: "cup" }],
+    });
+    expect(list.totalLines).toBe(1);
+  });
+});

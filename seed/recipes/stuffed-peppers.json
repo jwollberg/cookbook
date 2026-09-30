@@ -1,0 +1,55 @@
+{
+  "id": "stuffed-peppers",
+  "title": "Stuffed Peppers",
+  "description": "Bell peppers packed with browned beef, rice and tomato sauce, baked under a lid of melted mozzarella. A short par-bake first means the peppers come out tender instead of crunchy around a done filling.",
+  "servings": 4,
+  "yieldNote": "4 stuffed peppers",
+  "prepMin": 20,
+  "cookMin": 60,
+  "restMin": 5,
+  "tags": ["american", "main", "baked", "gluten-free"],
+  "image": "/images/recipes/stuffed-peppers.jpg",
+  "imageCredit": {
+    "author": "Roundhere44",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stuffed_Peppers_Florentine.jpg",
+    "title": "Stuffed peppers florentine"
+  },
+  "ingredients": [
+    { "ingredientId": "bell-pepper", "quantity": 4, "unit": "each", "note": "tops cut off, seeds and ribs removed" },
+    { "ingredientId": "ground-beef", "quantity": 1, "unit": "lb" },
+    { "ingredientId": "white-rice", "quantity": 0.5, "unit": "cup", "note": "uncooked" },
+    { "ingredientId": "tomato-sauce", "quantity": 1, "unit": "can", "note": "15 oz — 1 cup for the filling, the rest for the tops" },
+    { "ingredientId": "mozzarella", "quantity": 1.5, "unit": "cup", "note": "divided — 1/2 cup for the filling, 1 cup for the tops" },
+    { "ingredientId": "sea-salt", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "black-pepper", "quantity": 0.5, "unit": "tsp" }
+  ],
+  "steps": [
+    {
+      "heading": "Cook the Rice",
+      "text": "Heat the oven to 375°F. Bring the rice and 1 cup of water to a boil in a small saucepan, cover, drop to low and simmer for 15 minutes. Take it off the heat and leave it covered while you do the rest."
+    },
+    {
+      "heading": "Par-Bake the Peppers",
+      "text": "If a pepper won't stand upright, shave a thin slice off its base without cutting through. Stand them cut side up in a baking dish just big enough to hold them snugly and bake for 10 minutes to soften."
+    },
+    {
+      "heading": "Brown the Beef",
+      "text": "Meanwhile, brown the ground beef in a large skillet over medium-high heat for 6 to 8 minutes, breaking it up as it cooks, until no pink remains. Tip off the excess fat. Season with the salt and pepper."
+    },
+    {
+      "heading": "Mix the Filling",
+      "text": "Take the skillet off the heat. Stir in the cooked rice, 1 cup of the tomato sauce and 1/2 cup of the mozzarella."
+    },
+    {
+      "heading": "Stuff & Bake",
+      "text": "Pack the filling firmly into the peppers, mounding it on top. Spoon the remaining tomato sauce over the tops and let it run down into the dish. Cover tightly with foil and bake for 35 minutes."
+    },
+    {
+      "heading": "Melt the Cheese",
+      "text": "Uncover, pile the remaining 1 cup of mozzarella on top and bake uncovered for another 10 to 15 minutes, until the cheese is melted and browned in spots and the peppers are tender when pierced. Rest for 5 minutes before serving."
+    }
+  ],
+  "notes": "Cook the rice first rather than stuffing it raw — raw rice drinks the sauce unevenly and stays chalky in the middle of the pepper. Leftovers reheat well, covered, at 350°F for about 20 minutes."
+}

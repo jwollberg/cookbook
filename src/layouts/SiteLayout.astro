@@ -1,85 +1,218 @@
 ---
 import "../styles/global.css";
+import Icon from "../components/Icon";
+import { countList, listHouseholds } from "../lib/server/db";
 
 interface Props {
   title: string;
   description?: string;
-  /** Full-bleed pages (planner, shopping) opt out of the centred column. */
-  wide?: boolean;
+  /** The sign-in page: no navigation, nobody to show it to. */
+  bare?: boolean;
 }
 
 const {
   title,
-  description = "A personal cookbook: recipes, meals, weekly plans, and shopping lists generated from them.",
-  wide = false,
+  description = "Recipes, meal plans, and a shopping list that adds itself up.",
+  bare = false,
 } = Astro.props;
 
-const nav = [
-  { href: "/recipes", label: "Recipes" },
-  { href: "/meals", label: "Meals" },
-  { href: "/plan", label: "Plan" },
-  { href: "/shopping", label: "Shopping" },
-  { href: "/edit", label: "Edit" },
-];
+const { viewer, household } = Astro.locals;
+const signedIn = !bare && Boolean(viewer && household);
+const db = Astro.locals.runtime.env.DB;
+const [households, listCount] = signedIn
+  ? await Promise.all([listHouseholds(db), countList(db, household.id)])
+  : [[], 0];
 
 // Astro.url.pathname keeps a trailing slash on directory routes; strip it so
-// "/recipes/" still matches the "/recipes" nav href for aria-current.
+// "/recipes/" still matches "/recipes" for aria-current.
 const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
-const isActive = (href: string) => path === href || path.startsWith(href + "/");
+const here = path + Astro.url.search;
+const isActive = (href: string) => (href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`));
+
+const nav = [
+  { href: "/recipes", label: "Recipes", icon: "book" },
+  { href: "/meals", label: "Meals", icon: "cloche" },
+  { href: "/plan", label: "Plan", icon: "calendar" },
+  { href: "/shopping", label: "Shopping list", short: "List", icon: "bag", badge: true },
+] as const;
+
+const initial = (viewer?.name ?? viewer?.email ?? "?").trim().charAt(0).toUpperCase();
+const pageTitle = title === "Kitchen" ? title : `${title} · Kitchen`;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#FDFBF7" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#17140F" media="(prefers-color-scheme: dark)" />
-    <title>{title}</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#FAF9F7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141210" media="(prefers-color-scheme: dark)" />
+    <title>{pageTitle}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..700,0..100,0..1&family=Inter:wght@400..700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=Inter+Tight:wght@600..800&display=swap"
     />
   </head>
-  <body>
+  <body class={signedIn ? "has-tabbar" : undefined}>
     <a class="skip" href="#main">Skip to content</a>
 
-    <header class="site">
-      <div class="wrap nav">
-        <a class="brand" href="/">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
-            <path d="M3.2 11.6H20.8A8.8 8.8 0 0 1 3.2 11.6Z" fill="currentColor" stroke="none" />
-            <path d="M2.4 11.6h19.2" />
-            <path d="M9 3.2c-.85 1.05-.85 2.1 0 3.15s.85 2.1 0 3.15" />
-            <path d="M14.6 4.4c-.7.9-.7 1.75 0 2.65s.7 1.75 0 2.65" />
-          </svg>
-          Cookbook
-        </a>
-        <nav class="navlinks" aria-label="Primary">
-          {
-            nav.map((item) => (
-              <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
-                {item.label}
-              </a>
-            ))
-          }
-        </nav>
-      </div>
-    </header>
+    {
+      signedIn && (
+        <header class="topbar">
+          <div class="wrap topbar-inner">
+            <a class="brand" href="/">
+              <span class="brand-mark">
+                <Icon name="pot" />
+              </span>
+              Kitchen
+            </a>
 
-    <main id="main" class={wide ? undefined : "wrap"}>
+            <nav class="topnav" aria-label="Primary">
+              {nav.map((item) => (
+                <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+                  {item.label}
+                  {"badge" in item && (
+                    <span class="count-badge" data-list-count hidden={listCount === 0}>
+                      {listCount}
+                    </span>
+                  )}
+                </a>
+              ))}
+            </nav>
+
+            <div class="topbar-end">
+              <details class="menu" data-menu>
+                <summary class="pill-button" aria-label={`Household: ${household.name}. Switch household`}>
+                  <Icon name="home" />
+                  <span class="name">{household.name}</span>
+                  <Icon name="chevronDown" />
+                </summary>
+                <div class="menu-panel">
+                  <p class="menu-head label">Working in</p>
+                  {households.map((h) => (
+                    <form method="post" action="/api/households">
+                      <input type="hidden" name="intent" value="switch" />
+                      <input type="hidden" name="id" value={h.id} />
+                      <input type="hidden" name="next" value={here} />
+                      <button class="menu-item" aria-current={h.id === household.id ? "true" : undefined}>
+                        <span class="grow">{h.name}</span>
+                        {h.id === household.id && <Icon name="check" />}
+                      </button>
+                    </form>
+                  ))}
+                  <div class="menu-sep" />
+                  <a class="menu-item" href="/household">
+                    <Icon name="settings" />
+                    <span class="grow">Manage households</span>
+                  </a>
+                </div>
+              </details>
+
+              <details class="menu" data-menu>
+                <summary class="avatar" aria-label="Account">
+                  {viewer.picture ? (
+                    <img src={viewer.picture} alt="" referrerpolicy="no-referrer" width="36" height="36" />
+                  ) : (
+                    initial
+                  )}
+                </summary>
+                <div class="menu-panel">
+                  <div class="menu-head">
+                    <strong>{viewer.name ?? viewer.email}</strong>
+                    <div class="small muted">{viewer.email}</div>
+                  </div>
+                  <a class="menu-item" href="/edit">
+                    <Icon name="pencil" />
+                    <span class="grow">Edit recipes</span>
+                  </a>
+                  <a class="menu-item" href="/cook">
+                    <Icon name="pot" />
+                    <span class="grow">Cooking sheet</span>
+                  </a>
+                  <a class="menu-item" href="/household">
+                    <Icon name="home" />
+                    <span class="grow">Households</span>
+                  </a>
+                  <div class="menu-sep" />
+                  <form method="post" action="/auth/logout">
+                    <button class="menu-item">
+                      <Icon name="logout" />
+                      <span class="grow">Sign out</span>
+                    </button>
+                  </form>
+                </div>
+              </details>
+            </div>
+          </div>
+        </header>
+      )
+    }
+
+    <main id="main">
       <slot />
     </main>
 
-    <footer class="site">
-      <div class="wrap foot">
-        <span>Cookbook</span>
-        <span>Recipes in, dinner out.</span>
-      </div>
-    </footer>
+    {
+      signedIn && (
+        <footer class="footer no-print">
+          <div class="wrap footer-inner">
+            <span>Kitchen · {household.name}</span>
+            <span>
+              Recipes are shared by everyone; plans and lists belong to a household.{" "}
+              <a href="/household">Households</a>
+            </span>
+          </div>
+        </footer>
+      )
+    }
+
+    {
+      signedIn && (
+        <nav class="tabbar" aria-label="Primary">
+          <a href="/" aria-current={isActive("/") ? "page" : undefined}>
+            <Icon name="home" />
+            Home
+          </a>
+          {nav.map((item) => (
+            <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+              <Icon name={item.icon} />
+              {"short" in item ? item.short : item.label}
+              {"badge" in item && (
+                <span class="count-badge" data-list-count hidden={listCount === 0}>
+                  {listCount}
+                </span>
+              )}
+            </a>
+          ))}
+        </nav>
+      )
+    }
+
+    <script is:inline>
+      // Menus are <details>: they open with no JavaScript at all. This only
+      // closes them on an outside click or Escape, like a menu should.
+      document.addEventListener("click", (event) => {
+        document.querySelectorAll("details[data-menu][open]").forEach((menu) => {
+          if (!menu.contains(event.target)) menu.removeAttribute("open");
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        document.querySelectorAll("details[data-menu][open]").forEach((menu) => menu.removeAttribute("open"));
+      });
+      // Islands announce list changes; keep both badges in step.
+      window.addEventListener("kitchen:list-changed", (event) => {
+        const count = event.detail?.count ?? 0;
+        document.querySelectorAll("[data-list-count]").forEach((badge) => {
+          badge.textContent = String(count);
+          badge.hidden = count === 0;
+        });
+      });
+    </script>
   </body>
 </html>

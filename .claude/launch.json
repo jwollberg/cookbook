@@ -2,16 +2,16 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "cookbook",
+      "name": "kitchen",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 4321
     },
     {
-      "name": "cookbook-preview",
+      "name": "kitchen-worker",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["astro", "preview", "--port", "4322", "--host", "127.0.0.1"],
-      "port": 4322
+      "runtimeArgs": ["wrangler", "dev", "--port", "8787", "--ip", "127.0.0.1"],
+      "port": 8787
     }
   ]
 }

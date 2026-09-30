@@ -3,12 +3,11 @@ import { dirname, join } from "node:path";
 
 import { defineConfig } from "astro/config";
 
+import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
-import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
-const site = process.env.SITE_URL || "https://cookbook.atheosstudios.com";
-const base = process.env.SITE_BASE || "/";
+const site = process.env.SITE_URL || "https://kitchen.atheosstudios.com";
 
 /**
  * Work around a React 19 + Vite dev-server interop bug.
@@ -40,12 +39,22 @@ const reactJsxDevRuntime = join(
 
 export default defineConfig({
   site,
-  base,
-  output: "static",
-  integrations: [react(), sitemap()],
+  // Every page is rendered per request by the Worker, behind sign-in. A
+  // prerendered page would be a static file, and static files skip the gate.
+  output: "server",
+  adapter: cloudflare({
+    // `astro dev` gets real local D1 and R2 bindings from wrangler.jsonc.
+    platformProxy: { enabled: true },
+  }),
+  integrations: [react()],
 
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      // React 19's default server renderer reaches for MessageChannel, which
+      // the Workers runtime does not provide; its edge build does not.
+      alias: import.meta.env.PROD ? { "react-dom/server": "react-dom/server.edge" } : undefined,
+    },
     // Client only. Applied to the SSR environment as well, the raw CJS file
     // reaches Vite's module runner, which provides no `require` and throws
     // "require is not defined" while server-rendering the islands.

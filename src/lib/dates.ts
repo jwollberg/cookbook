@@ -44,7 +44,7 @@ export function weekDates(start: Date, length = 7): string[] {
 /** "Mon 17 Aug" */
 export function formatDayLabel(iso: string): string {
   const date = fromIso(iso);
-  const month = date.toLocaleString(undefined, { month: "short" });
+  const month = date.toLocaleString("en-US", { month: "short" });
   return `${WEEKDAYS[date.getDay()]} ${date.getDate()} ${month}`;
 }
 
@@ -52,10 +52,33 @@ export function formatDayLabel(iso: string): string {
 export function formatRange(isoStart: string, isoEnd: string): string {
   const a = fromIso(isoStart);
   const b = fromIso(isoEnd);
-  const monthA = a.toLocaleString(undefined, { month: "short" });
-  const monthB = b.toLocaleString(undefined, { month: "short" });
+  // Pinned to en-US: pages render on the server and hydrate in the browser,
+  // and the two must agree on the month name or React discards the markup.
+  const monthA = a.toLocaleString("en-US", { month: "short" });
+  const monthB = b.toLocaleString("en-US", { month: "short" });
   if (monthA === monthB && a.getFullYear() === b.getFullYear()) {
     return `${a.getDate()}–${b.getDate()} ${monthB}`;
   }
   return `${a.getDate()} ${monthA} – ${b.getDate()} ${monthB}`;
+}
+
+/**
+ * Today where the viewer is, as YYYY-MM-DD.
+ *
+ * Pages render in a Worker, which runs in UTC — at 8pm in Missouri it already
+ * thinks it is tomorrow. Cloudflare reports the visitor's time zone on each
+ * request, so ask for the date there instead.
+ */
+export function todayIn(timeZone?: string): string {
+  try {
+    // en-CA formats dates as YYYY-MM-DD.
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date());
+  } catch {
+    return isoDate(new Date());
+  }
 }

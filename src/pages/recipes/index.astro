@@ -1,38 +1,35 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import RecipeBrowser, { type RecipeCard } from "../../components/RecipeBrowser";
-import { loadRecipes, collectTags, formatMinutes, activeMinutes } from "../../lib/data.server";
+import RecipeBrowser from "../../components/RecipeBrowser";
+import Icon from "../../components/Icon";
+import { loadKitchen } from "../../lib/server/page";
+import { collectTags, recipeCard } from "../../lib/format";
 
-const recipes = loadRecipes();
-const tags = collectTags(recipes);
-
-const cards: RecipeCard[] = recipes.map((r) => ({
-  id: r.id,
-  title: r.title,
-  subtitle: r.subtitle,
-  description: r.description,
-  image: r.image,
-  tags: r.tags,
-  servings: r.servings,
-  timeLabel: formatMinutes(activeMinutes(r)),
-}));
+const { library, planning, household } = await loadKitchen(Astro.locals);
+const tags = collectTags(library.recipes);
+const query = Astro.url.searchParams.get("q") ?? "";
+const tag = Astro.url.searchParams.get("tag");
 ---
 
-<SiteLayout
-  title="Recipes — Cookbook"
-  description="Every recipe in the cookbook, searchable and filterable by tag."
->
-  <section style="padding-block: 44px 8px;">
-    <p class="lbl">The collection</p>
-    <h1 style="margin-top: 10px;">Recipes</h1>
-    <p style="max-width: 54ch; margin: 16px 0 28px; color: var(--ink-2);">
-      {recipes.length} recipe{recipes.length === 1 ? "" : "s"}. Ingredients are canonical records,
-      so quantities add up correctly once these are composed into meals and plans.
-    </p>
-  </section>
+<SiteLayout title="Recipes" description="Every recipe in the kitchen, searchable and filterable by tag.">
+  <div class="wrap">
+    <header class="page-head">
+      <div>
+        <span class="eyebrow">Shared by everyone</span>
+        <h1>Recipes</h1>
+        <p class="lede">Tap <strong>+</strong> on any photo to put that recipe on the shopping list.</p>
+      </div>
+      <a class="btn" href="/edit/recipe"><Icon name="plus" /> New recipe</a>
+    </header>
 
-  {/* Rendered server-side too, so the full list still works with JS off. */}
-  <RecipeBrowser client:load recipes={cards} tags={tags} />
-
-  <div style="height: 40px;"></div>
+    <RecipeBrowser
+      client:load
+      recipes={library.recipes.map(recipeCard)}
+      tags={tags}
+      householdId={household.id}
+      extras={planning.shopping}
+      initialQuery={query}
+      initialTags={tag && tags.includes(tag) ? [tag] : []}
+    />
+  </div>
 </SiteLayout>

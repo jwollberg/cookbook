@@ -1,150 +1,156 @@
 /* =====================================================================
-   Cookbook — design system
+   Kitchen — design system
 
-   Character: warm editorial. Think a well-set cookbook page rather than
-   a web app chrome. Calm, generous, appetising.
+   Modern and clean: photographs do the talking, the chrome gets out of the
+   way. One sans family (Inter, with Inter Tight for headings), a warm
+   off-white page, a single burnt-orange accent, generous space, soft
+   radii, and hairlines instead of boxes.
 
-   Every choice below is driven by where this actually gets read:
-   propped on a counter at arm's length while cooking, and one-handed on
-   a phone in a supermarket aisle. That means large readable steps, high
-   contrast, touch-sized targets, and quantities that align so a list can
-   be scanned rather than read.
+   Every choice is still driven by where this is read: propped on a counter
+   at arm's length while cooking, and one-handed on a phone in a supermarket
+   aisle. So — large readable steps, high contrast, 44px tap targets,
+   quantities in tabular figures so a list can be scanned, and a tab bar on
+   phones where a thumb can reach it.
 
-   - Warm cream/ink palette. Warm near-black (#221D18) not blue-black:
-     blue-blacks read cold and clinical next to photographs of food.
-   - Fraunces (display) + Inter (UI/body). Fraunces has genuine warmth
-     and character for headings; Inter is the most legible thing going
-     at distance and in poor light, which is what steps need.
-   - Soft radii and hairline rules instead of hard borders. Heavy rules
-     on every row get exhausting when scanning a 40-line shopping list.
-   - Terracotta primary, olive secondary. Warm, food-adjacent, and both
-     clear AA contrast on cream.
+   - Warm near-black ink (#1c1917), never blue-black: blue-blacks read cold
+     and clinical next to photographs of food.
+   - Every text colour below clears WCAG AA (4.5:1) on every surface it is
+     used on, in both themes.
+   - Aisle colours are DATA, not decoration. A shopping list is only usable
+     in a store if its sections are distinguishable at a glance.
    ===================================================================== */
 
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #221d18;
-  --color-ink-soft: #4a4139;
-  --color-muted: #7d7266;
-  --color-cream: #fdfbf7;
-  --color-cream-2: #f6f0e6;
-  --color-terracotta: #b4471f;
-  --color-olive: #5c6b3c;
-  --color-hairline: #e8e0d3;
-
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Inter Tight", "Inter", system-ui, sans-serif;
 }
 
 :root {
   color-scheme: light;
 
-  /* Surfaces */
-  --bg: #fdfbf7;
+  --bg: #faf9f7;
   --surface: #ffffff;
-  --surface-2: #f6f0e6;
-  --surface-sunk: #f1eade;
+  --surface-2: #f3f1ed;
+  --surface-3: #e9e6e0;
+  --scrim: rgba(28, 25, 23, 0.4);
 
-  /* Text */
-  --ink: #221d18;
-  --ink-2: #4a4139;
-  --muted: #7d7266;
+  --ink: #1c1917;
+  --ink-2: #4a4540;
+  --muted: #716a63;
 
-  /* Accents */
-  --accent: #b4471f;
-  --accent-hover: #9a3b18;
-  --accent-wash: #fbeee8;
-  --olive: #5c6b3c;
-  --olive-wash: #eef1e6;
+  --accent: #c2410c;
+  --accent-hover: #a8380b;
+  --accent-wash: #fdf1ea;
+  --accent-ink: #ffffff;
+  --green: #3d7a36;
+  --green-wash: #eef6ec;
 
-  /* Lines */
-  --hairline: #e8e0d3;
-  --hairline-strong: #d8cdbb;
+  --hairline: #ebe7e1;
+  --hairline-strong: #d9d3ca;
+  --focus: #2563eb;
 
-  --focus: #1a6dd4;
+  --display: var(--font-display);
+  --sans: var(--font-sans);
 
-  --display: "Fraunces", Georgia, "Times New Roman", serif;
-  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --radius-lg: 22px;
+  --radius: 16px;
+  --radius-sm: 12px;
+  --pill: 999px;
 
-  --radius: 10px;
-  --radius-sm: 6px;
-  --shadow-sm: 0 1px 2px rgba(34, 29, 24, 0.05);
-  --shadow: 0 2px 8px rgba(34, 29, 24, 0.07), 0 1px 2px rgba(34, 29, 24, 0.05);
-  --shadow-lg: 0 8px 28px rgba(34, 29, 24, 0.1);
+  --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.05);
+  --shadow: 0 1px 2px rgba(28, 25, 23, 0.04), 0 6px 20px rgba(28, 25, 23, 0.06);
+  --shadow-lg: 0 18px 50px rgba(28, 25, 23, 0.16);
 
-  --maxw: 1120px;
+  --maxw: 1200px;
+  --gutter: 20px;
+  --header-h: 64px;
+  --tabbar-h: 66px;
 
-  /* Store aisles. These are data, not decoration — a shopping list is
-     only usable in a store if you can tell sections apart at a glance.
-     Tuned to sit on cream without vibrating against it. */
-  --aisle-produce: #4f7a3f;
-  --aisle-dairy: #3d6b96;
-  --aisle-meat: #a8453a;
-  --aisle-seafood: #2f7d78;
-  --aisle-pantry: #8a6a35;
-  --aisle-spices: #b0621f;
-  --aisle-frozen: #5a7fa3;
-  --aisle-bakery: #7a5230;
-  --aisle-other: #7d7266;
+  --aisle-produce: #3f7a34;
+  --aisle-dairy: #2f6aa3;
+  --aisle-meat: #b0402f;
+  --aisle-seafood: #1f7f7a;
+  --aisle-pantry: #8a6526;
+  --aisle-spices: #b8561a;
+  --aisle-frozen: #4f78a8;
+  --aisle-bakery: #8a5a2b;
+  --aisle-other: #716a63;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
 
-    --bg: #17140f;
-    --surface: #211c16;
-    --surface-2: #2a241d;
-    --surface-sunk: #1c1813;
+    --bg: #141210;
+    --surface: #1d1a17;
+    --surface-2: #27231f;
+    --surface-3: #332e29;
+    --scrim: rgba(0, 0, 0, 0.6);
 
-    --ink: #f4ede2;
-    --ink-2: #d3c8b8;
-    --muted: #9d9184;
+    --ink: #f5f0ea;
+    --ink-2: #d4ccc2;
+    --muted: #a0968b;
 
-    --accent: #e2764a;
-    --accent-hover: #ef8a5e;
+    --accent: #f0824f;
+    --accent-hover: #f6966a;
     --accent-wash: #33211a;
-    --olive: #9cb06e;
-    --olive-wash: #23281a;
+    --accent-ink: #1c1917;
+    --green: #8cc27f;
+    --green-wash: #1d2a1a;
 
-    --hairline: #362e25;
-    --hairline-strong: #473d31;
-
-    --focus: #6aa9f0;
+    --hairline: #2e2a25;
+    --hairline-strong: #433d36;
+    --focus: #7aa7ff;
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.5);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 6px 20px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.55);
 
-    --aisle-produce: #86b06f;
-    --aisle-dairy: #7aa9d4;
-    --aisle-meat: #d98077;
-    --aisle-seafood: #6cb8b2;
-    --aisle-pantry: #c6a469;
-    --aisle-spices: #dc9354;
-    --aisle-frozen: #8fb0cd;
-    --aisle-bakery: #bc8f63;
-    --aisle-other: #9d9184;
+    --aisle-produce: #86b977;
+    --aisle-dairy: #7eb0e0;
+    --aisle-meat: #e88a7c;
+    --aisle-seafood: #6cc0b9;
+    --aisle-pantry: #d2ad6b;
+    --aisle-spices: #e89a5f;
+    --aisle-frozen: #93b5da;
+    --aisle-bakery: #cf9a68;
+    --aisle-other: #a0968b;
   }
 }
 
+@media (min-width: 768px) {
+  :root {
+    --gutter: 32px;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------- */
+
 @layer base {
-  * {
+  *,
+  *::before,
+  *::after {
     box-sizing: border-box;
   }
 
   html {
     -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
     margin: 0;
+    min-height: 100dvh;
     background: var(--bg);
     color: var(--ink);
     font-family: var(--sans);
     font-size: 16px;
     line-height: 1.6;
+    font-feature-settings: "cv11", "ss01";
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -154,84 +160,82 @@
   h3,
   h4 {
     font-family: var(--display);
-    font-weight: 600;
-    font-variation-settings: "SOFT" 20, "WONK" 1;
+    font-weight: 700;
     line-height: 1.12;
-    letter-spacing: -0.012em;
+    letter-spacing: -0.022em;
     margin: 0;
     color: var(--ink);
+    text-wrap: balance;
   }
 
   h1 {
-    font-size: clamp(2.1rem, 5vw, 3.4rem);
+    font-size: clamp(2rem, 5.2vw, 3.1rem);
+    letter-spacing: -0.03em;
   }
   h2 {
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-size: clamp(1.35rem, 2.6vw, 1.7rem);
   }
   h3 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    letter-spacing: -0.012em;
+  }
+
+  p {
+    margin: 0;
   }
 
   a {
     color: inherit;
   }
 
-  /* Quantities must line up down a column, or an ingredient list can't
-     be scanned — it has to be read line by line. */
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Quantities must line up down a column, or an ingredient list can't be
+     scanned — it has to be read line by line. */
   .num,
   input[type="number"],
   table {
     font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum";
   }
 
-  a:focus-visible,
-  button:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible,
-  [tabindex]:focus-visible {
+  :focus-visible {
     outline: 2px solid var(--focus);
     outline-offset: 2px;
-    border-radius: var(--radius-sm);
   }
 
   ::selection {
     background: var(--accent-wash);
     color: var(--ink);
   }
+
+  [hidden] {
+    display: none !important;
+  }
 }
+
+/* ---------------------------------------------------------------------
+   Components
+   --------------------------------------------------------------------- */
 
 @layer components {
   .wrap {
+    width: 100%;
     max-width: var(--maxw);
     margin-inline: auto;
-    padding-inline: 20px;
-  }
-  @media (min-width: 768px) {
-    .wrap {
-      padding-inline: 32px;
-    }
-  }
-
-  /* Tracked-caps label used for section eyebrows and field labels */
-  .lbl {
-    font-family: var(--sans);
-    font-weight: 600;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.13em;
-    color: var(--muted);
+    padding-inline: var(--gutter);
   }
 
   .skip {
     position: absolute;
     left: -999px;
     top: 0;
+    z-index: 100;
     background: var(--ink);
     color: var(--bg);
     padding: 10px 16px;
-    z-index: 100;
     border-radius: var(--radius-sm);
     font-weight: 600;
   }
@@ -240,407 +244,1626 @@
     top: 12px;
   }
 
-  /* ---- Header ---------------------------------------------------- */
-  header.site {
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .icon {
+    width: 1.25em;
+    height: 1.25em;
+    flex: none;
+  }
+  .icon.flip {
+    transform: rotate(180deg);
+  }
+
+  /* ---- Type helpers -------------------------------------------------- */
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.01em;
+  }
+
+  .label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .lede {
+    font-size: clamp(1.02rem, 1.8vw, 1.15rem);
+    color: var(--ink-2);
+    max-width: 62ch;
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+
+  .small {
+    font-size: 13px;
+  }
+
+  /* ---- Top bar ------------------------------------------------------- */
+
+  .topbar {
     position: sticky;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: saturate(1.6) blur(10px);
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter: saturate(1.5) blur(14px);
+    -webkit-backdrop-filter: saturate(1.5) blur(14px);
     border-bottom: 1px solid var(--hairline);
   }
-  .nav {
+  .topbar-inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 16px;
-    height: 62px;
+    height: var(--header-h);
   }
+
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: 9px;
+    gap: 10px;
     text-decoration: none;
     font-family: var(--display);
-    font-weight: 600;
-    font-variation-settings: "SOFT" 30, "WONK" 1;
-    font-size: 21px;
-    letter-spacing: -0.015em;
+    font-weight: 750;
+    font-size: 19px;
+    letter-spacing: -0.02em;
     white-space: nowrap;
-  }
-  .brand svg {
-    width: 22px;
-    height: 22px;
-    color: var(--accent);
     flex: none;
   }
-  .navlinks {
-    display: flex;
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .brand-mark .icon {
+    width: 19px;
+    height: 19px;
+  }
+
+  .topnav {
+    display: none;
     align-items: center;
     gap: 2px;
-    overflow-x: auto;
-    scrollbar-width: none;
+    margin-left: 12px;
   }
-  .navlinks::-webkit-scrollbar {
-    display: none;
-  }
-  .navlinks a {
+  .topnav a {
     display: inline-flex;
     align-items: center;
-    padding: 7px 13px;
-    border-radius: 999px;
+    gap: 7px;
+    height: 38px;
+    padding: 0 14px;
+    border-radius: var(--pill);
     text-decoration: none;
-    font-weight: 500;
-    font-size: 14px;
+    font-weight: 550;
+    font-size: 15px;
     color: var(--ink-2);
-    white-space: nowrap;
-    transition: background 0.15s, color 0.15s;
+    transition:
+      background 0.15s,
+      color 0.15s;
   }
-  .navlinks a:hover {
+  .topnav a:hover {
     background: var(--surface-2);
     color: var(--ink);
   }
-  .navlinks a[aria-current="page"] {
-    background: var(--accent-wash);
-    color: var(--accent);
-    font-weight: 600;
+  .topnav a[aria-current="page"] {
+    background: var(--surface-2);
+    color: var(--ink);
+    font-weight: 650;
   }
 
-  /* ---- Buttons --------------------------------------------------- */
+  .topbar-end {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .count-badge {
+    display: inline-grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: var(--pill);
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 900px) {
+    .topnav {
+      display: flex;
+    }
+  }
+
+  /* ---- Tab bar (phones) ---------------------------------------------- */
+
+  .tabbar {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    height: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    backdrop-filter: saturate(1.5) blur(14px);
+    -webkit-backdrop-filter: saturate(1.5) blur(14px);
+    border-top: 1px solid var(--hairline);
+  }
+  .tabbar a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .tabbar a .icon {
+    width: 23px;
+    height: 23px;
+  }
+  .tabbar a[aria-current="page"] {
+    color: var(--accent);
+  }
+  .tabbar .count-badge {
+    position: absolute;
+    top: 7px;
+    left: calc(50% + 6px);
+    min-width: 18px;
+    height: 18px;
+    font-size: 10.5px;
+  }
+  body.has-tabbar {
+    padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  }
+  @media (min-width: 900px) {
+    .tabbar {
+      display: none;
+    }
+    body.has-tabbar {
+      padding-bottom: 0;
+    }
+  }
+
+  /* ---- Menus (details/summary, no JS needed) ------------------------- */
+
+  .menu {
+    position: relative;
+  }
+  .menu > summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  .menu > summary::-webkit-details-marker {
+    display: none;
+  }
+  .menu-panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    z-index: 60;
+    width: min(320px, calc(100vw - 2 * var(--gutter)));
+    padding: 8px;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+  }
+  .menu-head {
+    padding: 8px 10px 6px;
+  }
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .menu-item:hover {
+    background: var(--surface-2);
+  }
+  .menu-item[aria-current="true"] {
+    font-weight: 650;
+  }
+  .menu-item .icon {
+    color: var(--muted);
+  }
+  .menu-item .grow {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .menu-sep {
+    height: 1px;
+    margin: 6px 4px;
+    background: var(--hairline);
+  }
+
+  .pill-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    max-width: 240px;
+    padding: 0 12px 0 10px;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--pill);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .pill-button .name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pill-button .icon {
+    width: 18px;
+    height: 18px;
+    color: var(--muted);
+  }
+  .pill-button:hover {
+    border-color: var(--muted);
+  }
+
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--pill);
+    overflow: hidden;
+    background: var(--surface-3);
+    color: var(--ink-2);
+    font-size: 14px;
+    font-weight: 700;
+    flex: none;
+  }
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---- Buttons ------------------------------------------------------- */
+
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    text-decoration: none;
-    font-family: var(--sans);
-    font-weight: 550;
-    font-size: 14px;
-    /* 42px min target — this gets tapped with one hand holding a phone
-       and the other holding something wet. */
-    min-height: 42px;
-    padding: 10px 18px;
-    border-radius: var(--radius-sm);
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 20px;
     border: 1px solid var(--hairline-strong);
+    border-radius: var(--pill);
     background: var(--surface);
     color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
     cursor: pointer;
-    box-shadow: var(--shadow-sm);
-    transition: background 0.15s, border-color 0.15s, transform 0.08s;
+    transition:
+      background 0.15s,
+      border-color 0.15s,
+      color 0.15s,
+      transform 0.08s;
   }
   .btn:hover {
-    background: var(--surface-2);
     border-color: var(--muted);
   }
   .btn:active {
-    transform: translateY(1px);
+    transform: scale(0.98);
+  }
+  .btn .icon {
+    width: 18px;
+    height: 18px;
   }
   .btn-primary {
     background: var(--accent);
     border-color: var(--accent);
-    color: #fff;
+    color: var(--accent-ink);
   }
   .btn-primary:hover {
     background: var(--accent-hover);
     border-color: var(--accent-hover);
   }
+  .btn-dark {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+  }
+  .btn-dark:hover {
+    opacity: 0.9;
+    border-color: var(--ink);
+  }
   .btn-ghost {
     background: transparent;
     border-color: transparent;
-    box-shadow: none;
   }
   .btn-ghost:hover {
     background: var(--surface-2);
     border-color: transparent;
   }
-  .btn:disabled {
+  .btn-danger {
+    color: #b42318;
+  }
+  .btn-sm {
+    min-height: 36px;
+    padding: 0 14px;
+    font-size: 14px;
+  }
+  .btn-icon {
+    width: 44px;
+    padding: 0;
+  }
+  .btn-icon.btn-sm {
+    width: 36px;
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
     opacity: 0.45;
     cursor: not-allowed;
     transform: none;
   }
-  .btn-sm {
-    min-height: 34px;
-    padding: 6px 12px;
-    font-size: 13px;
+  .btn-block {
+    width: 100%;
   }
 
-  /* ---- Surfaces -------------------------------------------------- */
-  .card {
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* ---- Surfaces ------------------------------------------------------ */
+
+  .panel {
     background: var(--surface);
     border: 1px solid var(--hairline);
-    border-radius: var(--radius);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
   }
-  .card-interactive {
-    transition: box-shadow 0.18s, transform 0.18s, border-color 0.18s;
+  .panel-pad {
+    padding: 20px;
   }
-  .card-interactive:hover {
-    box-shadow: var(--shadow);
-    border-color: var(--hairline-strong);
-    transform: translateY(-2px);
-  }
-
-  /* 2×2 on tablet and up. Four across in one row would squeeze the
-     measure to ~30 characters, which reads badly for explanatory copy —
-     and auto-fit was landing them 3+1, which just looks broken. */
-  .grid-cards {
-    display: grid;
-    gap: 16px;
-    grid-template-columns: 1fr;
-  }
-  @media (min-width: 680px) {
-    .grid-cards {
-      grid-template-columns: repeat(2, 1fr);
+  @media (min-width: 768px) {
+    .panel-pad {
+      padding: 24px;
     }
   }
 
-  /* ---- Chips / tags ---------------------------------------------- */
+  .soft {
+    background: var(--surface-2);
+    border-radius: var(--radius);
+  }
+
+  .callout {
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    background: var(--green-wash);
+    color: var(--ink-2);
+  }
+  .callout .label {
+    color: var(--green);
+  }
+  .callout-warn {
+    background: var(--accent-wash);
+  }
+
+  .empty {
+    display: grid;
+    justify-items: start;
+    gap: 14px;
+    padding: 28px;
+    border: 1.5px dashed var(--hairline-strong);
+    border-radius: var(--radius-lg);
+    color: var(--ink-2);
+  }
+
+  /* ---- Chips ---------------------------------------------------------- */
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
   .chip {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 3px 10px;
-    border-radius: 999px;
+    gap: 6px;
+    min-height: 30px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: var(--pill);
     background: var(--surface-2);
     color: var(--ink-2);
-    font-size: 12px;
-    font-weight: 500;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 550;
+    text-decoration: none;
     white-space: nowrap;
   }
+  a.chip:hover,
+  button.chip:hover {
+    border-color: var(--hairline-strong);
+  }
+  button.chip {
+    cursor: pointer;
+    min-height: 36px;
+  }
+  .chip[aria-pressed="true"],
   .chip-accent {
     background: var(--accent-wash);
     color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
   }
-  .chip-olive {
-    background: var(--olive-wash);
-    color: var(--olive);
+  .chip-green {
+    background: var(--green-wash);
+    color: var(--green);
+  }
+  .chip .icon {
+    width: 15px;
+    height: 15px;
   }
 
-  /* ---- Form controls --------------------------------------------- */
+  /* ---- Forms ---------------------------------------------------------- */
+
   .input,
   .select,
   .textarea {
     width: 100%;
-    min-height: 42px;
-    padding: 9px 12px;
-    border-radius: var(--radius-sm);
+    min-height: 46px;
+    padding: 10px 14px;
     border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius-sm);
     background: var(--surface);
     color: var(--ink);
-    font-family: var(--sans);
-    font-size: 15px;
+    font: inherit;
+    font-size: 16px; /* 16px stops iOS zooming into the field */
     line-height: 1.4;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+  .input:focus,
+  .select:focus,
+  .textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
   }
   .textarea {
-    min-height: 84px;
+    min-height: 96px;
     resize: vertical;
   }
   .input::placeholder,
   .textarea::placeholder {
     color: var(--muted);
   }
-
-  /* ---- Aisle marker ---------------------------------------------- */
-  .aisle-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 999px;
-    flex: none;
-    background: var(--aisle, var(--aisle-other));
+  .input-sm,
+  .select-sm {
+    min-height: 36px;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 10px;
   }
 
-  /* ---- Recipe step ------------------------------------------------
-     Deliberately large. This is the one thing read from two feet away
-     with hands occupied, so it gets the most generous type on the site. */
-  .step {
+  .field {
     display: grid;
-    grid-template-columns: 34px 1fr;
-    gap: 16px;
-    padding-block: 18px;
-    border-top: 1px solid var(--hairline);
+    gap: 6px;
   }
-  .step-n {
-    font-family: var(--display);
+  .field-label {
+    font-size: 13px;
     font-weight: 600;
-    font-size: 1.35rem;
-    line-height: 1.2;
-    color: var(--accent);
-  }
-  .step-body {
-    font-size: 1.06rem;
-    line-height: 1.65;
     color: var(--ink-2);
   }
-
-  /* ---- Ingredient row -------------------------------------------- */
-  .ing-row {
-    display: grid;
-    grid-template-columns: minmax(72px, max-content) 1fr;
-    gap: 14px;
-    padding-block: 9px;
-    border-bottom: 1px solid var(--hairline);
-    align-items: baseline;
-  }
-  .ing-qty {
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum";
-    font-weight: 600;
-    color: var(--ink);
-    white-space: nowrap;
-  }
-  .ing-name {
-    color: var(--ink-2);
+  .field-hint {
+    font-weight: 400;
+    color: var(--muted);
   }
 
-  /* ---- Recipe cards ---------------------------------------------- */
-  .grid-recipes {
-    display: grid;
-    gap: 18px;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  .search {
+    position: relative;
   }
-  .recipe-card {
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  .search .icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
   }
-  .recipe-card-img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    /* Photos arrive in whatever crop the photographer shot — portrait
-       tzatziki next to a wide tray of potatoes. Cover keeps the grid even. */
-    object-fit: cover;
-    background: var(--surface-2);
-  }
-  .recipe-card-img--empty {
-    background: linear-gradient(135deg, var(--surface-2), var(--surface-sunk));
+  .search .input {
+    padding-left: 44px;
+    border-radius: var(--pill);
   }
 
-  /* ---- Recipe page ----------------------------------------------- */
-  .recipe-hero {
-    width: 100%;
-    max-height: 420px;
-    object-fit: cover;
-    border-radius: var(--radius);
-    display: block;
-  }
-  .recipe-layout {
-    display: grid;
-    gap: 40px;
-    grid-template-columns: 1fr;
-    margin-top: 36px;
-  }
-  @media (min-width: 900px) {
-    .recipe-layout {
-      grid-template-columns: minmax(260px, 340px) 1fr;
-      gap: 56px;
-      align-items: start;
-    }
-    /* Ingredients follow you down the steps — you refer back constantly
-       while cooking, and scrolling up mid-recipe with messy hands is grim. */
-    .recipe-aside {
-      position: sticky;
-      top: 84px;
-    }
+  .check {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent);
   }
 
-  .meta-row {
+  /* ---- Page header ---------------------------------------------------- */
+
+  .page-head {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-    margin-top: 18px;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px 24px;
+    padding-block: clamp(28px, 5vw, 48px) clamp(20px, 3vw, 28px);
+  }
+  .page-head > div {
+    display: grid;
+    gap: 10px;
+    min-width: 0;
   }
 
-  /* Required by the CC BY / CC BY-SA licences on the photos. */
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .back:hover {
+    color: var(--ink);
+  }
+  .back .icon {
+    width: 17px;
+    height: 17px;
+  }
+
+  .section {
+    margin-top: clamp(40px, 6vw, 64px);
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .section-head a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* ---- Photo cards --------------------------------------------------- */
+
+  .card-grid {
+    display: grid;
+    gap: 28px 20px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  }
+  .card-grid-tight {
+    gap: 22px 16px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
+  }
+
+  .rcard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+  .rcard-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  /* The whole card is one link; the quick-add button sits above it. */
+  .rcard-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .rcard-media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface-2);
+  }
+  .rcard-media img {
+    width: 100%;
+    height: 100%;
+    /* Photos arrive in whatever crop the photographer shot. Cover keeps the
+       grid even. */
+    object-fit: cover;
+    transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .rcard:hover .rcard-media img {
+    transform: scale(1.04);
+  }
+  .rcard-title {
+    font-family: var(--display);
+    font-size: 1.08rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+  .rcard-sub {
+    margin-top: 2px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .rcard-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    margin-top: 6px;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  .rcard-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rcard-meta .icon {
+    width: 15px;
+    height: 15px;
+  }
+  .rcard-tag {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    z-index: 2;
+    padding: 4px 10px;
+    border-radius: var(--pill);
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 650;
+    text-transform: capitalize;
+  }
+
+  .quick-add {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: var(--pill);
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition:
+      background 0.15s,
+      color 0.15s,
+      transform 0.1s;
+  }
+  .quick-add:hover {
+    transform: scale(1.06);
+  }
+  .quick-add[aria-pressed="true"] {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .quick-add .icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Recipe with no photo yet: a quiet placeholder rather than a hole. */
+  .no-photo {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    color: var(--hairline-strong);
+    background:
+      radial-gradient(circle at 30% 20%, var(--surface-3), transparent 60%),
+      var(--surface-2);
+  }
+  .no-photo .icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* A meal's cover is a collage of its dishes. */
+  .collage {
+    display: grid;
+    gap: 3px;
+    width: 100%;
+    height: 100%;
+  }
+  .collage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    min-height: 0;
+  }
+  .collage-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .collage-3 {
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  .collage-3 img:first-child {
+    grid-row: span 2;
+  }
+  .collage-4 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  /* ---- Home ---------------------------------------------------------- */
+
+  .hero {
+    display: grid;
+    gap: 32px;
+    align-items: center;
+    padding-block: clamp(28px, 6vw, 64px) 8px;
+  }
+  .hero-copy {
+    display: grid;
+    gap: 16px;
+  }
+  .hero-mosaic {
+    display: none;
+  }
+  @media (min-width: 900px) {
+    .hero {
+      grid-template-columns: 1.05fr 1fr;
+      gap: 48px;
+    }
+    .hero-mosaic {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 12px;
+      height: 400px;
+    }
+    .hero-mosaic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+      min-height: 0;
+    }
+    .hero-mosaic img:first-child {
+      grid-row: span 2;
+    }
+  }
+
+  .tiles {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 768px) {
+    .tiles {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .tile {
+    display: grid;
+    gap: 6px;
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    text-decoration: none;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+  .tile:hover {
+    border-color: var(--hairline-strong);
+    box-shadow: var(--shadow);
+  }
+  .tile .icon {
+    width: 22px;
+    height: 22px;
+    color: var(--accent);
+  }
+  .tile-title {
+    font-weight: 700;
+    font-size: 15.5px;
+  }
+  .tile-sub {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .week-strip {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(7, minmax(132px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scroll-snap-type: x mandatory;
+  }
+  .week-day {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    min-height: 120px;
+    padding: 12px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    scroll-snap-align: start;
+  }
+  .week-day.is-today {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  .week-day-name {
+    font-size: 13px;
+    font-weight: 650;
+    color: var(--muted);
+  }
+  .week-day.is-today .week-day-name {
+    color: var(--accent);
+  }
+  .week-dish {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 550;
+    line-height: 1.3;
+    text-decoration: none;
+  }
+  .week-dish img,
+  .week-dish .thumb-empty {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex: none;
+    background: var(--surface-2);
+  }
+
+  /* ---- Recipe page --------------------------------------------------- */
+
+  .recipe-top {
+    display: grid;
+    gap: 24px;
+    padding-block: 16px 8px;
+  }
+  .recipe-photo {
+    position: relative;
+    margin: 0 calc(-1 * var(--gutter));
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--surface-2);
+  }
+  .recipe-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (min-width: 600px) {
+    .recipe-photo {
+      margin: 0;
+      border-radius: var(--radius-lg);
+    }
+  }
+  @media (min-width: 960px) {
+    .recipe-top {
+      grid-template-columns: 1fr 1.05fr;
+      gap: 48px;
+      align-items: center;
+      padding-top: 28px;
+    }
+    .recipe-top .recipe-photo {
+      order: 2;
+    }
+  }
+  .recipe-intro {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+  }
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 6px;
+    border-block: 1px solid var(--hairline);
+  }
+  .stat {
+    display: grid;
+    gap: 2px;
+    padding: 12px 20px 12px 0;
+    margin-right: 20px;
+    border-right: 1px solid var(--hairline);
+  }
+  .stat:last-child {
+    border-right: 0;
+    margin-right: 0;
+  }
+  .stat .label {
+    font-size: 11px;
+  }
+  .stat-value {
+    font-size: 16px;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
   .image-credit {
     font-size: 12px;
     color: var(--muted);
-    margin-top: 8px;
   }
   .image-credit a {
     color: inherit;
   }
+  .recipe-photo .image-credit {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    max-width: calc(100% - 20px);
+    padding: 3px 9px;
+    border-radius: var(--pill);
+    background: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-  /* ---- Planner ---------------------------------------------------- */
-  .planner-layout {
+  .recipe-body {
+    display: grid;
+    gap: 40px;
+    margin-top: clamp(28px, 5vw, 48px);
+  }
+  @media (min-width: 960px) {
+    .recipe-body {
+      grid-template-columns: minmax(300px, 380px) 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+    /* Ingredients follow you down the steps — you refer back constantly
+       while cooking, and scrolling up with messy hands is grim. */
+    .recipe-aside {
+      position: sticky;
+      top: calc(var(--header-h) + 20px);
+    }
+  }
+
+  /* ---- Ingredients ---------------------------------------------------- */
+
+  .ing-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  /* A fixed quantity column, so every name starts at the same x and the
+     list scans as two columns. A long quantity wraps inside it instead of
+     pushing its own name out of line. */
+  .ing-row {
+    display: grid;
+    grid-template-columns: 84px 1fr;
+    gap: 14px;
+    padding-block: 10px;
+    border-bottom: 1px solid var(--hairline);
+    align-items: baseline;
+  }
+  .ing-row:last-child {
+    border-bottom: 0;
+  }
+  .ing-qty {
+    font-variant-numeric: tabular-nums;
+    font-weight: 650;
+    color: var(--ink);
+  }
+  .ing-name {
+    color: var(--ink-2);
+  }
+  .ing-note {
+    color: var(--muted);
+  }
+  .ing-group {
+    margin: 18px 0 2px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border-radius: var(--pill);
+    background: var(--surface-2);
+  }
+  .stepper button {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: var(--pill);
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+  }
+  .stepper button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .stepper button .icon {
+    width: 16px;
+    height: 16px;
+  }
+  .stepper output {
+    min-width: 92px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+  }
+  .stepper-sm button {
+    width: 30px;
+    height: 30px;
+  }
+  .stepper-sm output {
+    min-width: 34px;
+  }
+
+  /* ---- Steps ----------------------------------------------------------
+     Deliberately large. This is the one thing read from two feet away with
+     hands occupied, so it gets the most generous type on the site. */
+
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 16px;
+    padding-block: 16px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .step:last-child {
+    border-bottom: 0;
+  }
+  .step-n {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--pill);
+    background: var(--accent-wash);
+    color: var(--accent);
+    font-weight: 750;
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+  }
+  .step-body {
+    font-size: 1.07rem;
+    line-height: 1.7;
+    color: var(--ink-2);
+  }
+  .step-body strong {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--ink);
+    font-size: 1.02rem;
+  }
+
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+  .timeline li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 16px;
+    padding-bottom: 22px;
+  }
+  .timeline li::before {
+    content: "";
+    position: absolute;
+    left: 15.5px;
+    top: 34px;
+    bottom: 0;
+    width: 1px;
+    background: var(--hairline-strong);
+  }
+  .timeline li:last-child::before {
+    display: none;
+  }
+
+  /* ---- Shopping list --------------------------------------------------- */
+
+  .aisle {
+    padding: 6px 0 4px;
+  }
+  .aisle-head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 14px 4px 6px;
+  }
+  .aisle-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--pill);
+    flex: none;
+    background: var(--aisle, var(--aisle-other));
+  }
+  .aisle-name {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--aisle, var(--aisle-other));
+  }
+  .aisle-count {
+    margin-left: auto;
+    font-size: 12.5px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .shop-row {
+    display: grid;
+    grid-template-columns: 28px 84px 1fr;
+    align-items: baseline;
+    gap: 12px;
+    width: 100%;
+    min-height: 52px;
+    padding: 12px 8px;
+    border: 0;
+    border-bottom: 1px solid var(--hairline);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .shop-row:hover {
+    background: color-mix(in srgb, var(--surface-2) 60%, transparent);
+  }
+  .tick {
+    align-self: center;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--hairline-strong);
+    border-radius: 8px;
+    color: transparent;
+    transition:
+      background 0.12s,
+      border-color 0.12s;
+  }
+  .tick .icon {
+    width: 16px;
+    height: 16px;
+  }
+  .shop-row[aria-checked="true"] .tick {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+  .shop-row[aria-checked="true"] .ing-qty,
+  .shop-row[aria-checked="true"] .shop-name {
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: color-mix(in srgb, var(--muted) 70%, transparent);
+  }
+  .shop-name {
+    min-width: 0;
+    color: var(--ink);
+  }
+  .shop-from {
+    display: block;
+    margin-top: 1px;
+    font-size: 12.5px;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .source-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .source-row:last-child {
+    border-bottom: 0;
+  }
+  .source-thumb {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex: none;
+    background: var(--surface-2);
+  }
+  .source-title {
+    flex: 1;
+    min-width: 0;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .shop-layout {
     display: grid;
     gap: 20px;
-    grid-template-columns: 1fr;
+    align-items: start;
   }
-  @media (min-width: 900px) {
-    .planner-layout {
-      grid-template-columns: 250px 1fr;
+  .builder-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    padding: 10px 16px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .builder-toggle .icon {
+    transition: transform 0.2s;
+  }
+  .builder:not(.is-collapsed) .builder-toggle .icon {
+    transform: rotate(180deg);
+  }
+  .builder-body {
+    display: grid;
+    gap: 22px;
+    margin-top: 10px;
+  }
+  .builder.is-collapsed .builder-body {
+    display: none;
+  }
+  .builder-section {
+    display: grid;
+    gap: 10px;
+  }
+  .builder-section + .builder-section {
+    padding-top: 20px;
+    border-top: 1px solid var(--hairline);
+  }
+  .shop-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  @media (min-width: 1000px) {
+    .shop-layout {
+      grid-template-columns: 360px 1fr;
+      gap: 32px;
+    }
+    .builder {
+      position: sticky;
+      top: calc(var(--header-h) + 16px);
+    }
+    .builder-toggle {
+      display: none;
+    }
+    .builder.is-collapsed .builder-body,
+    .builder-body {
+      display: grid;
+      margin-top: 0;
+    }
+  }
+  @media print {
+    .builder {
+      display: none;
+    }
+    .shop-layout {
+      display: block;
+    }
+  }
+
+  .suggest {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 6px);
+    z-index: 20;
+    max-height: 320px;
+    overflow-y: auto;
+    padding: 6px;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* ---- Planner --------------------------------------------------------- */
+
+  .planner {
+    display: grid;
+    gap: 24px;
+  }
+  @media (min-width: 1000px) {
+    .planner {
+      grid-template-columns: 280px 1fr;
       align-items: start;
     }
     .planner-library {
       position: sticky;
-      top: 78px;
-      max-height: calc(100vh - 110px);
+      top: calc(var(--header-h) + 16px);
+      max-height: calc(100dvh - var(--header-h) - 32px);
       overflow-y: auto;
-      padding-right: 4px;
     }
   }
   .planner-week {
     display: grid;
-    gap: 10px;
+    gap: 12px;
     grid-template-columns: 1fr;
   }
-  @media (min-width: 560px) {
+  @media (min-width: 620px) {
     .planner-week {
       grid-template-columns: repeat(2, 1fr);
     }
   }
-  @media (min-width: 1100px) {
+  @media (min-width: 1280px) {
     /* Seven columns would squeeze each day to ~110px, too narrow for an
        entry with a slot and a servings box. Four keeps them usable. */
     .planner-week {
       grid-template-columns: repeat(4, 1fr);
     }
   }
-
-  /* ---- Shopping list ---------------------------------------------- */
-  .shop-row {
-    display: flex;
-    align-items: baseline;
+  .day {
+    display: grid;
+    align-content: start;
     gap: 10px;
-    padding: 9px 0;
-    border-bottom: 1px solid var(--hairline);
+    min-height: 140px;
+    padding: 14px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    transition:
+      background 0.12s,
+      border-color 0.12s;
   }
-  .shop-row input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    flex: none;
-    accent-color: var(--accent);
-    align-self: center;
+  .day.is-today {
+    border-color: var(--accent);
   }
-  .shop-row.done {
-    opacity: 0.42;
+  .day.is-over {
+    border-color: var(--accent);
+    background: var(--accent-wash);
   }
-  .shop-row.done .shop-name,
-  .shop-row.done .ing-qty {
-    text-decoration: line-through;
-  }
-  .shop-name {
-    flex: 1;
-  }
-
-  /* ---- Footer ---------------------------------------------------- */
-  footer.site {
-    margin-top: 72px;
-    border-top: 1px solid var(--hairline);
+  .lib-item,
+  .entry {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: var(--radius-sm);
     background: var(--surface-2);
   }
-  .foot {
-    display: flex;
-    justify-content: space-between;
+  .lib-item img,
+  .lib-item .thumb-empty,
+  .entry img,
+  .entry .thumb-empty {
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
+    object-fit: cover;
+    flex: none;
+    background: var(--surface-3);
+  }
+  .entry {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    gap: 8px 10px;
     align-items: center;
-    gap: 14px;
+  }
+  .entry-title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+  .entry-controls {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 6px;
+  }
+  .entry-controls .select {
+    flex: 1;
+    min-width: 0;
+    min-height: 34px;
+  }
+  .entry-controls .input {
+    flex: none;
+    width: 60px;
+    min-height: 34px;
+  }
+
+  .savebar {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .savebar .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--pill);
+    background: var(--green);
+  }
+  .savebar[data-state="saving"] .dot {
+    background: var(--muted);
+  }
+  .savebar[data-state="error"] {
+    color: var(--accent);
+  }
+  .savebar[data-state="error"] .dot {
+    background: var(--accent);
+  }
+
+  /* ---- Toast ----------------------------------------------------------- */
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 16px);
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: calc(100vw - 32px);
+    padding: 10px 12px 10px 18px;
+    border-radius: var(--pill);
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 14px;
+    font-weight: 550;
+    box-shadow: var(--shadow-lg);
+    transform: translateX(-50%);
+    animation: toast-in 0.2s ease-out;
+  }
+  .toast a {
+    color: inherit;
+    font-weight: 700;
+  }
+  @media (min-width: 900px) {
+    .toast {
+      bottom: 28px;
+    }
+  }
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 8px);
+    }
+  }
+
+  /* ---- Footer ---------------------------------------------------------- */
+
+  .footer {
+    margin-top: 80px;
+    border-top: 1px solid var(--hairline);
+  }
+  .footer-inner {
+    display: flex;
     flex-wrap: wrap;
-    padding-block: 22px;
+    justify-content: space-between;
+    gap: 12px;
+    padding-block: 24px;
     font-size: 13px;
     color: var(--muted);
+  }
+  .footer a {
+    color: inherit;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Print — the cooking sheet and the shopping list both get printed.
+   --------------------------------------------------------------------- */
+
+@media print {
+  .topbar,
+  .tabbar,
+  .footer,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+    padding: 0 !important;
+  }
+  .panel {
+    box-shadow: none;
+    border-color: #ccc;
   }
 }
 

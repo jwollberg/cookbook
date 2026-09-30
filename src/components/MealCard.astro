@@ -1,0 +1,48 @@
+---
+import Icon from "./Icon";
+import { formatMinutes, mealImages, mealMinutes } from "../lib/format";
+import type { Meal, Recipe } from "../lib/schema";
+
+interface Props {
+  meal: Meal;
+  recipesById: Map<string, Recipe>;
+}
+
+const { meal, recipesById } = Astro.props;
+const images = mealImages(meal, recipesById).slice(0, 4);
+const titles = meal.components
+  .map((c) => recipesById.get(c.recipeId)?.title)
+  .filter(Boolean)
+  .join(" · ");
+const time = formatMinutes(mealMinutes(meal, recipesById));
+---
+
+<article class="rcard">
+  <div class="rcard-media">
+    {
+      images.length === 0 ? (
+        <div class="no-photo">
+          <Icon name="cloche" />
+        </div>
+      ) : images.length === 1 ? (
+        <img src={images[0]} alt="" loading="lazy" />
+      ) : (
+        <div class={`collage collage-${images.length}`}>
+          {images.map((src) => (
+            <img src={src} alt="" loading="lazy" />
+          ))}
+        </div>
+      )
+    }
+  </div>
+  <div>
+    <a class="rcard-link" href={`/meals/${meal.id}`}>
+      <h3 class="rcard-title">{meal.name}</h3>
+    </a>
+    <p class="rcard-sub">{titles}</p>
+    <div class="rcard-meta">
+      <span><Icon name="cloche" />{meal.components.length} dishes</span>
+      {time && <span><Icon name="clock" />About {time}</span>}
+    </div>
+  </div>
+</article>

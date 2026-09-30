@@ -1,0 +1,148 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { GoogleMark } from "../components/Icon";
+import Icon from "../components/Icon";
+import { isAllowed, readSession, safeNext } from "../lib/server/auth";
+import { googleConfigured, isDevViewer, sessionSecret } from "../lib/server/context";
+import { loadViewer } from "../lib/server/db";
+
+const env = Astro.locals.runtime.env;
+const next = safeNext(Astro.url.searchParams.get("next"));
+const error = Astro.url.searchParams.get("error");
+const signedOut = Astro.url.searchParams.has("signed-out");
+
+// Already signed in and still allowed: carry straight on. The allowlist check
+// matters — without it a removed account would bounce between here and the
+// gate forever.
+const session = await readSession(Astro.cookies, Astro.url, sessionSecret(env));
+if (session && !error) {
+  const viewer = await loadViewer(env.DB, session.uid);
+  if (viewer && (isDevViewer(viewer) || isAllowed(viewer.email, env.ALLOWED_EMAILS))) {
+    return Astro.redirect(next);
+  }
+}
+
+const messages: Record<string, string> = {
+  setup: "Google sign-in is not set up on this server yet.",
+  "not-allowed":
+    "That Google account is not on this kitchen's guest list. Try a different account, or ask to be added.",
+  expired: "That sign-in took too long or was interrupted. Please try again.",
+  cancelled: "Sign-in was cancelled.",
+  google: "Google could not confirm that sign-in. Please try again.",
+};
+const message = error ? (messages[error] ?? messages.google) : signedOut ? "You are signed out." : null;
+const offerDev = import.meta.env.DEV && !googleConfigured(env);
+---
+
+<SiteLayout title="Sign in" description="Sign in to Kitchen." bare>
+  <div class="login">
+    <section class="login-card">
+      <span class="brand">
+        <span class="brand-mark"><Icon name="pot" /></span>
+        Kitchen
+      </span>
+
+      <div class="login-copy">
+        <h1>Cook, plan and shop together.</h1>
+        <p class="lede">
+          Shared recipes, a plan for the week, and one shopping list that adds itself up.
+        </p>
+      </div>
+
+      {
+        message && (
+          <p class={error ? "callout callout-warn" : "callout"} role="status">
+            {message}
+          </p>
+        )
+      }
+
+      <div class="login-actions">
+        <a class="btn btn-block google-btn" href={`/auth/login?next=${encodeURIComponent(next)}`}>
+          <GoogleMark />
+          Continue with Google
+        </a>
+        {
+          offerDev && (
+            <form method="post" action="/auth/dev">
+              <input type="hidden" name="next" value={next} />
+              <button class="btn btn-ghost btn-block">Continue as Dev Cook (local only)</button>
+            </form>
+          )
+        }
+      </div>
+
+      <p class="small muted">Only invited Google accounts can sign in.</p>
+    </section>
+
+    <div class="login-art" aria-hidden="true">
+      <img src="/images/recipes/greek-lemon-potatoes.jpg" alt="" />
+      <img src="/images/recipes/falafel.jpg" alt="" />
+      <img src="/images/recipes/deviled-eggs.jpg" alt="" />
+    </div>
+  </div>
+</SiteLayout>
+
+<style>
+  .login {
+    display: grid;
+    min-height: 100dvh;
+  }
+  .login-card {
+    display: grid;
+    align-content: center;
+    gap: 26px;
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 48px var(--gutter);
+  }
+  .login-copy {
+    display: grid;
+    gap: 12px;
+  }
+  .login-copy h1 {
+    font-size: clamp(2rem, 6vw, 2.8rem);
+  }
+  .login-actions {
+    display: grid;
+    gap: 10px;
+  }
+  .google-btn {
+    min-height: 52px;
+    font-size: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .google-btn :global(.icon) {
+    width: 20px;
+    height: 20px;
+  }
+  .login-art {
+    display: none;
+  }
+  @media (min-width: 900px) {
+    .login {
+      grid-template-columns: 1fr 1.1fr;
+    }
+    .login-art {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1.3fr 1fr;
+      gap: 10px;
+      padding: 10px;
+      height: 100dvh;
+      position: sticky;
+      top: 0;
+    }
+    .login-art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+      min-height: 0;
+    }
+    .login-art img:first-child {
+      grid-column: span 2;
+    }
+  }
+</style>

@@ -1,19 +1,25 @@
 {
-  "name": "cookbook",
+  "name": "kitchen",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
     "build": "astro check && astro build",
-    "preview": "astro preview --host 127.0.0.1",
+    "preview": "npm run build && wrangler dev --port 8787",
     "test": "vitest run --passWithNoTests",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "ci": "npm test && npm run build",
+    "deploy": "npm run ci && wrangler deploy",
+    "db:migrate:local": "wrangler d1 migrations apply kitchen --local",
+    "db:migrate:remote": "wrangler d1 migrations apply kitchen --remote",
+    "db:seed:local": "node scripts/seed.mjs && wrangler d1 execute kitchen --local --file scripts/seed.sql",
+    "db:seed:remote": "node scripts/seed.mjs && wrangler d1 execute kitchen --remote --file scripts/seed.sql"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/cloudflare": "^12.6.13",
     "@astrojs/react": "^4.2.0",
-    "@astrojs/sitemap": "^3.2.1",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@tailwindcss/vite": "^4.3.2",
@@ -25,8 +31,10 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260930.2",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "vitest": "^3.0.0"
+    "vitest": "^3.0.0",
+    "wrangler": "^4.145.0"
   }
 }

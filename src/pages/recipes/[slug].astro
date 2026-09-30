@@ -2,159 +2,160 @@
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import ImageCredit from "../../components/ImageCredit.astro";
 import IngredientList, { type IngredientName } from "../../components/IngredientList";
-import EditLink from "../../components/EditLink";
-import { loadAll, formatMinutes } from "../../lib/data.server";
+import Icon from "../../components/Icon";
+import { loadKitchen } from "../../lib/server/page";
+import { formatMinutes } from "../../lib/format";
 
-export async function getStaticPaths() {
-  const { recipes, ingredientsById, meals } = loadAll();
-  return recipes.map((recipe) => ({
-    params: { slug: recipe.id },
-    props: {
-      recipe,
-      // Only the names this recipe actually needs cross to the client.
-      names: Object.fromEntries(
-        recipe.ingredients.map((line) => {
-          const ing = ingredientsById.get(line.ingredientId);
-          return [
-            line.ingredientId,
-            { name: ing?.name ?? line.ingredientId, plural: ing?.plural } as IngredientName,
-          ];
-        }),
-      ),
-      partOf: meals
-        .filter((m) => m.components.some((c) => c.recipeId === recipe.id))
-        .map((m) => ({ id: m.id, name: m.name })),
-    },
-  }));
-}
+const { library, planning, household, ingredientsById } = await loadKitchen(Astro.locals);
+const recipe = library.recipes.find((r) => r.id === Astro.params.slug);
+if (!recipe) return Astro.rewrite("/404");
 
-const { recipe, names, partOf } = Astro.props;
+// Only the names this recipe needs cross to the browser.
+const names: Record<string, IngredientName> = Object.fromEntries(
+  recipe.ingredients.map((line) => {
+    const ing = ingredientsById.get(line.ingredientId);
+    return [line.ingredientId, { name: ing?.name ?? line.ingredientId, plural: ing?.plural }];
+  }),
+);
+const partOf = library.meals.filter((m) => m.components.some((c) => c.recipeId === recipe.id));
 
-const times = [
+const stats = [
   { label: "Prep", value: formatMinutes(recipe.prepMin) },
   { label: "Cook", value: formatMinutes(recipe.cookMin) },
   { label: "Chill", value: formatMinutes(recipe.restMin) },
-].filter((t) => t.value);
+  { label: "Serves", value: String(recipe.servings) },
+].filter((s) => s.value);
 
-// Group steps the same way the ingredients group, preserving authoring order.
-const stepGroups = recipe.steps.reduce((acc, step) => {
-  const key = step.group ?? "";
-  const existing = acc.find((g) => g.key === key);
-  if (existing) existing.steps.push(step);
-  else acc.push({ key, steps: [step] });
-  return acc;
-}, [] as { key: string; steps: typeof recipe.steps }[]);
+// Group steps the way the ingredients group, preserving authoring order.
+const stepGroups = recipe.steps.reduce(
+  (acc, step) => {
+    const key = step.group ?? "";
+    const existing = acc.find((g) => g.key === key);
+    if (existing) existing.steps.push(step);
+    else acc.push({ key, steps: [step] });
+    return acc;
+  },
+  [] as { key: string; steps: typeof recipe.steps }[],
+);
 ---
 
-<SiteLayout title={`${recipe.title} — Cookbook`} description={recipe.description}>
-  <article style="padding-block: 32px 8px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
-      <a href="/recipes" class="lbl" style="text-decoration: none;">← Recipes</a>
-      {/* Only renders once a token is present, so the public view stays clean. */}
-      <EditLink client:only="react" href={`/edit/recipe?id=${recipe.id}`} />
+<SiteLayout title={recipe.title} description={recipe.description}>
+  <div class="wrap">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 20px;">
+      <a class="back" href="/recipes"><Icon name="chevronLeft" /> Recipes</a>
+      <a class="btn btn-sm" href={`/edit/recipe?id=${encodeURIComponent(recipe.id)}`}>
+        <Icon name="pencil" /> Edit
+      </a>
     </div>
 
-    <header style="margin-top: 18px;">
-      <h1>{recipe.title}</h1>
-      {
-        recipe.subtitle && (
-          <p style="margin: 6px 0 0; font-size: 1.15rem; color: var(--muted); font-style: italic;">
-            {recipe.subtitle}
-          </p>
-        )
-      }
-      {
-        recipe.description && (
-          <p style="max-width: 62ch; margin: 16px 0 0; font-size: 1.08rem; color: var(--ink-2);">
-            {recipe.description}
-          </p>
-        )
-      }
-
-      <div class="meta-row">
-        {times.map((t) => (
-          <span class="chip num">
-            {t.label} {t.value}
-          </span>
-        ))}
-        {recipe.tags.map((tag) => (
-          <a href={`/recipes?tag=${encodeURIComponent(tag)}`} class="chip" style="text-decoration: none;">
-            {tag}
-          </a>
-        ))}
-      </div>
-    </header>
-
-    {
-      recipe.image && (
-        <figure style="margin: 28px 0 0;">
-          <img class="recipe-hero" src={recipe.image} alt={recipe.title} />
-          <ImageCredit credit={recipe.imageCredit} />
+    <article>
+      <div class="recipe-top">
+        <figure class="recipe-photo" style="margin-block: 0;">
+          {
+            recipe.image ? (
+              <>
+                <img src={recipe.image} alt={recipe.title} />
+                <ImageCredit credit={recipe.imageCredit} />
+              </>
+            ) : (
+              <div class="no-photo">
+                <Icon name="camera" />
+              </div>
+            )
+          }
         </figure>
-      )
-    }
 
-    <div class="recipe-layout">
-      <aside class="recipe-aside">
-        <IngredientList
-          client:load
-          ingredients={recipe.ingredients}
-          baseServings={recipe.servings}
-          names={names}
-          yieldNote={recipe.yieldNote}
-        />
-
-        {
-          partOf.length > 0 && (
-            <div style="margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--hairline);">
-              <span class="lbl">Part of</span>
-              <div style="display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px;">
-                {partOf.map((m) => (
-                  <a href={`/meals/${m.id}`} class="chip chip-olive" style="text-decoration: none;">
-                    {m.name}
+        <div class="recipe-intro">
+          <h1>{recipe.title}</h1>
+          {recipe.subtitle && <p class="subtitle">{recipe.subtitle}</p>}
+          {recipe.description && <p class="lede">{recipe.description}</p>}
+          <div class="stats">
+            {
+              stats.map((s) => (
+                <div class="stat">
+                  <span class="label">{s.label}</span>
+                  <span class="stat-value">{s.value}</span>
+                </div>
+              ))
+            }
+          </div>
+          {
+            recipe.tags.length > 0 && (
+              <div class="chips">
+                {recipe.tags.map((tag) => (
+                  <a class="chip" href={`/recipes?tag=${encodeURIComponent(tag)}`}>
+                    {tag}
                   </a>
                 ))}
               </div>
-            </div>
-          )
-        }
-      </aside>
+            )
+          }
+        </div>
+      </div>
 
-      <section>
-        <span class="lbl">Method</span>
-        {
-          stepGroups.map((group) => (
-            <div>
-              {group.key && <h2 style="font-size: 1.3rem; margin-top: 26px;">{group.key}</h2>}
-              <ol style="list-style: none; margin: 6px 0 0; padding: 0; counter-reset: step;">
-                {group.steps.map((step, i) => (
-                  <li class="step">
-                    <span class="step-n num">{i + 1}</span>
-                    <div class="step-body">
-                      {step.heading && (
-                        <strong style="display: block; color: var(--ink);">{step.heading}</strong>
-                      )}
-                      {step.text}
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          ))
-        }
+      <div class="recipe-body">
+        <aside class="recipe-aside">
+          <IngredientList
+            client:load
+            recipeId={recipe.id}
+            recipeTitle={recipe.title}
+            ingredients={recipe.ingredients}
+            baseServings={recipe.servings}
+            names={names}
+            yieldNote={recipe.yieldNote}
+            householdId={household.id}
+            householdName={household.name}
+            extras={planning.shopping}
+          />
 
-        {
-          recipe.notes && (
-            <aside
-              class="card"
-              style="margin-top: 30px; padding: 16px 18px; background: var(--olive-wash); border-color: transparent;"
-            >
-              <span class="lbl" style="color: var(--olive);">Note</span>
-              <p style="margin: 6px 0 0; color: var(--ink-2);">{recipe.notes}</p>
-            </aside>
-          )
-        }
-      </section>
-    </div>
-  </article>
+          {
+            partOf.length > 0 && (
+              <div style="margin-top: 20px; display: grid; gap: 10px;">
+                <span class="label">Part of</span>
+                <div class="chips">
+                  {partOf.map((m) => (
+                    <a class="chip chip-green" href={`/meals/${m.id}`}>
+                      <Icon name="cloche" />
+                      {m.name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+        </aside>
+
+        <section>
+          <h2 style="font-size: 1.25rem; margin-bottom: 6px;">Method</h2>
+          {
+            stepGroups.map((group) => (
+              <div>
+                {group.key && <h3 style="margin-top: 22px;">{group.key}</h3>}
+                <ol class="steps">
+                  {group.steps.map((step, i) => (
+                    <li class="step">
+                      <span class="step-n">{i + 1}</span>
+                      <div class="step-body">
+                        {step.heading && <strong>{step.heading}</strong>}
+                        {step.text}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ))
+          }
+
+          {
+            recipe.notes && (
+              <aside class="callout" style="margin-top: 24px; display: grid; gap: 6px;">
+                <span class="label">Cook's note</span>
+                <p>{recipe.notes}</p>
+              </aside>
+            )
+          }
+        </section>
+      </div>
+    </article>
+  </div>
 </SiteLayout>

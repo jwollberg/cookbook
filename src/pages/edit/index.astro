@@ -1,25 +1,73 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import TokenPanel from "../../components/TokenPanel";
-import EditIndex from "../../components/EditIndex";
+import Icon from "../../components/Icon";
+import { loadLibrary } from "../../lib/server/db";
+
+const library = await loadLibrary(Astro.locals.runtime.env.DB);
+const deleted = Astro.url.searchParams.has("deleted");
 ---
 
-<SiteLayout title="Edit — Cookbook" description="Add and edit recipes, committed straight to the repo.">
-  <section style="padding-block: 44px 8px;">
-    <p class="lbl">Authoring</p>
-    <h1 style="margin-top: 10px;">Edit</h1>
-    <p style="max-width: 58ch; margin: 16px 0 28px; color: var(--ink-2);">
-      Recipes are files in the repo. Saving here writes them back as a single commit, and the
-      published site rebuilds itself about a minute later.
-    </p>
-  </section>
+<SiteLayout title="Edit recipes" description="Add and edit the shared recipes.">
+  <div class="wrap" style="max-width: 900px;">
+    <header class="page-head">
+      <div>
+        <span class="eyebrow">Shared by everyone</span>
+        <h1>Edit recipes</h1>
+        <p class="lede">
+          Recipes and ingredients are one shared book: a change here shows up for every household
+          straight away.
+        </p>
+      </div>
+      <a class="btn btn-primary" href="/edit/recipe"><Icon name="plus" /> New recipe</a>
+    </header>
 
-  {/* client:only — reads localStorage, which does not exist during SSR. */}
-  <TokenPanel client:only="react" />
+    {deleted && <p class="callout" role="status" style="margin-bottom: 18px;">Recipe deleted.</p>}
 
-  <div style="height: 32px;"></div>
+    <section class="panel" style="padding: 6px 18px;">
+      {
+        library.recipes.map((r) => (
+          <div class="source-row">
+            {r.image ? <img class="source-thumb" src={r.image} alt="" loading="lazy" /> : <span class="source-thumb" />}
+            <span class="source-title">
+              {r.title}
+              <span class="small muted" style="display: block; font-weight: 400;">
+                {r.ingredients.length} ingredients · serves {r.servings}
+              </span>
+            </span>
+            <a class="btn btn-sm btn-ghost" href={`/recipes/${r.id}`}>
+              View
+            </a>
+            <a class="btn btn-sm" href={`/edit/recipe?id=${encodeURIComponent(r.id)}`}>
+              <Icon name="pencil" /> Edit
+            </a>
+          </div>
+        ))
+      }
+    </section>
 
-  <EditIndex client:only="react" />
-
-  <div style="height: 48px;"></div>
+    {
+      library.meals.length > 0 && (
+        <section class="section">
+          <div class="section-head">
+            <h2>Meals</h2>
+          </div>
+          <div class="panel" style="padding: 6px 18px;">
+            {library.meals.map((m) => (
+              <div class="source-row">
+                <span class="source-title">
+                  {m.name}
+                  <span class="small muted" style="display: block; font-weight: 400;">
+                    {m.components.length} dishes
+                  </span>
+                </span>
+                <a class="btn btn-sm btn-ghost" href={`/meals/${m.id}`}>
+                  View
+                </a>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </div>
 </SiteLayout>

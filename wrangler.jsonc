@@ -1,0 +1,48 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kitchen",
+  // Astro's Cloudflare adapter builds the Worker into dist/_worker.js; the rest
+  // of dist/ is static assets (.assetsignore keeps the Worker itself out).
+  "main": "./dist/_worker.js/index.js",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+
+  // Static files are served straight from the edge and never reach the
+  // Worker, so they skip the sign-in check. Nothing private may be a static
+  // file: every page with data in it is rendered by the Worker, behind auth.
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+
+  "routes": [{ "pattern": "kitchen.atheosstudios.com", "custom_domain": true }],
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kitchen",
+      "database_id": "64201a80-8066-4c30-be0a-d712f6d031a7",
+      "migrations_dir": "./migrations"
+    }
+  ],
+
+  // Photos uploaded from the recipe editor. Served through the Worker at
+  // /photos/*, so they sit behind sign-in like everything else.
+  "r2_buckets": [
+    {
+      "binding": "PHOTOS",
+      "bucket_name": "kitchen-photos"
+    }
+  ],
+
+  "vars": {
+    "APP_URL": "https://kitchen.atheosstudios.com"
+  }
+
+  // Secrets (`wrangler secret put <NAME>` in production, .dev.vars locally):
+  //   GOOGLE_CLIENT_ID      OAuth web client, Google Auth Platform
+  //   GOOGLE_CLIENT_SECRET
+  //   SESSION_SECRET        signs the session cookie; rotating it signs everyone out
+  //   ALLOWED_EMAILS        comma-separated; the only accounts that may sign in
+}

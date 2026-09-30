@@ -14,13 +14,14 @@
 import {
   bucketKey,
   formatQuantity,
+  formatUnitQuantity,
   toBase,
   toGrams,
   type MeasurementSystem,
 } from "./units";
 import { scaleIngredients } from "./scaling";
-import type { Aisle, Ingredient, Meal, MealPlan, PantryItem, Recipe } from "./schema";
-import { AISLES } from "./schema";
+import type { Ingredient, ListItem, Meal, MealPlan, PantryItem, Recipe } from "./schema";
+import { AISLES, type Aisle } from "./constants";
 
 export interface ResolvedDish {
   recipe: Recipe;
@@ -34,7 +35,13 @@ export interface ShoppingPart {
 }
 
 export interface ShoppingLine {
-  ingredientId: string;
+  /**
+   * Stable identity for ticking a line off: the ingredient id, or
+   * `item:<id>` for a free-text item the registry doesn't know.
+   */
+  key: string;
+  /** Absent for free-text items. */
+  ingredientId?: string;
   name: string;
   aisle: Aisle;
   isStaple: boolean;
@@ -47,6 +54,8 @@ export interface ShoppingLine {
   fromRecipes: string[];
   /** Pantry covered the whole requirement, so nothing needs buying. */
   covered: boolean;
+  /** Put on the list by hand, rather than (or as well as) by a recipe. */
+  added: boolean;
 }
 
 export interface AisleGroup {
@@ -69,37 +78,59 @@ export interface ShoppingList {
 // Plan expansion
 // ---------------------------------------------------------------------------
 
+/** Anything that names a meal or a recipe to cook, at some number of servings. */
+export interface DishEntry {
+  mealId?: string;
+  recipeId?: string;
+  servings?: number;
+}
+
+/**
+ * Flatten plan entries or list dishes into the recipes actually being
+ * cooked, with servings. Meals expand to their components; references to
+ * anything that no longer exists are skipped.
+ */
+export function expandDishes(
+  entries: DishEntry[],
+  recipesById: Map<string, Recipe>,
+  mealsById: Map<string, Meal>,
+): ResolvedDish[] {
+  const dishes: ResolvedDish[] = [];
+
+  for (const entry of entries) {
+    if (entry.recipeId) {
+      const recipe = recipesById.get(entry.recipeId);
+      if (recipe) dishes.push({ recipe, servings: entry.servings });
+      continue;
+    }
+    if (!entry.mealId) continue;
+
+    const meal = mealsById.get(entry.mealId);
+    if (!meal) continue;
+
+    for (const component of meal.components) {
+      const recipe = recipesById.get(component.recipeId);
+      if (!recipe) continue;
+      // A component override wins over the entry's servings — it exists
+      // precisely to cook one part of a meal at a different scale.
+      dishes.push({ recipe, servings: component.servingsOverride ?? entry.servings });
+    }
+  }
+
+  return dishes;
+}
+
 /** Flatten a plan into the dishes actually being cooked, with servings. */
 export function expandPlan(
   plan: MealPlan,
   recipesById: Map<string, Recipe>,
   mealsById: Map<string, Meal>,
 ): ResolvedDish[] {
-  const dishes: ResolvedDish[] = [];
-
-  for (const day of plan.days) {
-    for (const entry of day.entries) {
-      if (entry.recipeId) {
-        const recipe = recipesById.get(entry.recipeId);
-        if (recipe) dishes.push({ recipe, servings: entry.servings });
-        continue;
-      }
-      if (!entry.mealId) continue;
-
-      const meal = mealsById.get(entry.mealId);
-      if (!meal) continue;
-
-      for (const component of meal.components) {
-        const recipe = recipesById.get(component.recipeId);
-        if (!recipe) continue;
-        // A component override wins over the plan entry's servings — it exists
-        // precisely to cook one part of a meal at a different scale.
-        dishes.push({ recipe, servings: component.servingsOverride ?? entry.servings });
-      }
-    }
-  }
-
-  return dishes;
+  return expandDishes(
+    plan.days.flatMap((day) => day.entries),
+    recipesById,
+    mealsById,
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -112,10 +143,11 @@ interface Accumulator {
 }
 
 /**
- * Build a shopping list from a set of dishes.
+ * Build a shopping list from a set of dishes, plus anything added by hand.
  *
  * `includeStaples` defaults to false: salt and pepper on every list is noise,
- * and the whole point of the staple flag is to keep them off it.
+ * and the whole point of the staple flag is to keep them off it. A staple you
+ * add by hand is shown regardless — asking for salt means you're out of it.
  */
 export function buildShoppingList(
   dishes: ResolvedDish[],
@@ -124,9 +156,11 @@ export function buildShoppingList(
     pantry?: PantryItem[];
     system?: MeasurementSystem;
     includeStaples?: boolean;
+    /** Items added by hand, outside any recipe. */
+    items?: ListItem[];
   } = {},
 ): ShoppingList {
-  const { pantry = [], system = "us", includeStaples = false } = options;
+  const { pantry = [], system = "us", includeStaples = false, items = [] } = options;
 
   const acc = new Map<string, Accumulator>();
 
@@ -146,13 +180,36 @@ export function buildShoppingList(
 
   subtractPantry(acc, pantry);
 
+  // Hand-added items go on AFTER the pantry. They are explicit requests to
+  // buy, not requirements for the pantry to net off — "12 eggs" means twelve
+  // eggs even when the pantry already covers what the recipes need.
+  const added = new Set<string>();
+  const loose: ShoppingLine[] = [];
+  for (const item of items) {
+    if (!item.ingredientId) {
+      if (item.name) loose.push(looseLine(item));
+      continue;
+    }
+    const entry = acc.get(item.ingredientId) ?? { buckets: new Map(), recipes: new Set() };
+    if (item.quantity && item.unit) {
+      const bucket = bucketKey(item.unit);
+      // A bucket the pantry drove negative is worth nothing here; without the
+      // clamp, pantry surplus would silently eat into the hand-added amount.
+      const current = Math.max(0, entry.buckets.get(bucket) ?? 0);
+      entry.buckets.set(bucket, current + toBase(item.quantity, item.unit));
+    }
+    acc.set(item.ingredientId, entry);
+    added.add(item.ingredientId);
+  }
+
   const lines: ShoppingLine[] = [];
   const splitLines: string[] = [];
 
   for (const [ingredientId, entry] of acc) {
     const ingredient = ingredientsById.get(ingredientId);
     const isStaple = ingredient?.isStaple ?? false;
-    if (isStaple && !includeStaples) continue;
+    const isAdded = added.has(ingredientId);
+    if (isStaple && !includeStaples && !isAdded) continue;
 
     const merged = mergeBuckets(entry.buckets, ingredient);
     const parts: ShoppingPart[] = [];
@@ -171,13 +228,16 @@ export function buildShoppingList(
     const name = shoppingName(ingredient, ingredientId, parts);
     if (parts.length === 0) {
       lines.push({
+        key: ingredientId,
         ingredientId,
         name,
         aisle: ingredient?.aisle ?? "other",
         isStaple,
         parts: [],
         fromRecipes: [...entry.recipes],
-        covered: true,
+        // Added by hand with no amount is a request, not a pantry hit.
+        covered: !isAdded,
+        added: isAdded,
       });
       continue;
     }
@@ -185,6 +245,7 @@ export function buildShoppingList(
     if (parts.length > 1) splitLines.push(ingredientId);
 
     lines.push({
+      key: ingredientId,
       ingredientId,
       name,
       aisle: ingredient?.aisle ?? "other",
@@ -192,13 +253,44 @@ export function buildShoppingList(
       parts,
       fromRecipes: [...entry.recipes],
       covered: false,
+      added: isAdded,
     });
   }
+
+  lines.push(...loose);
 
   return {
     groups: groupByAisle(lines),
     splitLines,
     totalLines: lines.length,
+  };
+}
+
+/**
+ * A free-text item the registry doesn't know. Shown exactly as entered, in
+ * the unit it was typed in: with no ingredient record there is nothing to
+ * convert with, and nothing it could merge into.
+ */
+function looseLine(item: ListItem): ShoppingLine {
+  const parts: ShoppingPart[] =
+    item.quantity && item.unit
+      ? [
+          {
+            bucket: bucketKey(item.unit),
+            baseAmount: toBase(item.quantity, item.unit),
+            text: formatUnitQuantity(item.quantity, item.unit),
+          },
+        ]
+      : [];
+  return {
+    key: `item:${item.id}`,
+    name: item.name ?? "",
+    aisle: "other",
+    isStaple: false,
+    parts,
+    fromRecipes: [],
+    covered: false,
+    added: true,
   };
 }
 

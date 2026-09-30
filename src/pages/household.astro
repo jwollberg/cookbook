@@ -1,0 +1,101 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import Icon from "../components/Icon";
+import { listHouseholds } from "../lib/server/db";
+
+const { viewer, household } = Astro.locals;
+const households = await listHouseholds(Astro.locals.runtime.env.DB);
+const notice = Astro.url.searchParams.has("created")
+  ? "Household created — you are working in it now."
+  : Astro.url.searchParams.has("renamed")
+    ? "Renamed."
+    : null;
+---
+
+<SiteLayout title="Households" description="Switch, rename or create households.">
+  <div class="wrap" style="max-width: 820px;">
+    <header class="page-head">
+      <div>
+        <span class="eyebrow">Households</span>
+        <h1>Whose kitchen?</h1>
+        <p class="lede">
+          Recipes are shared by everyone. Each household keeps its own week plan, shopping list and
+          ticks — and anyone signed in can work in any household.
+        </p>
+      </div>
+    </header>
+
+    {notice && <p class="callout" role="status" style="margin-bottom: 20px;">{notice}</p>}
+
+    <section class="panel panel-pad" style="display: grid; gap: 14px;">
+      <span class="label">Working in</span>
+      <form method="post" action="/api/households" class="actions" style="align-items: flex-end;">
+        <input type="hidden" name="intent" value="rename" />
+        <input type="hidden" name="id" value={household.id} />
+        <label class="field" style="flex: 1 1 260px;">
+          <span class="field-label">Name</span>
+          <input class="input" name="name" value={household.name} maxlength="60" required />
+        </label>
+        <button class="btn">Rename</button>
+      </form>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>All households</h2></div>
+      <div class="panel" style="padding: 6px 18px;">
+        {
+          households.map((h) => (
+            <div class="source-row">
+              <span class="source-thumb" style="display: grid; place-items: center; color: var(--muted);">
+                <Icon name="home" />
+              </span>
+              <span class="source-title">
+                {h.name}
+                <span class="small muted" style="display: block; font-weight: 400;">
+                  {h.creatorName ? `Started by ${h.creatorName}` : "Household"}
+                </span>
+              </span>
+              {h.id === household.id ? (
+                <span class="chip chip-accent">
+                  <Icon name="check" /> Current
+                </span>
+              ) : (
+                <form method="post" action="/api/households">
+                  <input type="hidden" name="intent" value="switch" />
+                  <input type="hidden" name="id" value={h.id} />
+                  <input type="hidden" name="next" value="/household" />
+                  <button class="btn btn-sm">Work here</button>
+                </form>
+              )}
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>New household</h2></div>
+      <form method="post" action="/api/households" class="panel panel-pad actions" style="align-items: flex-end;">
+        <input type="hidden" name="intent" value="create" />
+        <label class="field" style="flex: 1 1 260px;">
+          <span class="field-label">Name</span>
+          <input class="input" name="name" placeholder="The Lake House" maxlength="60" required />
+        </label>
+        <button class="btn btn-primary"><Icon name="plus" /> Create</button>
+      </form>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Your account</h2></div>
+      <div class="panel panel-pad actions" style="justify-content: space-between;">
+        <span>
+          <strong>{viewer.name ?? viewer.email}</strong>
+          <span class="small muted" style="display: block;">{viewer.email} · signed in with Google</span>
+        </span>
+        <form method="post" action="/auth/logout">
+          <button class="btn"><Icon name="logout" /> Sign out</button>
+        </form>
+      </div>
+    </section>
+  </div>
+</SiteLayout>

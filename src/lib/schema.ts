@@ -1,31 +1,16 @@
 /**
- * Data model. The repo is the database — every one of these lives as JSON
- * under public/data/ and is validated on load, so a hand-edited or
- * browser-written file that goes malformed fails loudly instead of silently
+ * Data model. Every record is a JSON document in D1 (see migrations/), and
+ * the starter library is seeded from seed/*.json. Documents are validated on
+ * every read and write, so a malformed one fails loudly instead of silently
  * producing a wrong shopping list.
  */
 
 import { z } from "zod";
 import { UNIT_IDS } from "./units";
+import { AISLES, ROLES, SLOTS } from "./constants";
 
-export const AISLES = [
-  "produce",
-  "meat",
-  "seafood",
-  "dairy",
-  "bakery",
-  "pantry",
-  "spices",
-  "frozen",
-  "other",
-] as const;
-export type Aisle = (typeof AISLES)[number];
-
-export const ROLES = ["main", "side", "starter", "dessert", "drink", "sauce"] as const;
-export type Role = (typeof ROLES)[number];
-
-export const SLOTS = ["breakfast", "lunch", "dinner", "snack"] as const;
-export type Slot = (typeof SLOTS)[number];
+export { AISLES, ROLES, SLOTS };
+export type { Aisle, Role, Slot } from "./constants";
 
 const slug = z
   .string()
@@ -124,7 +109,10 @@ export const RecipeSchema = z.object({
   restMin: z.number().nonnegative().default(0),
   tags: z.array(z.string()).default([]),
   sourceUrl: z.string().url().optional(),
-  /** Path under /images/recipes/, served statically. */
+  /**
+   * /images/recipes/* for the starter photos (static, openly licensed), or
+   * /photos/* for one uploaded in the editor (R2, behind sign-in).
+   */
   image: z.string().optional(),
   imageCredit: ImageCreditSchema.optional(),
   ingredients: z.array(RecipeIngredientSchema),
@@ -221,3 +209,99 @@ export const PantryItemSchema = z.object({
 export type PantryItem = z.infer<typeof PantryItemSchema>;
 
 export const PantryFileSchema = z.array(PantryItemSchema);
+
+// ---------------------------------------------------------------------------
+// Shopping list extras
+// ---------------------------------------------------------------------------
+
+/**
+ * A recipe or meal put straight on the shopping list, without planning it
+ * onto a day. A plan entry minus the slot.
+ */
+export const DishRefSchema = z
+  .object({ mealId: slug.optional(), recipeId: slug.optional() })
+  .refine((d) => Boolean(d.mealId) !== Boolean(d.recipeId), {
+    message: "a list dish must reference exactly one of mealId or recipeId",
+  });
+
+export const ListDishSchema = z
+  .object({
+    mealId: slug.optional(),
+    recipeId: slug.optional(),
+    servings: z.number().positive().max(999).optional(),
+  })
+  .refine((d) => Boolean(d.mealId) !== Boolean(d.recipeId), {
+    message: "a list dish must reference exactly one of mealId or recipeId",
+  });
+export type ListDish = z.infer<typeof ListDishSchema>;
+
+/**
+ * One thing to buy, added by hand.
+ *
+ * Linked to the ingredient registry whenever the text matches an ingredient,
+ * so "2 lb ground beef" merges with the pound a recipe already asked for
+ * instead of sitting beside it. Anything the registry doesn't know
+ * ("paper towels") is kept as free text and never aggregated.
+ */
+const ListItemFields = z.object({
+  id: z.string().min(1).max(64),
+  ingredientId: slug.optional(),
+  name: z.string().min(1).max(120).optional(),
+  quantity: z.number().positive().max(100000).optional(),
+  unit: unitId.optional(),
+});
+const namesSomething = (i: { ingredientId?: string; name?: string }) =>
+  Boolean(i.ingredientId) || Boolean(i.name);
+
+export const ListItemSchema = ListItemFields.refine(namesSomething, {
+  message: "a list item needs an ingredientId or a name",
+});
+export type ListItem = z.infer<typeof ListItemSchema>;
+
+/** An item as typed, before the list gives it an id. */
+export const NewListItemSchema = ListItemFields.omit({ id: true }).refine(namesSomething, {
+  message: "a list item needs an ingredientId or a name",
+});
+
+/**
+ * Everything on the shopping list that did not come from a plan.
+ *
+ * The list you shop from is the plan (optional) plus these, aggregated
+ * together — so the list works with no plan at all, and a recipe added here
+ * still merges with the same ingredient from a planned dinner.
+ */
+export const ShoppingExtrasSchema = z.object({
+  dishes: z.array(ListDishSchema).default([]),
+  items: z.array(ListItemSchema).default([]),
+  /**
+   * Which plan feeds the list: a plan id, null for none, or absent for
+   * automatic — the current or next planned week (see pickCurrentPlan).
+   */
+  planId: z.string().nullable().optional(),
+  updatedAt: z.string().optional(),
+});
+export type ShoppingExtras = z.infer<typeof ShoppingExtrasSchema>;
+
+/**
+ * One edit to a household's list. The server applies it to the latest copy
+ * (see mutateShopping) rather than accepting a whole replacement list, so two
+ * people adding things at the same moment both keep what they added.
+ */
+export const ListEditSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("addDish"), dish: ListDishSchema }),
+  z.object({ type: z.literal("removeDish"), ref: DishRefSchema }),
+  z.object({
+    type: z.literal("setServings"),
+    ref: DishRefSchema,
+    servings: z.number().positive().max(999).nullable(),
+  }),
+  z.object({ type: z.literal("addItem"), item: NewListItemSchema }),
+  z.object({ type: z.literal("removeItem"), id: z.string().min(1) }),
+  /** "auto" follows the current week; null means no plan. */
+  z.object({ type: z.literal("setPlan"), planId: z.union([z.literal("auto"), z.string().min(1), z.null()]) }),
+  z.object({ type: z.literal("tick"), key: z.string().min(1).max(200), on: z.boolean() }),
+  z.object({ type: z.literal("clearTicks") }),
+  /** Empty the list: dishes, items and ticks. The plan choice stays. */
+  z.object({ type: z.literal("clear") }),
+]);
+export type ListEdit = z.infer<typeof ListEditSchema>;

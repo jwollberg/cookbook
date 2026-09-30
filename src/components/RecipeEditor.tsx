@@ -1,14 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import Icon from "./Icon";
 import { UNIT_IDS, UNITS } from "../lib/units";
-import { AISLES, type Aisle, type Ingredient, type Recipe } from "../lib/schema";
-import {
-  loadCookbook,
-  saveRecipe,
-  getToken,
-  slugify,
-  uniqueSlug,
-  type Cookbook,
-} from "../lib/store";
+import { AISLES, type Aisle } from "../lib/constants";
+import type { Ingredient, Recipe } from "../lib/schema";
+import { slugify, uniqueSlug } from "../lib/slug";
+import { deleteRecipe, downsizePhoto, removePhoto, saveRecipe, uploadPhoto } from "../lib/api";
 
 const NEW = "__new__";
 
@@ -25,43 +21,31 @@ const blankRecipe = (): Recipe => ({
 });
 
 type Row = Recipe["ingredients"][number];
+type Result = { tone: "ok" | "bad"; text: string };
 
-export default function RecipeEditor() {
-  const [cookbook, setCookbook] = useState<Cookbook | null>(null);
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [ingredientsChanged, setIngredientsChanged] = useState(false);
-  const [recipe, setRecipe] = useState<Recipe>(blankRecipe);
-  const [isNew, setIsNew] = useState(true);
-  const [loadError, setLoadError] = useState<string>();
+interface Props {
+  /** The recipe being edited, or null to create one. */
+  initial: Recipe | null;
+  ingredients: Ingredient[];
+  /** Every recipe id already taken, so a new slug never collides. */
+  takenIds: string[];
+}
+
+export default function RecipeEditor({ initial, ingredients: registry, takenIds }: Props) {
+  const [ingredients, setIngredients] = useState<Ingredient[]>(registry);
+  const [created, setCreated] = useState<Ingredient[]>([]);
+  const [recipe, setRecipe] = useState<Recipe>(() => (initial ? structuredClone(initial) : blankRecipe()));
+  const [isNew, setIsNew] = useState(!initial);
   const [saving, setSaving] = useState(false);
-  const [result, setResult] = useState<{ tone: "ok" | "warn" | "bad"; text: string; url?: string }>();
-  const [hasToken, setHasToken] = useState(false);
-
-  useEffect(() => {
-    setHasToken(Boolean(getToken()));
-    void (async () => {
-      const { data, error } = await loadCookbook();
-      setCookbook(data);
-      setIngredients(data.ingredients);
-      setLoadError(error);
-
-      const id = new URLSearchParams(window.location.search).get("id");
-      const existing = id ? data.recipes.find((r) => r.id === id) : undefined;
-      if (existing) {
-        setRecipe(structuredClone(existing));
-        setIsNew(false);
-      }
-    })();
-  }, []);
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const [pendingPhoto, setPendingPhoto] = useState<{ blob: Blob; url: string } | null>(null);
+  const [result, setResult] = useState<Result>();
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const byId = useMemo(() => new Map(ingredients.map((i) => [i.id, i])), [ingredients]);
-  const sorted = useMemo(
-    () => [...ingredients].sort((a, b) => a.name.localeCompare(b.name)),
-    [ingredients],
-  );
+  const sorted = useMemo(() => [...ingredients].sort((a, b) => a.name.localeCompare(b.name)), [ingredients]);
 
-  const set = <K extends keyof Recipe>(key: K, value: Recipe[K]) =>
-    setRecipe((r) => ({ ...r, [key]: value }));
+  const set = <K extends keyof Recipe>(key: K, value: Recipe[K]) => setRecipe((r) => ({ ...r, [key]: value }));
 
   // --- ingredient rows -----------------------------------------------------
 
@@ -74,10 +58,7 @@ export default function RecipeEditor() {
   const addRow = () =>
     setRecipe((r) => ({
       ...r,
-      ingredients: [
-        ...r.ingredients,
-        { ingredientId: sorted[0]?.id ?? "", quantity: 1, unit: "each", optional: false, noScale: false },
-      ],
+      ingredients: [...r.ingredients, { ingredientId: "", quantity: 1, unit: "each", optional: false, noScale: false }],
     }));
 
   const removeRow = (index: number) =>
@@ -95,23 +76,18 @@ export default function RecipeEditor() {
   /** Create an ingredient inline so a recipe never blocks on missing data. */
   function createIngredient(rowIndex: number, name: string, aisle: Aisle) {
     const id = uniqueSlug(name, ingredients.map((i) => i.id));
-    const created: Ingredient = { id, name: name.trim(), aisle, aliases: [], isStaple: false };
-    setIngredients((list) => [...list, created]);
-    setIngredientsChanged(true);
+    const ingredient: Ingredient = { id, name: name.trim(), aisle, aliases: [], isStaple: false };
+    setIngredients((list) => [...list, ingredient]);
+    setCreated((list) => [...list, ingredient]);
     setRow(rowIndex, { ingredientId: id });
   }
 
   // --- steps ---------------------------------------------------------------
 
   const setStep = (index: number, patch: Partial<Recipe["steps"][number]>) =>
-    setRecipe((r) => ({
-      ...r,
-      steps: r.steps.map((s, i) => (i === index ? { ...s, ...patch } : s)),
-    }));
-
+    setRecipe((r) => ({ ...r, steps: r.steps.map((s, i) => (i === index ? { ...s, ...patch } : s)) }));
   const addStep = () => setRecipe((r) => ({ ...r, steps: [...r.steps, { text: "" }] }));
-  const removeStep = (index: number) =>
-    setRecipe((r) => ({ ...r, steps: r.steps.filter((_, i) => i !== index) }));
+  const removeStep = (index: number) => setRecipe((r) => ({ ...r, steps: r.steps.filter((_, i) => i !== index) }));
   const moveStep = (index: number, delta: number) =>
     setRecipe((r) => {
       const next = [...r.steps];
@@ -134,66 +110,144 @@ export default function RecipeEditor() {
     return list;
   }, [recipe]);
 
+  // --- save ------------------------------------------------------------------
+
   async function onSave() {
     setSaving(true);
     setResult(undefined);
-
-    const id =
-      recipe.id ||
-      uniqueSlug(recipe.title, cookbook?.recipes.map((r) => r.id) ?? []);
-    const toSave: Recipe = { ...recipe, id, ingredients: recipe.ingredients, steps: recipe.steps };
-
-    const res = await saveRecipe(toSave, ingredients, { ingredientsChanged });
-    setSaving(false);
-    setRecipe(toSave);
-    setIsNew(false);
-
-    if (res.committed) {
-      setIngredientsChanged(false);
-      setResult({
-        tone: "ok",
-        text: "Saved and committed. The published site updates in about a minute.",
-        url: res.url,
-      });
-    } else {
-      setResult({
-        tone: hasToken ? "bad" : "warn",
-        text: res.error ?? "Could not commit.",
-      });
+    const id = recipe.id || uniqueSlug(recipe.title, takenIds);
+    try {
+      // Only ingredients still used by a row are worth creating.
+      const used = new Set(recipe.ingredients.map((r) => r.ingredientId));
+      let { recipe: saved } = await saveRecipe(
+        { ...recipe, id },
+        created.filter((i) => used.has(i.id)),
+      );
+      setCreated([]);
+      if (pendingPhoto) {
+        ({ recipe: saved } = await uploadPhoto(saved.id, pendingPhoto.blob));
+        URL.revokeObjectURL(pendingPhoto.url);
+        setPendingPhoto(null);
+      }
+      setRecipe(saved);
+      if (isNew) {
+        setIsNew(false);
+        window.history.replaceState(null, "", `/edit/recipe?id=${encodeURIComponent(saved.id)}`);
+      }
+      setResult({ tone: "ok", text: "Saved — live for everyone now." });
+    } catch (error) {
+      setResult({ tone: "bad", text: error instanceof Error ? error.message : "Could not save." });
+    } finally {
+      setSaving(false);
     }
   }
 
-  if (!cookbook) {
-    return <p style={{ color: "var(--muted)" }}>Loading cookbook…</p>;
+  async function onPhoto(file: File | undefined) {
+    if (!file) return;
+    setPhotoBusy(true);
+    setResult(undefined);
+    try {
+      const blob = await downsizePhoto(file);
+      if (isNew) {
+        // Nothing to attach it to until the recipe exists; it goes up on save.
+        if (pendingPhoto) URL.revokeObjectURL(pendingPhoto.url);
+        setPendingPhoto({ blob, url: URL.createObjectURL(blob) });
+      } else {
+        const { recipe: saved } = await uploadPhoto(recipe.id, blob);
+        setRecipe((r) => ({ ...r, image: saved.image, imageCredit: saved.imageCredit, updatedAt: saved.updatedAt }));
+        setResult({ tone: "ok", text: "Photo saved." });
+      }
+    } catch (error) {
+      setResult({ tone: "bad", text: error instanceof Error ? error.message : "Could not use that photo." });
+    } finally {
+      setPhotoBusy(false);
+      if (fileInput.current) fileInput.current.value = "";
+    }
   }
 
-  return (
-    <div style={{ display: "grid", gap: 26 }}>
-      {loadError && (
-        <p className="card" style={{ padding: 14, color: "var(--accent)" }}>
-          {loadError}
-        </p>
-      )}
+  async function onRemovePhoto() {
+    if (pendingPhoto) {
+      URL.revokeObjectURL(pendingPhoto.url);
+      setPendingPhoto(null);
+      return;
+    }
+    if (!window.confirm("Remove this recipe's photo?")) return;
+    setPhotoBusy(true);
+    try {
+      const { recipe: saved } = await removePhoto(recipe.id);
+      setRecipe((r) => ({ ...r, image: saved.image, imageCredit: saved.imageCredit }));
+    } catch (error) {
+      setResult({ tone: "bad", text: error instanceof Error ? error.message : "Could not remove the photo." });
+    } finally {
+      setPhotoBusy(false);
+    }
+  }
 
-      {!hasToken && (
-        <p className="card" style={{ padding: "14px 16px", background: "var(--accent-wash)", borderColor: "transparent" }}>
-          No token connected — you can draft here and it will be kept in this browser, but nothing
-          will be committed. Connect one on the <a href="/edit">edit hub</a>.
-        </p>
-      )}
+  async function onDelete() {
+    if (!window.confirm(`Delete “${recipe.title}” for everyone? This cannot be undone.`)) return;
+    try {
+      await deleteRecipe(recipe.id);
+      window.location.assign("/edit?deleted=1");
+    } catch (error) {
+      setResult({ tone: "bad", text: error instanceof Error ? error.message : "Could not delete." });
+    }
+  }
+
+  const photo = pendingPhoto?.url ?? recipe.image;
+
+  return (
+    <div style={{ display: "grid", gap: 20, maxWidth: 880 }}>
+      {/* --- photo --- */}
+      <section className="panel panel-pad" style={{ display: "grid", gap: 14 }}>
+        <h2 style={{ fontSize: "1.15rem" }}>Photo</h2>
+        <div style={{ display: "flex", gap: 18, flexWrap: "wrap", alignItems: "center" }}>
+          <div className="rcard-media" style={{ width: 220, flex: "none" }}>
+            {photo ? (
+              <img src={photo} alt="" />
+            ) : (
+              <div className="no-photo">
+                <Icon name="camera" />
+              </div>
+            )}
+          </div>
+          <div style={{ display: "grid", gap: 10 }}>
+            <input
+              ref={fileInput}
+              type="file"
+              accept="image/*"
+              className="sr-only"
+              id="photo-input"
+              onChange={(e) => void onPhoto(e.target.files?.[0])}
+            />
+            <div className="actions">
+              <label htmlFor="photo-input" className="btn" aria-disabled={photoBusy}>
+                <Icon name={photo ? "camera" : "upload"} />
+                {photoBusy ? "Working…" : photo ? "Replace photo" : "Add a photo"}
+              </label>
+              {photo && (
+                <button className="btn btn-ghost" onClick={() => void onRemovePhoto()} disabled={photoBusy}>
+                  Remove
+                </button>
+              )}
+            </div>
+            <p className="small muted" style={{ maxWidth: 360 }}>
+              {pendingPhoto
+                ? "Uploads when you create the recipe."
+                : recipe.imageCredit
+                  ? `Current photo: ${recipe.imageCredit.author}, ${recipe.imageCredit.license}.`
+                  : "Snap it on your phone or pick a file — it is resized before upload."}
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* --- basics --- */}
-      <section style={{ display: "grid", gap: 12 }}>
-        <span className="lbl">Basics</span>
+      <section className="panel panel-pad" style={{ display: "grid", gap: 14 }}>
+        <h2 style={{ fontSize: "1.15rem" }}>Basics</h2>
         <Field label="Title">
-          <input
-            className="input"
-            value={recipe.title}
-            onChange={(e) => set("title", e.target.value)}
-            placeholder="Greek Lemon Potatoes"
-          />
+          <input className="input" value={recipe.title} onChange={(e) => set("title", e.target.value)} placeholder="Greek Lemon Potatoes" />
         </Field>
-        <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+        <div style={{ display: "grid", gap: 14, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
           <Field label="Subtitle" hint="Traditional or native name">
             <input
               className="input"
@@ -202,13 +256,8 @@ export default function RecipeEditor() {
               placeholder="Patates Sto Fourno"
             />
           </Field>
-          <Field label="Slug" hint={isNew ? "Generated from the title" : "Fixed once created"}>
-            <input
-              className="input"
-              value={recipe.id || slugify(recipe.title)}
-              readOnly
-              style={{ color: "var(--muted)" }}
-            />
+          <Field label="Address" hint={isNew ? "Made from the title" : "Fixed once created"}>
+            <input className="input" value={`/recipes/${recipe.id || slugify(recipe.title)}`} readOnly style={{ color: "var(--muted)" }} />
           </Field>
         </div>
         <Field label="Description">
@@ -219,42 +268,29 @@ export default function RecipeEditor() {
             placeholder="One or two lines on what makes it worth cooking."
           />
         </Field>
-        <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))" }}>
+        <div style={{ display: "grid", gap: 14, gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))" }}>
           <Field label="Servings">
-            <input
-              className="input num"
-              type="number"
-              min={1}
-              value={recipe.servings}
-              onChange={(e) => set("servings", Number(e.target.value) || 1)}
-            />
+            <input className="input num" type="number" min={1} value={recipe.servings} onChange={(e) => set("servings", Number(e.target.value) || 1)} />
           </Field>
           <Field label="Prep (min)">
-            <input className="input num" type="number" min={0} value={recipe.prepMin}
-              onChange={(e) => set("prepMin", Number(e.target.value) || 0)} />
+            <input className="input num" type="number" min={0} value={recipe.prepMin} onChange={(e) => set("prepMin", Number(e.target.value) || 0)} />
           </Field>
           <Field label="Cook (min)">
-            <input className="input num" type="number" min={0} value={recipe.cookMin}
-              onChange={(e) => set("cookMin", Number(e.target.value) || 0)} />
+            <input className="input num" type="number" min={0} value={recipe.cookMin} onChange={(e) => set("cookMin", Number(e.target.value) || 0)} />
           </Field>
-          <Field label="Chill (min)" hint="Inactive">
-            <input className="input num" type="number" min={0} value={recipe.restMin}
-              onChange={(e) => set("restMin", Number(e.target.value) || 0)} />
+          <Field label="Chill (min)" hint="Hands-off">
+            <input className="input num" type="number" min={0} value={recipe.restMin} onChange={(e) => set("restMin", Number(e.target.value) || 0)} />
           </Field>
         </div>
-        <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
-          <Field label="Yield note" hint="When a count beats servings">
-            <input className="input" value={recipe.yieldNote ?? ""}
-              onChange={(e) => set("yieldNote", e.target.value || undefined)}
-              placeholder="12–14 small patties" />
+        <div style={{ display: "grid", gap: 14, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+          <Field label="Yield" hint="When a count beats servings">
+            <input className="input" value={recipe.yieldNote ?? ""} onChange={(e) => set("yieldNote", e.target.value || undefined)} placeholder="12–14 small patties" />
           </Field>
           <Field label="Tags" hint="Comma separated">
             <input
               className="input"
               value={recipe.tags.join(", ")}
-              onChange={(e) =>
-                set("tags", e.target.value.split(",").map((t) => t.trim()).filter(Boolean))
-              }
+              onChange={(e) => set("tags", e.target.value.split(",").map((t) => t.trim()).filter(Boolean))}
               placeholder="greek, main, vegetarian"
             />
           </Field>
@@ -262,136 +298,119 @@ export default function RecipeEditor() {
       </section>
 
       {/* --- ingredients --- */}
-      <section>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
-          <span className="lbl">Ingredients</span>
-          <button className="btn btn-sm" onClick={addRow}>+ Add ingredient</button>
+      <section className="panel panel-pad" style={{ display: "grid", gap: 12 }}>
+        <div className="actions" style={{ justifyContent: "space-between" }}>
+          <h2 style={{ fontSize: "1.15rem" }}>Ingredients</h2>
+          <button className="btn btn-sm" onClick={addRow}>
+            <Icon name="plus" /> Add ingredient
+          </button>
         </div>
-
-        {recipe.ingredients.length === 0 && (
-          <p style={{ color: "var(--muted)", marginTop: 12 }}>No ingredients yet.</p>
-        )}
-
-        <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
-          {recipe.ingredients.map((row, i) => (
-            <IngredientRow
-              key={i}
-              row={row}
-              index={i}
-              total={recipe.ingredients.length}
-              options={sorted}
-              known={byId}
-              onChange={(patch) => setRow(i, patch)}
-              onCreate={(name, aisle) => createIngredient(i, name, aisle)}
-              onRemove={() => removeRow(i)}
-              onMove={(d) => moveRow(i, d)}
-            />
-          ))}
-        </div>
+        {recipe.ingredients.length === 0 && <p className="muted">No ingredients yet.</p>}
+        {recipe.ingredients.map((row, i) => (
+          <IngredientRow
+            key={i}
+            row={row}
+            index={i}
+            total={recipe.ingredients.length}
+            options={sorted}
+            known={byId}
+            onChange={(patch) => setRow(i, patch)}
+            onCreate={(name, aisle) => createIngredient(i, name, aisle)}
+            onRemove={() => removeRow(i)}
+            onMove={(d) => moveRow(i, d)}
+          />
+        ))}
       </section>
 
       {/* --- steps --- */}
-      <section>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
-          <span className="lbl">Method</span>
-          <button className="btn btn-sm" onClick={addStep}>+ Add step</button>
+      <section className="panel panel-pad" style={{ display: "grid", gap: 12 }}>
+        <div className="actions" style={{ justifyContent: "space-between" }}>
+          <h2 style={{ fontSize: "1.15rem" }}>Method</h2>
+          <button className="btn btn-sm" onClick={addStep}>
+            <Icon name="plus" /> Add step
+          </button>
         </div>
-
-        <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
-          {recipe.steps.map((step, i) => (
-            <div key={i} className="card-soft" style={{ padding: 12, borderRadius: "var(--radius-sm)" }}>
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                <span className="step-n num" style={{ fontSize: "1.05rem", minWidth: 20 }}>{i + 1}</span>
-                <input
-                  className="input"
-                  value={step.heading ?? ""}
-                  onChange={(e) => setStep(i, { heading: e.target.value || undefined })}
-                  placeholder="Optional lead-in, e.g. Bind & Chill"
-                  style={{ flex: 1 }}
-                />
-                <button className="btn btn-ghost btn-sm" onClick={() => moveStep(i, -1)} disabled={i === 0} aria-label="Move step up">↑</button>
-                <button className="btn btn-ghost btn-sm" onClick={() => moveStep(i, 1)} disabled={i === recipe.steps.length - 1} aria-label="Move step down">↓</button>
-                <button className="btn btn-ghost btn-sm" onClick={() => removeStep(i)} aria-label="Remove step">✕</button>
-              </div>
-              <textarea
-                className="textarea"
-                style={{ marginTop: 8 }}
-                value={step.text}
-                onChange={(e) => setStep(i, { text: e.target.value })}
-                placeholder="What to do."
+        {recipe.steps.map((step, i) => (
+          <div key={i} className="soft" style={{ padding: 12, display: "grid", gap: 8 }}>
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <span className="step-n">{i + 1}</span>
+              <input
+                className="input input-sm"
+                value={step.heading ?? ""}
+                onChange={(e) => setStep(i, { heading: e.target.value || undefined })}
+                placeholder="Optional lead-in, e.g. Bind & Chill"
+                style={{ flex: 1 }}
               />
+              <button className="btn btn-ghost btn-icon btn-sm" onClick={() => moveStep(i, -1)} disabled={i === 0} aria-label="Move step up">
+                <Icon name="chevronDown" className="flip" />
+              </button>
+              <button className="btn btn-ghost btn-icon btn-sm" onClick={() => moveStep(i, 1)} disabled={i === recipe.steps.length - 1} aria-label="Move step down">
+                <Icon name="chevronDown" />
+              </button>
+              <button className="btn btn-ghost btn-icon btn-sm" onClick={() => removeStep(i)} aria-label="Remove step">
+                <Icon name="x" />
+              </button>
             </div>
-          ))}
-        </div>
+            <textarea className="textarea" value={step.text} onChange={(e) => setStep(i, { text: e.target.value })} placeholder="What to do." />
+          </div>
+        ))}
       </section>
 
-      <Field label="Notes">
-        <textarea
-          className="textarea"
-          value={recipe.notes ?? ""}
-          onChange={(e) => set("notes", e.target.value || undefined)}
-          placeholder="Anything worth knowing that is not a step."
-        />
-      </Field>
+      <section className="panel panel-pad">
+        <Field label="Notes">
+          <textarea
+            className="textarea"
+            value={recipe.notes ?? ""}
+            onChange={(e) => set("notes", e.target.value || undefined)}
+            placeholder="Anything worth knowing that is not a step."
+          />
+        </Field>
+      </section>
 
       {/* --- save --- */}
-      <section
+      <div
+        className="actions"
         style={{
           position: "sticky",
-          bottom: 0,
+          bottom: "calc(var(--tabbar-h) + env(safe-area-inset-bottom))",
+          zIndex: 5,
+          padding: "14px 0",
           background: "var(--bg)",
           borderTop: "1px solid var(--hairline)",
-          padding: "14px 0",
-          display: "flex",
-          gap: 12,
-          alignItems: "center",
-          flexWrap: "wrap",
         }}
       >
-        <button className="btn btn-primary" onClick={onSave} disabled={saving || problems.length > 0}>
+        <button className="btn btn-primary" onClick={() => void onSave()} disabled={saving || problems.length > 0}>
           {saving ? "Saving…" : isNew ? "Create recipe" : "Save changes"}
         </button>
-        {recipe.id && !isNew && (
-          <a className="btn" href={`/recipes/${recipe.id}`}>View</a>
+        {!isNew && (
+          <a className="btn" href={`/recipes/${recipe.id}`}>
+            View
+          </a>
         )}
-        {problems.length > 0 && (
-          <span style={{ fontSize: 13, color: "var(--muted)" }}>{problems[0]}</span>
-        )}
+        {problems.length > 0 && <span className="small muted">{problems[0]}</span>}
         {result && (
-          <span
-            role="status"
-            style={{
-              fontSize: 13,
-              color: result.tone === "ok" ? "var(--olive)" : result.tone === "warn" ? "var(--muted)" : "var(--accent)",
-            }}
-          >
-            {result.text}{" "}
-            {result.url && (
-              <a href={result.url} target="_blank" rel="noopener noreferrer">View commit →</a>
-            )}
+          <span role="status" className="small" style={{ color: result.tone === "ok" ? "var(--green)" : "var(--accent)", fontWeight: 600 }}>
+            {result.text}
           </span>
         )}
-      </section>
+        {!isNew && (
+          <button className="btn btn-ghost btn-danger btn-sm" style={{ marginLeft: "auto" }} onClick={() => void onDelete()}>
+            <Icon name="trash" /> Delete
+          </button>
+        )}
+      </div>
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
 
-function Field({
-  label,
-  hint,
-  children,
-}: {
-  label: string;
-  hint?: string;
-  children: React.ReactNode;
-}) {
+function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
-    <label style={{ display: "block" }}>
-      <span className="lbl" style={{ display: "block", marginBottom: 5 }}>
+    <label className="field">
+      <span className="field-label">
         {label}
-        {hint && <span style={{ textTransform: "none", letterSpacing: 0, fontWeight: 400 }}> · {hint}</span>}
+        {hint && <span className="field-hint"> · {hint}</span>}
       </span>
       {children}
     </label>
@@ -422,14 +441,13 @@ function IngredientRow({
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState("");
   const [newAisle, setNewAisle] = useState<Aisle>("produce");
-
   const missing = row.ingredientId && !known.has(row.ingredientId);
 
   return (
-    <div className="card-soft" style={{ padding: 12, borderRadius: "var(--radius-sm)" }}>
-      <div style={{ display: "grid", gap: 8, gridTemplateColumns: "90px 110px 1fr auto", alignItems: "center" }}>
+    <div className="soft" style={{ padding: 12, display: "grid", gap: 8 }}>
+      <div style={{ display: "grid", gap: 8, gridTemplateColumns: "84px 100px minmax(0, 1fr) auto", alignItems: "center" }}>
         <input
-          className="input num"
+          className="input input-sm num"
           type="number"
           step="0.01"
           min={0}
@@ -437,12 +455,7 @@ function IngredientRow({
           onChange={(e) => onChange({ quantity: Number(e.target.value) || 0 })}
           aria-label="Quantity"
         />
-        <select
-          className="select"
-          value={row.unit}
-          onChange={(e) => onChange({ unit: e.target.value })}
-          aria-label="Unit"
-        >
+        <select className="select select-sm" value={row.unit} onChange={(e) => onChange({ unit: e.target.value })} aria-label="Unit">
           {UNIT_IDS.map((id) => (
             <option key={id} value={id}>
               {UNITS[id].label || "each"}
@@ -450,7 +463,7 @@ function IngredientRow({
           ))}
         </select>
         <select
-          className="select"
+          className="select select-sm"
           value={row.ingredientId}
           onChange={(e) => {
             if (e.target.value === NEW) {
@@ -471,34 +484,33 @@ function IngredientRow({
           <option value={NEW}>+ New ingredient…</option>
         </select>
         <div style={{ display: "flex", gap: 2 }}>
-          <button className="btn btn-ghost btn-sm" onClick={() => onMove(-1)} disabled={index === 0} aria-label="Move up">↑</button>
-          <button className="btn btn-ghost btn-sm" onClick={() => onMove(1)} disabled={index === total - 1} aria-label="Move down">↓</button>
-          <button className="btn btn-ghost btn-sm" onClick={onRemove} aria-label="Remove ingredient">✕</button>
+          <button className="btn btn-ghost btn-icon btn-sm" onClick={() => onMove(-1)} disabled={index === 0} aria-label="Move up">
+            <Icon name="chevronDown" className="flip" />
+          </button>
+          <button className="btn btn-ghost btn-icon btn-sm" onClick={() => onMove(1)} disabled={index === total - 1} aria-label="Move down">
+            <Icon name="chevronDown" />
+          </button>
+          <button className="btn btn-ghost btn-icon btn-sm" onClick={onRemove} aria-label="Remove ingredient">
+            <Icon name="x" />
+          </button>
         </div>
       </div>
 
       {creating && (
-        <div
-          style={{
-            display: "grid",
-            gap: 8,
-            gridTemplateColumns: "1fr 140px auto auto",
-            alignItems: "center",
-            marginTop: 10,
-            paddingTop: 10,
-            borderTop: "1px solid var(--hairline)",
-          }}
-        >
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", paddingTop: 8, borderTop: "1px solid var(--hairline)" }}>
           <input
-            className="input"
+            className="input input-sm"
+            style={{ flex: "1 1 180px" }}
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             placeholder="New ingredient name"
             autoFocus
           />
-          <select className="select" value={newAisle} onChange={(e) => setNewAisle(e.target.value as Aisle)} aria-label="Aisle">
+          <select className="select select-sm" style={{ width: "auto" }} value={newAisle} onChange={(e) => setNewAisle(e.target.value as Aisle)} aria-label="Aisle">
             {AISLES.map((a) => (
-              <option key={a} value={a}>{a}</option>
+              <option key={a} value={a}>
+                {a}
+              </option>
             ))}
           </select>
           <button
@@ -512,27 +524,26 @@ function IngredientRow({
           >
             Add
           </button>
-          <button className="btn btn-ghost btn-sm" onClick={() => setCreating(false)}>Cancel</button>
+          <button className="btn btn-ghost btn-sm" onClick={() => setCreating(false)}>
+            Cancel
+          </button>
         </div>
       )}
 
-      <div style={{ display: "flex", gap: 10, marginTop: 8, alignItems: "center", flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
         <input
-          className="input"
-          style={{ flex: "1 1 220px", minHeight: 34, fontSize: 14 }}
+          className="input input-sm"
+          style={{ flex: "1 1 220px" }}
           value={row.note ?? ""}
           onChange={(e) => onChange({ note: e.target.value || undefined })}
-          placeholder="Preparation note, e.g. finely pressed"
+          placeholder="Preparation note, e.g. finely chopped"
         />
-        <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13 }}>
-          <input type="checkbox" checked={row.optional} onChange={(e) => onChange({ optional: e.target.checked })} />
+        <label className="small" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <input type="checkbox" className="check" checked={row.optional} onChange={(e) => onChange({ optional: e.target.checked })} />
           Optional
         </label>
-        <label
-          style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13 }}
-          title="Held fixed when the recipe is scaled — e.g. oil for frying"
-        >
-          <input type="checkbox" checked={row.noScale} onChange={(e) => onChange({ noScale: e.target.checked })} />
+        <label className="small" style={{ display: "flex", alignItems: "center", gap: 6 }} title="Held fixed when the recipe is scaled — e.g. oil for frying">
+          <input type="checkbox" className="check" checked={row.noScale} onChange={(e) => onChange({ noScale: e.target.checked })} />
           Don't scale
         </label>
       </div>

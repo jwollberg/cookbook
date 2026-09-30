@@ -1,28 +1,25 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import { loadAll, formatMinutes } from "../../lib/data.server";
+import AddDish from "../../components/AddDish";
+import Icon from "../../components/Icon";
+import { loadKitchen } from "../../lib/server/page";
+import { formatMinutes, mealImages, mealMinutes } from "../../lib/format";
 import { buildShoppingList, type ResolvedDish } from "../../lib/shopping";
 import type { Role } from "../../lib/schema";
 
-export async function getStaticPaths() {
-  const { meals } = loadAll();
-  return meals.map((meal) => ({ params: { slug: meal.id }, props: { meal } }));
-}
+const { library, planning, household, recipesById, ingredientsById } = await loadKitchen(Astro.locals);
+const meal = library.meals.find((m) => m.id === Astro.params.slug);
+if (!meal) return Astro.rewrite("/404");
 
-const { meal } = Astro.props;
-const { recipesById, ingredientsById } = loadAll();
-
-const components = meal.components
-  .map((c) => ({ component: c, recipe: recipesById.get(c.recipeId) }))
-  .filter((x): x is { component: typeof x.component; recipe: NonNullable<typeof x.recipe> } =>
-    Boolean(x.recipe),
-  );
+const components = meal.components.flatMap((component) => {
+  const recipe = recipesById.get(component.recipeId);
+  return recipe ? [{ component, recipe }] : [];
+});
 
 const ROLE_ORDER: Role[] = ["starter", "main", "side", "sauce", "dessert", "drink"];
-const byRole = ROLE_ORDER.map((role) => ({
-  role,
-  items: components.filter((c) => c.component.role === role),
-})).filter((g) => g.items.length > 0);
+const ordered = [...components].sort(
+  (a, b) => ROLE_ORDER.indexOf(a.component.role) - ROLE_ORDER.indexOf(b.component.role),
+);
 
 // Everything the meal needs, in one aggregated list. Staples are included
 // here — on a "can I cook this tonight?" page you do want to see the salt.
@@ -33,92 +30,128 @@ const dishes: ResolvedDish[] = components.map(({ component, recipe }) => ({
 const shopping = buildShoppingList(dishes, ingredientsById, { includeStaples: true });
 
 const totalActive = components.reduce((n, c) => n + c.recipe.prepMin + c.recipe.cookMin, 0);
-const longest = Math.max(0, ...components.map((c) => c.recipe.prepMin + c.recipe.cookMin));
+const longest = mealMinutes(meal, recipesById);
+const images = mealImages(meal, recipesById).slice(0, 4);
 ---
 
-<SiteLayout title={`${meal.name} — Cookbook`} description={meal.description}>
-  <article style="padding-block: 32px 8px;">
-    <a href="/meals" class="lbl" style="text-decoration: none;">← Meals</a>
+<SiteLayout title={meal.name} description={meal.description}>
+  <div class="wrap">
+    <div style="padding-top: 20px;">
+      <a class="back" href="/meals"><Icon name="chevronLeft" /> Meals</a>
+    </div>
 
-    <header style="margin-top: 18px;">
-      <h1>{meal.name}</h1>
-      {
-        meal.description && (
-          <p style="max-width: 62ch; margin: 16px 0 0; font-size: 1.08rem; color: var(--ink-2);">
-            {meal.description}
-          </p>
-        )
-      }
-      <div class="meta-row">
-        <span class="chip num">{components.length} recipes</span>
-        {formatMinutes(longest) && <span class="chip num">About {formatMinutes(longest)}</span>}
-        {meal.tags.map((tag) => <span class="chip">{tag}</span>)}
-      </div>
-      {
-        totalActive > longest && (
-          <p style="margin: 10px 0 0; font-size: 13px; color: var(--muted);">
-            {formatMinutes(totalActive)} of work in total, but the components overlap — follow the
-            timeline and it lands in about {formatMinutes(longest)}.
-          </p>
-        )
-      }
-    </header>
-
-    <section style="margin-top: 36px;">
-      <span class="lbl">On the table</span>
-      <div class="grid-recipes" style="margin-top: 14px;">
+    <div class="recipe-top">
+      <figure class="recipe-photo" style="margin-block: 0;">
         {
-          byRole.flatMap((group) =>
-            group.items.map(({ component, recipe }) => (
-              <a class="card card-interactive recipe-card" href={`/recipes/${recipe.id}`}>
-                {recipe.image ? (
-                  <img class="recipe-card-img" src={recipe.image} alt="" loading="lazy" />
-                ) : (
-                  <div class="recipe-card-img recipe-card-img--empty" aria-hidden="true" />
-                )}
-                <div style="padding: 14px 16px 16px;">
-                  <span class="chip chip-accent" style="text-transform: capitalize;">
-                    {group.role}
-                  </span>
-                  <h2 style="font-size: 1.15rem; margin-top: 9px;">{recipe.title}</h2>
-                  <p style="margin: 6px 0 0; font-size: 13px; color: var(--muted);">
-                    Serves {component.servingsOverride ?? recipe.servings}
-                  </p>
-                </div>
-              </a>
-            )),
+          images.length > 1 ? (
+            <div class={`collage collage-${images.length}`}>
+              {images.map((src) => (
+                <img src={src} alt="" />
+              ))}
+            </div>
+          ) : images.length === 1 ? (
+            <img src={images[0]} alt="" />
+          ) : (
+            <div class="no-photo">
+              <Icon name="cloche" />
+            </div>
           )
+        }
+      </figure>
+
+      <div class="recipe-intro">
+        <h1>{meal.name}</h1>
+        {meal.description && <p class="lede">{meal.description}</p>}
+        <div class="stats">
+          <div class="stat">
+            <span class="label">Dishes</span>
+            <span class="stat-value">{components.length}</span>
+          </div>
+          {
+            formatMinutes(longest) && (
+              <div class="stat">
+                <span class="label">Start to table</span>
+                <span class="stat-value">About {formatMinutes(longest)}</span>
+              </div>
+            )
+          }
+        </div>
+        {
+          totalActive > longest && (
+            <p class="small muted">
+              {formatMinutes(totalActive)} of work in total, but the dishes overlap — follow the game plan
+              and it all lands in about {formatMinutes(longest)}.
+            </p>
+          )
+        }
+        <AddDish
+          client:load
+          mealId={meal.id}
+          title={meal.name}
+          householdId={household.id}
+          householdName={household.name}
+          extras={planning.shopping}
+        />
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-head"><h2>On the table</h2></div>
+      <div class="card-grid card-grid-tight">
+        {
+          ordered.map(({ component, recipe }) => (
+            <article class="rcard">
+              <div class="rcard-media">
+                {recipe.image ? (
+                  <img src={recipe.image} alt="" loading="lazy" />
+                ) : (
+                  <div class="no-photo">
+                    <Icon name="pot" />
+                  </div>
+                )}
+                <span class="rcard-tag">{component.role}</span>
+              </div>
+              <div>
+                <a class="rcard-link" href={`/recipes/${recipe.id}`}>
+                  <h3 class="rcard-title">{recipe.title}</h3>
+                </a>
+                <div class="rcard-meta">
+                  <span>
+                    <Icon name="users" />
+                    Serves {component.servingsOverride ?? recipe.servings}
+                  </span>
+                </div>
+              </div>
+            </article>
+          ))
         }
       </div>
     </section>
 
     {
       meal.timeline.length > 0 && (
-        <section style="margin-top: 44px;">
-          <span class="lbl">Game plan</span>
-          <h2 style="font-size: 1.6rem; margin-top: 8px;">Getting it all to the table</h2>
-          <p style="max-width: 58ch; margin: 10px 0 0; color: var(--ink-2);">
-            The useful order interleaves the recipes rather than running them one after another.
-          </p>
-          <ol style="list-style: none; margin: 18px 0 0; padding: 0;">
+        <section class="section" style="max-width: 760px;">
+          <div class="section-head">
+            <div style="display: grid; gap: 6px;">
+              <h2>Game plan</h2>
+              <p class="muted">The useful order interleaves the recipes rather than running them one after another.</p>
+            </div>
+          </div>
+          <ol class="timeline">
             {meal.timeline.map((step, i) => {
               const recipe = step.recipeId ? recipesById.get(step.recipeId) : undefined;
               return (
-                <li class="step">
-                  <span class="step-n num">{i + 1}</span>
+                <li>
+                  <span class="step-n">{i + 1}</span>
                   <div class="step-body">
-                    {step.heading && (
-                      <strong style="display: block; color: var(--ink);">{step.heading}</strong>
-                    )}
+                    {step.heading && <strong>{step.heading}</strong>}
                     {step.text}
                     {recipe && (
-                      <a
-                        href={`/recipes/${recipe.id}`}
-                        class="chip"
-                        style="text-decoration: none; margin-left: 8px; vertical-align: middle;"
-                      >
-                        {recipe.title}
-                      </a>
+                      <div style="margin-top: 8px;">
+                        <a class="chip" href={`/recipes/${recipe.id}`}>
+                          {recipe.title}
+                        </a>
+                      </div>
                     )}
                   </div>
                 </li>
@@ -129,25 +162,27 @@ const longest = Math.max(0, ...components.map((c) => c.recipe.prepMin + c.recipe
       )
     }
 
-    <section style="margin-top: 44px;">
-      <span class="lbl">Everything you need</span>
-      <h2 style="font-size: 1.6rem; margin-top: 8px;">Combined ingredients</h2>
-      <p style="max-width: 58ch; margin: 10px 0 18px; color: var(--ink-2);">
-        Merged across all {components.length} recipes and grouped by aisle. Shared ingredients are
-        already added together.
-      </p>
-
-      <div class="grid-cards">
+    <section class="section">
+      <div class="section-head">
+        <div style="display: grid; gap: 6px;">
+          <h2>Everything you need</h2>
+          <p class="muted">
+            Merged across all {components.length} dishes and grouped by aisle — shared ingredients are already
+            added together.
+          </p>
+        </div>
+      </div>
+      <div class="panel panel-pad" style="columns: 300px 2; column-gap: 40px;">
         {
           shopping.groups.map((group) => (
-            <div class="card" style="padding: 16px 18px 18px;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="aisle-dot" style={`--aisle: var(--aisle-${group.aisle});`} />
-                <span class="lbl" style="text-transform: capitalize;">{group.aisle}</span>
+            <div class="aisle" style={`--aisle: var(--aisle-${group.aisle}); break-inside: avoid;`}>
+              <div class="aisle-head">
+                <span class="aisle-dot" />
+                <span class="aisle-name">{group.aisle}</span>
               </div>
-              <ul style="list-style: none; margin: 10px 0 0; padding: 0;">
+              <ul class="ing-list">
                 {group.lines.map((line) => (
-                  <li class="ing-row" style="grid-template-columns: minmax(64px, max-content) 1fr;">
+                  <li class="ing-row">
                     <span class="ing-qty">{line.parts.map((p) => p.text).join(" + ")}</span>
                     <span class="ing-name">{line.name}</span>
                   </li>
@@ -157,16 +192,14 @@ const longest = Math.max(0, ...components.map((c) => c.recipe.prepMin + c.recipe
           ))
         }
       </div>
-
       {
         shopping.splitLines.length > 0 && (
-          <p style="margin-top: 14px; font-size: 13px; color: var(--muted);">
-            {shopping.splitLines.length} ingredient
-            {shopping.splitLines.length === 1 ? " is" : "s are"} listed in more than one unit
-            because a conversion factor is missing — they are shown separately rather than guessed.
+          <p class="small muted" style="margin-top: 12px;">
+            {shopping.splitLines.length} ingredient{shopping.splitLines.length === 1 ? " is" : "s are"} listed in
+            more than one unit because a conversion factor is missing — shown separately rather than guessed.
           </p>
         )
       }
     </section>
-  </article>
+  </div>
 </SiteLayout>
