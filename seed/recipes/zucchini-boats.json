@@ -7,6 +7,13 @@
   "cookMin": 30,
   "restMin": 0,
   "tags": ["main", "pork", "baked"],
+  "image": "/images/recipes/zucchini-boats.jpg",
+  "imageCredit": {
+    "author": "USDAgov",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Child_Care_Recipes_(Team_Nutiriton)_(20211103-FNS-UNC-8896).jpg",
+    "title": "Child Care Recipes (Team Nutiriton) (20211103-FNS-UNC-8896)"
+  },
   "ingredients": [
     { "ingredientId": "olive-oil", "quantity": 1, "unit": "tbsp" },
     { "ingredientId": "ground-sausage", "quantity": 1, "unit": "lb" },

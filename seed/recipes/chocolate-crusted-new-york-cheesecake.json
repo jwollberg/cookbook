@@ -7,6 +7,14 @@
   "cookMin": 60,
   "restMin": 600,
   "tags": ["dessert", "vegetarian", "baked", "make-ahead"],
+  "image": "/images/recipes/chocolate-crusted-new-york-cheesecake.jpg",
+  "imageCredit": {
+    "author": "zingyyellow",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Baked_cheesecake_with_raspberries_and_blueberries.jpg",
+    "title": "Baked cheesecake with raspberries and blueberries"
+  },
   "ingredients": [
     { "ingredientId": "graham-crackers", "quantity": 15, "unit": "each", "note": "crushed", "group": "Crust" },
     { "ingredientId": "butter", "quantity": 0.333, "unit": "cup", "note": "melted", "group": "Crust" },

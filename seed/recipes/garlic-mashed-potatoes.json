@@ -8,6 +8,14 @@
   "cookMin": 25,
   "restMin": 0,
   "tags": ["side", "vegetarian", "gluten-free"],
+  "image": "/images/recipes/garlic-mashed-potatoes.jpg",
+  "imageCredit": {
+    "author": "Thriving Vegetarian",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Garlic_Wasabi_Red_Skin_Mashed_Potatoes_-_11974272144.jpg",
+    "title": "Garlic Wasabi Red Skin Mashed Potatoes - 11974272144"
+  },
   "ingredients": [
     { "ingredientId": "potato", "quantity": 2.5, "unit": "lb", "note": "baking potatoes, peeled and cubed (about 7 cups)" },
     { "ingredientId": "garlic", "quantity": 6, "unit": "clove", "note": "peeled" },

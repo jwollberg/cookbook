@@ -7,6 +7,14 @@
   "cookMin": 10,
   "restMin": 0,
   "tags": ["main", "vegetarian", "skillet", "pasta"],
+  "image": "/images/recipes/fried-gnocchi-with-tomatoes-and-olives.jpg",
+  "imageCredit": {
+    "author": "Ewan Munro from London, UK",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:North_London_Tavern,_Kilburn,_London_(3661279696).jpg",
+    "title": "North London Tavern, Kilburn, London (3661279696)"
+  },
   "ingredients": [
     { "ingredientId": "olive-oil", "quantity": 1, "unit": "tbsp" },
     { "ingredientId": "red-pepper-flakes", "quantity": 1, "unit": "pinch", "note": "dried crushed chilli" },

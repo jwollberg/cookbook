@@ -7,6 +7,14 @@
   "cookMin": 20,
   "restMin": 0,
   "tags": ["main", "chicken", "baked"],
+  "image": "/images/recipes/asian-crusted-chicken.jpg",
+  "imageCredit": {
+    "author": "Ocdp",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chicken_Cutlet_001_(cropped).jpg",
+    "title": "Chicken Cutlet 001 (cropped)"
+  },
   "ingredients": [
     { "ingredientId": "mayonnaise", "quantity": 0.5, "unit": "cup", "note": "Hellmann's or Best Foods Real" },
     { "ingredientId": "green-onion", "quantity": 1, "unit": "each", "note": "chopped" },

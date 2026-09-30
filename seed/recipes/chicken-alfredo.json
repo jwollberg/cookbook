@@ -7,6 +7,14 @@
   "cookMin": 25,
   "restMin": 0,
   "tags": ["main", "chicken", "pasta"],
+  "image": "/images/recipes/chicken-alfredo.jpg",
+  "imageCredit": {
+    "author": "Kim Scarborough from Chicago, IL",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fettuccini_alfredo_with_grilled_chicken_(Medici)_(53448852).jpg",
+    "title": "Fettuccini alfredo with grilled chicken (Medici) (53448852)"
+  },
   "ingredients": [
     { "ingredientId": "chicken-breast", "quantity": 2, "unit": "each", "note": "medium, sliced in half horizontally" },
     { "ingredientId": "dried-basil", "quantity": 1, "unit": "tsp" },

@@ -7,6 +7,14 @@
   "cookMin": 50,
   "restMin": 0,
   "tags": ["main", "chicken", "baked", "gluten-free"],
+  "image": "/images/recipes/honey-mustard-chicken.jpg",
+  "imageCredit": {
+    "author": "YoAmes",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Poulet_Gaston_G%C3%A9rard.jpg",
+    "title": "Poulet Gaston Gérard"
+  },
   "ingredients": [
     { "ingredientId": "whole-grain-mustard", "quantity": 0.25, "unit": "cup" },
     { "ingredientId": "dijon-mustard", "quantity": 0.25, "unit": "cup" },

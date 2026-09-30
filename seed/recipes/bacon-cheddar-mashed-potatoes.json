@@ -7,6 +7,14 @@
   "cookMin": 55,
   "restMin": 0,
   "tags": ["side", "baked", "gluten-free"],
+  "image": "/images/recipes/bacon-cheddar-mashed-potatoes.jpg",
+  "imageCredit": {
+    "author": "DC Central Kitchen",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:CheesyMashedPotatoes-1077.jpg",
+    "title": "CheesyMashedPotatoes-1077"
+  },
   "ingredients": [
     { "ingredientId": "potato", "quantity": 5, "unit": "lb", "note": "russet" },
     { "ingredientId": "bacon", "quantity": 10, "unit": "slice" },

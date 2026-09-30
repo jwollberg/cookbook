@@ -7,6 +7,13 @@
   "cookMin": 25,
   "restMin": 5,
   "tags": ["main", "chicken", "baked", "gluten-free"],
+  "image": "/images/recipes/cheesy-spinach-stuffed-chicken.jpg",
+  "imageCredit": {
+    "author": "Jon Sullivan",
+    "license": "Public domain",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stuffed_chicken_rice.jpg",
+    "title": "Stuffed chicken rice"
+  },
   "ingredients": [
     { "ingredientId": "cream-cheese", "quantity": 4, "unit": "oz", "note": "cold", "group": "Filling" },
     { "ingredientId": "mayonnaise", "quantity": 1, "unit": "tbsp", "group": "Filling" },

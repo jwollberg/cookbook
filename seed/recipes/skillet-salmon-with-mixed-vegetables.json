@@ -7,6 +7,14 @@
   "cookMin": 20,
   "restMin": 0,
   "tags": ["main", "seafood", "skillet", "gluten-free"],
+  "image": "/images/recipes/skillet-salmon-with-mixed-vegetables.jpg",
+  "imageCredit": {
+    "author": "Famartin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2021-02-23_20_32_58_Herb-grilled_salmon,_asparagus_and_broccoli_at_the_Olive_Garden_in_Fair_Lakes,_Fairfax_County,_Virginia.jpg",
+    "title": "2021-02-23 20 32 58 Herb-grilled salmon, asparagus and broccoli at the Olive Garden in Fair Lakes, Fairfax County, Virgi"
+  },
   "ingredients": [
     { "ingredientId": "olive-oil", "quantity": 2, "unit": "tbsp", "note": "divided" },
     { "ingredientId": "salmon", "quantity": 1.25, "unit": "lb", "note": "skin removed if you like, cut into 4 pieces" },

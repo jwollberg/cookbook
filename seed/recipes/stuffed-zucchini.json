@@ -8,6 +8,14 @@
   "cookMin": 40,
   "restMin": 0,
   "tags": ["side", "vegetarian", "baked", "make-ahead"],
+  "image": "/images/recipes/stuffed-zucchini.jpg",
+  "imageCredit": {
+    "author": "MOs810",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zucchini_stuffed_with_vegetables.jpg",
+    "title": "Zucchini stuffed with vegetables"
+  },
   "ingredients": [
     { "ingredientId": "zucchini", "quantity": 3, "unit": "each", "note": "medium (about 1½ lb total)" },
     { "ingredientId": "sea-salt", "quantity": 1, "unit": "tsp", "note": "for the cooking water" },

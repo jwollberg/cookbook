@@ -7,6 +7,14 @@
   "cookMin": 25,
   "restMin": 5,
   "tags": ["main", "pork", "baked", "gluten-free"],
+  "image": "/images/recipes/bacon-wrapped-pork-tenderloin.jpg",
+  "imageCredit": {
+    "author": "cyclonebill from Copenhagen, Denmark",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Svinem%C3%B8rbrad_med_bacon_og_rodfrugter_(5018776216).jpg",
+    "title": "Svinemørbrad med bacon og rodfrugter (5018776216)"
+  },
   "ingredients": [
     { "ingredientId": "pork-tenderloin", "quantity": 2, "unit": "lb", "note": "a twin pack — 2 tenderloins" },
     { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp" },

@@ -8,6 +8,14 @@
   "cookMin": 75,
   "restMin": 0,
   "tags": ["dessert", "vegetarian", "baked"],
+  "image": "/images/recipes/peach-cobbler-coffee-cake.jpg",
+  "imageCredit": {
+    "author": "Mark Pellegrini",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Peach_cobbler_(cropped).jpg",
+    "title": "Peach cobbler (cropped)"
+  },
   "ingredients": [
     { "ingredientId": "butter", "quantity": 1, "unit": "cup", "note": "softened", "group": "Cake" },
     { "ingredientId": "sugar", "quantity": 1, "unit": "cup", "group": "Cake" },

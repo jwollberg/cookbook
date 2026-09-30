@@ -8,6 +8,14 @@
   "cookMin": 0,
   "restMin": 120,
   "tags": ["dessert", "vegetarian", "gluten-free", "no-cook", "make-ahead", "fall"],
+  "image": "/images/recipes/peanut-butter-pumpkin-fudge.jpg",
+  "imageCredit": {
+    "author": "Veganbaking.net",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vegan_Peanut_Butter_Maple_Fudge.jpg",
+    "title": "Vegan Peanut Butter Maple Fudge"
+  },
   "ingredients": [
     { "ingredientId": "peanut-butter", "quantity": 2, "unit": "cup" },
     { "ingredientId": "pumpkin-puree", "quantity": 1, "unit": "cup" },
