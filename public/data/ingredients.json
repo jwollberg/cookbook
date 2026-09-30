@@ -27,6 +27,16 @@
     "countWeights": { "each": 120 }
   },
   {
+    "id": "bell-pepper",
+    "name": "large bell pepper",
+    "plural": "large bell peppers",
+    "aisle": "produce",
+    "aliases": ["red bell pepper", "yellow bell pepper", "orange bell pepper", "sweet pepper"],
+    "defaultUnit": "each",
+    "countWeights": { "each": 200 },
+    "notes": "Any colour. For stuffing, pick squat, blocky peppers with flat bottoms that stand up on their own."
+  },
+  {
     "id": "red-onion",
     "name": "red onion",
     "plural": "red onions",
@@ -103,6 +113,15 @@
   },
 
   {
+    "id": "ground-beef",
+    "name": "ground beef",
+    "aisle": "meat",
+    "aliases": ["hamburger", "hamburger meat", "ground chuck", "minced beef", "beef mince"],
+    "defaultUnit": "lb",
+    "notes": "85/15 is the sweet spot — lean enough not to swim in fat, fatty enough to stay juicy."
+  },
+
+  {
     "id": "greek-yogurt",
     "name": "plain Greek yogurt",
     "aisle": "dairy",
@@ -127,6 +146,16 @@
     "aliases": ["eggs"],
     "defaultUnit": "each",
     "countWeights": { "each": 50 }
+  },
+  {
+    "id": "mozzarella",
+    "name": "shredded low-moisture mozzarella",
+    "aisle": "dairy",
+    "aliases": ["mozzarella", "mozzarella cheese", "shredded mozzarella"],
+    "defaultUnit": "cup",
+    "gramsPerMl": 0.48,
+    "countWeights": { "package": 227 },
+    "notes": "Low-moisture, not fresh — fresh mozzarella weeps water as it bakes. An 8 oz bag is about 2 cups."
   },
 
   {
@@ -189,6 +218,49 @@
     "defaultUnit": "cup",
     "gramsPerMl": 1.0
   },
+  {
+    "id": "white-rice",
+    "name": "long-grain white rice",
+    "aisle": "pantry",
+    "aliases": ["rice", "white rice", "long grain rice"],
+    "defaultUnit": "cup",
+    "gramsPerMl": 0.78,
+    "notes": "Quantities are uncooked. 1 cup raw cooks to about 3 cups."
+  },
+  {
+    "id": "tomato-sauce",
+    "name": "canned tomato sauce",
+    "aisle": "pantry",
+    "aliases": ["tomato sauce", "passata"],
+    "defaultUnit": "can",
+    "gramsPerMl": 1.03,
+    "countWeights": { "can": 425 },
+    "notes": "Plain tomato sauce, not marinara or pasta sauce. 15 oz cans hold a little under 2 cups."
+  },
+  {
+    "id": "mayonnaise",
+    "name": "mayonnaise",
+    "aisle": "pantry",
+    "aliases": ["mayo"],
+    "defaultUnit": "tbsp",
+    "gramsPerMl": 0.93
+  },
+  {
+    "id": "white-vinegar",
+    "name": "distilled white vinegar",
+    "aisle": "pantry",
+    "aliases": ["white vinegar", "distilled vinegar"],
+    "defaultUnit": "tsp",
+    "gramsPerMl": 1.01
+  },
+  {
+    "id": "yellow-mustard",
+    "name": "yellow mustard",
+    "aisle": "pantry",
+    "aliases": ["mustard", "American mustard", "prepared mustard"],
+    "defaultUnit": "tsp",
+    "gramsPerMl": 1.05
+  },
 
   {
     "id": "ground-cumin",
@@ -213,6 +285,14 @@
     "aliases": ["oregano", "Greek oregano"],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.15
+  },
+  {
+    "id": "paprika",
+    "name": "paprika",
+    "aisle": "spices",
+    "aliases": ["sweet paprika", "smoked paprika"],
+    "defaultUnit": "tsp",
+    "gramsPerMl": 0.46
   },
   {
     "id": "sea-salt",

@@ -1,0 +1,43 @@
+{
+  "id": "deviled-eggs",
+  "title": "Deviled Eggs",
+  "description": "The classic: a smooth, tangy yolk filling of mayonnaise, yellow mustard and a splash of white vinegar, dusted with paprika. The whole trick is mashing the yolks fine before anything wet goes in.",
+  "servings": 6,
+  "yieldNote": "12 halves",
+  "prepMin": 20,
+  "cookMin": 12,
+  "restMin": 10,
+  "tags": ["american", "starter", "vegetarian", "gluten-free", "make-ahead"],
+  "ingredients": [
+    { "ingredientId": "egg", "quantity": 6, "unit": "each" },
+    { "ingredientId": "mayonnaise", "quantity": 0.25, "unit": "cup" },
+    { "ingredientId": "white-vinegar", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "yellow-mustard", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "sea-salt", "quantity": 0.125, "unit": "tsp" },
+    { "ingredientId": "black-pepper", "quantity": 0.125, "unit": "tsp" },
+    { "ingredientId": "paprika", "quantity": 0.25, "unit": "tsp", "note": "for dusting" }
+  ],
+  "steps": [
+    {
+      "heading": "Hard-Boil",
+      "text": "Lay the eggs in a single layer in a saucepan and cover with cold water by 1 inch. Bring to a full boil over high heat, then cover, take the pan off the heat and leave for 12 minutes."
+    },
+    {
+      "heading": "Chill & Peel",
+      "text": "Move the eggs straight into a bowl of ice water for 10 minutes. Crack them all over and peel under running water, starting from the wide end where the air pocket is."
+    },
+    {
+      "heading": "Halve",
+      "text": "Slice each egg in half lengthwise with a sharp knife, wiping the blade between eggs. Pop the yolks into a bowl and set the whites on a platter, hollow side up."
+    },
+    {
+      "heading": "Make the Filling",
+      "text": "Mash the yolks with a fork until they are fine, even crumbs with no lumps left. Only then add the mayonnaise, vinegar, mustard, salt and pepper, and stir until completely smooth. Taste and adjust."
+    },
+    {
+      "heading": "Fill",
+      "text": "Spoon the filling into the whites, or pipe it from a zip-top bag with one corner snipped off. Dust with paprika just before serving."
+    }
+  ],
+  "notes": "Eggs a week or so old peel far more cleanly than very fresh ones. Make-ahead: keep the whites and filling separately, covered, in the fridge for up to 2 days and fill shortly before serving so the whites don't go soggy."
+}
