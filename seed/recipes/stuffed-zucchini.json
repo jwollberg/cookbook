@@ -1,0 +1,40 @@
+{
+  "id": "stuffed-zucchini",
+  "title": "Stuffed Zucchini",
+  "description": "Parboiled zucchini halves filled with their own chopped pulp, sautéed onion, green pepper, pimiento and herb stuffing, topped with mozzarella. Can be made a day ahead.",
+  "servings": 6,
+  "yieldNote": "6 halves",
+  "prepMin": 25,
+  "cookMin": 40,
+  "restMin": 0,
+  "tags": ["side", "vegetarian", "baked", "make-ahead"],
+  "ingredients": [
+    { "ingredientId": "zucchini", "quantity": 3, "unit": "each", "note": "medium (about 1½ lb total)" },
+    { "ingredientId": "sea-salt", "quantity": 1, "unit": "tsp", "note": "for the cooking water" },
+    { "ingredientId": "yellow-onion", "quantity": 1, "unit": "each", "note": "medium, chopped" },
+    { "ingredientId": "butter", "quantity": 0.25, "unit": "cup" },
+    { "ingredientId": "green-bell-pepper", "quantity": 1, "unit": "each", "note": "small, chopped" },
+    { "ingredientId": "pimientos", "quantity": 1, "unit": "jar", "note": "2 oz, diced and drained" },
+    { "ingredientId": "stuffing-mix", "quantity": 1, "unit": "cup" },
+    { "ingredientId": "mozzarella", "quantity": 0.5, "unit": "cup" }
+  ],
+  "steps": [
+    {
+      "heading": "Parboil",
+      "text": "Bring 2 inches of salted water (½ tsp salt per cup of water) to a boil. Add the zucchini, cover, and cook until tender, 8 to 10 minutes; drain."
+    },
+    {
+      "heading": "Hollow",
+      "text": "Cool slightly, then cut each zucchini in half lengthwise. Spoon out the pulp and chop it coarsely. Set the shells cut side up in an ungreased 11x7-inch baking pan."
+    },
+    {
+      "heading": "Fill",
+      "text": "Cook and stir the onion in the butter in a 10-inch skillet until tender. Stir in the chopped pulp, green pepper, pimiento and stuffing mix. Divide among the zucchini halves and sprinkle each with about 1 tbsp cheese."
+    },
+    {
+      "heading": "Bake",
+      "text": "Bake uncovered at 350°F until hot and the cheese is melted, 25 to 30 minutes."
+    }
+  ],
+  "notes": "Make-ahead: after filling, cover and refrigerate for up to 24 hours. Bake uncovered at 350°F for 30 to 35 minutes (start about 40 minutes before serving)."
+}

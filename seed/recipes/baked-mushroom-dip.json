@@ -1,0 +1,36 @@
+{
+  "id": "baked-mushroom-dip",
+  "title": "Baked Mushroom Dip",
+  "description": "Sautéed mushrooms and onion folded into cream cheese, mayonnaise, garlic-herb seasoning and habanero cheese, baked until bubbling. Serve with chips, crackers or in a bread bowl.",
+  "servings": 6,
+  "yieldNote": "serves 6-8",
+  "prepMin": 10,
+  "cookMin": 40,
+  "restMin": 0,
+  "tags": ["starter", "side", "vegetarian", "baked"],
+  "ingredients": [
+    { "ingredientId": "mushrooms", "quantity": 2, "unit": "cup", "note": "diced" },
+    { "ingredientId": "butter", "quantity": 1, "unit": "tbsp", "note": "or margarine" },
+    { "ingredientId": "yellow-onion", "quantity": 0.25, "unit": "each", "note": "diced (about ¼ cup)" },
+    { "ingredientId": "cream-cheese", "quantity": 8, "unit": "oz", "note": "softened" },
+    { "ingredientId": "mayonnaise", "quantity": 0.5, "unit": "cup" },
+    { "ingredientId": "garlic-herb-seasoning", "quantity": 1, "unit": "tbsp" },
+    { "ingredientId": "pepper-jack", "quantity": 1, "unit": "cup", "note": "Kraft Habanero shredded cheese" },
+    { "ingredientId": "green-onion", "quantity": 1, "unit": "each", "note": "sliced, for garnish" }
+  ],
+  "steps": [
+    {
+      "heading": "Cook the Mushrooms",
+      "text": "Cook the mushrooms, butter and onion in a frying pan until most of the liquid has evaporated, about 10 minutes."
+    },
+    {
+      "heading": "Mix",
+      "text": "In a bowl, combine the cream cheese, mayonnaise, seasoning and cheese. Add the mushroom mixture and mix well."
+    },
+    {
+      "heading": "Bake",
+      "text": "Spread in a baking dish (about 9 inches, depending on depth) and bake at 350°F for 30 minutes. Garnish with green onion and serve with tortilla chips, crackers, or in a bread bowl."
+    }
+  ],
+  "notes": "Slow-cooker option: instead of baking, cook on low for an hour before guests arrive."
+}

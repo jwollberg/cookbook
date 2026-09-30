@@ -1,0 +1,39 @@
+{
+  "id": "bacon-cheddar-mashed-potatoes",
+  "title": "Mashed Potatoes with Bacon and Cheddar",
+  "description": "Loaded mashed potatoes — cream cheese, sour cream, chives, cheddar and bacon — baked in a casserole until golden on top.",
+  "servings": 10,
+  "prepMin": 25,
+  "cookMin": 55,
+  "restMin": 0,
+  "tags": ["side", "baked", "gluten-free"],
+  "ingredients": [
+    { "ingredientId": "potato", "quantity": 5, "unit": "lb", "note": "russet" },
+    { "ingredientId": "bacon", "quantity": 10, "unit": "slice" },
+    { "ingredientId": "cream-cheese", "quantity": 8, "unit": "oz", "note": "room temperature" },
+    { "ingredientId": "butter", "quantity": 0.5, "unit": "cup", "note": "unsalted, melted" },
+    { "ingredientId": "sour-cream", "quantity": 1, "unit": "cup" },
+    { "ingredientId": "fresh-chives", "quantity": 0.25, "unit": "cup", "note": "minced" },
+    { "ingredientId": "cheddar", "quantity": 2.5, "unit": "cup", "note": "grated, divided" },
+    { "ingredientId": "sea-salt", "quantity": 2, "unit": "tsp", "note": "kosher" },
+    { "ingredientId": "black-pepper", "quantity": 0.5, "unit": "tsp" }
+  ],
+  "steps": [
+    {
+      "heading": "Boil",
+      "text": "Heat the oven to 350°F. Peel the potatoes and cut into 1-inch chunks. Put them in a large saucepan with enough cold water to cover by about 2 inches. Bring to a boil over medium-high heat, then simmer until easily pierced with a paring knife, about 20 minutes. Drain in a colander, return to the pan, cover and set aside."
+    },
+    {
+      "heading": "Bacon",
+      "text": "Meanwhile, cook the bacon in a large skillet over medium heat until crisp and browned, turning once. Drain on paper towels, let cool, and crumble."
+    },
+    {
+      "heading": "Mash",
+      "text": "Mash the potatoes in the pan with a fork until light and fluffy. Stir in the cream cheese, butter and sour cream until smooth. Add the chives, 2 cups of the cheddar, half the bacon, the salt and the pepper, and stir until well combined."
+    },
+    {
+      "heading": "Bake",
+      "text": "Transfer to a buttered 3-quart baking dish and top with the remaining ½ cup cheddar. Bake until golden on top and heated through, about 30 minutes. Garnish with the rest of the bacon and serve immediately."
+    }
+  ]
+}

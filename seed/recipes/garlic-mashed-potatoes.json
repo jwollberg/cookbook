@@ -1,0 +1,30 @@
+{
+  "id": "garlic-mashed-potatoes",
+  "title": "Garlic Mashed Potatoes",
+  "description": "Potatoes boiled with whole garlic cloves, then mashed together with milk, Parmesan and butter.",
+  "servings": 6,
+  "yieldNote": "serves 6-8",
+  "prepMin": 15,
+  "cookMin": 25,
+  "restMin": 0,
+  "tags": ["side", "vegetarian", "gluten-free"],
+  "ingredients": [
+    { "ingredientId": "potato", "quantity": 2.5, "unit": "lb", "note": "baking potatoes, peeled and cubed (about 7 cups)" },
+    { "ingredientId": "garlic", "quantity": 6, "unit": "clove", "note": "peeled" },
+    { "ingredientId": "milk", "quantity": 0.5, "unit": "cup", "note": "low-fat" },
+    { "ingredientId": "parmesan", "quantity": 0.25, "unit": "cup", "note": "grated" },
+    { "ingredientId": "butter", "quantity": 2, "unit": "tbsp" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp" },
+    { "ingredientId": "black-pepper", "quantity": 0.125, "unit": "tsp" }
+  ],
+  "steps": [
+    {
+      "heading": "Boil",
+      "text": "Put the potatoes and garlic in a saucepan, cover with water and bring to a boil. Reduce the heat and simmer for 20 minutes; drain."
+    },
+    {
+      "heading": "Mash",
+      "text": "Put the drained potatoes and garlic in a mixing bowl, add the remaining ingredients and mix until smooth."
+    }
+  ]
+}

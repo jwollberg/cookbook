@@ -1,0 +1,46 @@
+{
+  "id": "potato-soup",
+  "title": "Potato Soup",
+  "description": "Slow-cooker potato soup finished with a butter-and-cream roux and sour cream, topped with bacon, cheddar and chives.",
+  "servings": 6,
+  "prepMin": 20,
+  "cookMin": 390,
+  "restMin": 0,
+  "tags": ["soup", "slow-cooker"],
+  "ingredients": [
+    { "ingredientId": "potato", "quantity": 1.5, "unit": "lb", "note": "peeled and cubed (about 4 cups)" },
+    { "ingredientId": "yellow-onion", "quantity": 1, "unit": "each", "note": "small, diced (about ¾ cup)" },
+    { "ingredientId": "broth", "quantity": 4, "unit": "cup", "note": "chicken" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tbsp" },
+    { "ingredientId": "black-pepper", "quantity": 0.5, "unit": "tbsp" },
+    { "ingredientId": "butter", "quantity": 4, "unit": "tbsp" },
+    { "ingredientId": "all-purpose-flour", "quantity": 0.25, "unit": "cup" },
+    { "ingredientId": "heavy-cream", "quantity": 1.5, "unit": "cup" },
+    { "ingredientId": "sour-cream", "quantity": 0.25, "unit": "cup" },
+    { "ingredientId": "bacon", "quantity": 6, "unit": "slice" },
+    { "ingredientId": "cheddar", "quantity": 0.5, "unit": "cup", "note": "for topping", "group": "To serve" },
+    { "ingredientId": "fresh-chives", "quantity": 2, "unit": "tbsp", "note": "chopped, for topping", "group": "To serve" }
+  ],
+  "steps": [
+    {
+      "heading": "Slow Cook",
+      "text": "Combine the potatoes, onion, broth, salt and pepper in a slow cooker. Cook on low for 6 hours."
+    },
+    {
+      "heading": "Cook the Bacon",
+      "text": "Cook the bacon until crispy, cool on paper towels and dice."
+    },
+    {
+      "heading": "Make the Cream Base",
+      "text": "Melt the butter in a saucepan over medium heat. Add the flour and mix well, then add the cream and sour cream and stir until thoroughly combined and thickened."
+    },
+    {
+      "heading": "Finish",
+      "text": "Stir the cream mixture into the slow cooker and cook on low for another 30 minutes."
+    },
+    {
+      "heading": "Serve",
+      "text": "Top each bowl with shredded cheddar, bacon and chives."
+    }
+  ]
+}

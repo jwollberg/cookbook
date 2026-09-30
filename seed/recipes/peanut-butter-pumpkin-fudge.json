@@ -1,0 +1,36 @@
+{
+  "id": "peanut-butter-pumpkin-fudge",
+  "title": "Peanut Butter Pumpkin Fudge",
+  "description": "No-bake freezer fudge: peanut butter, pumpkin, coconut oil and maple syrup with a little pumpkin pie spice, finished with flaky sea salt.",
+  "servings": 16,
+  "yieldNote": "16 squares (8x8 pan)",
+  "prepMin": 10,
+  "cookMin": 0,
+  "restMin": 120,
+  "tags": ["dessert", "vegetarian", "gluten-free", "no-cook", "make-ahead", "fall"],
+  "ingredients": [
+    { "ingredientId": "peanut-butter", "quantity": 2, "unit": "cup" },
+    { "ingredientId": "pumpkin-puree", "quantity": 1, "unit": "cup" },
+    { "ingredientId": "coconut-oil", "quantity": 0.5, "unit": "cup" },
+    { "ingredientId": "maple-syrup", "quantity": 0.25, "unit": "cup" },
+    { "ingredientId": "vanilla-extract", "quantity": 2, "unit": "tsp" },
+    { "ingredientId": "pumpkin-pie-spice", "quantity": 0.5, "unit": "tsp" },
+    { "ingredientId": "sea-salt", "quantity": 0.25, "unit": "tsp" },
+    { "ingredientId": "flaky-sea-salt", "quantity": 0.5, "unit": "tsp", "note": "for the top" }
+  ],
+  "steps": [
+    {
+      "heading": "Mix",
+      "text": "Mix all the ingredients except the flaky salt until well combined."
+    },
+    {
+      "heading": "Pan",
+      "text": "Pour into a parchment-lined 8x8 pan and spread evenly. Sprinkle the top with flaky sea salt."
+    },
+    {
+      "heading": "Freeze",
+      "text": "Cover and freeze for 2 hours, then lift out of the pan and cut into squares."
+    }
+  ],
+  "notes": "Keep it chilled — the coconut oil softens at room temperature."
+}

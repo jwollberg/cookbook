@@ -1,0 +1,38 @@
+{
+  "id": "roasted-butternut-squash",
+  "title": "Roasted Butternut Squash",
+  "description": "Butternut squash roasted hot with onion and fresh sage, glazed with a little maple syrup.",
+  "servings": 4,
+  "prepMin": 15,
+  "cookMin": 24,
+  "restMin": 0,
+  "tags": ["side", "vegetarian", "gluten-free", "fall"],
+  "ingredients": [
+    { "ingredientId": "butternut-squash", "quantity": 1, "unit": "each", "note": "peeled, seeded and cubed" },
+    { "ingredientId": "yellow-onion", "quantity": 1, "unit": "each", "note": "small, cut into large pieces" },
+    { "ingredientId": "fresh-sage", "quantity": 2, "unit": "tbsp", "note": "roughly chopped (a small handful)" },
+    { "ingredientId": "maple-syrup", "quantity": 1, "unit": "tbsp", "note": "or honey" },
+    { "ingredientId": "olive-oil", "quantity": 2, "unit": "tbsp" },
+    { "ingredientId": "sea-salt", "quantity": 0.75, "unit": "tsp" },
+    { "ingredientId": "black-pepper", "quantity": 0.25, "unit": "tsp", "note": "or to taste" }
+  ],
+  "steps": [
+    {
+      "heading": "Prep the Squash",
+      "text": "Heat the oven to 425°F. Peel the squash and cut it in half, scoop out the insides with a spoon and discard, then cut into cubes."
+    },
+    {
+      "heading": "Prep the Rest",
+      "text": "Cut the onion into large pieces and roughly chop the sage."
+    },
+    {
+      "heading": "Season",
+      "text": "Put everything on a baking sheet, drizzle the oil and maple syrup over, sprinkle with salt and pepper, and mix well."
+    },
+    {
+      "heading": "Roast",
+      "text": "Roast for 12 minutes, stir, then roast another 10 to 12 minutes."
+    }
+  ],
+  "notes": "The original card lists the squash, onion and sage without amounts; one medium squash is about 2½ lb."
+}

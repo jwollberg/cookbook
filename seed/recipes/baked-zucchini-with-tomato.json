@@ -1,0 +1,35 @@
+{
+  "id": "baked-zucchini-with-tomato",
+  "title": "Baked Zucchini with Tomato & Cheese",
+  "description": "Zucchini halves brushed with olive oil and garlic, topped with sliced tomato and cheese, and baked soft. Finished with fresh basil.",
+  "servings": 4,
+  "prepMin": 10,
+  "cookMin": 25,
+  "restMin": 0,
+  "tags": ["side", "vegetarian", "gluten-free", "baked"],
+  "ingredients": [
+    { "ingredientId": "zucchini", "quantity": 2, "unit": "each", "note": "halved lengthwise" },
+    { "ingredientId": "olive-oil", "quantity": 1, "unit": "tbsp" },
+    { "ingredientId": "garlic", "quantity": 2, "unit": "clove", "note": "minced — or ½ tsp garlic powder" },
+    { "ingredientId": "tomato", "quantity": 1, "unit": "each", "note": "sliced" },
+    { "ingredientId": "sea-salt", "quantity": 0.25, "unit": "tsp", "note": "or to taste" },
+    { "ingredientId": "black-pepper", "quantity": 0.125, "unit": "tsp", "note": "or to taste" },
+    { "ingredientId": "mozzarella", "quantity": 0.5, "unit": "cup", "note": "or Parmesan, or a mixed blend" },
+    { "ingredientId": "fresh-basil", "quantity": 2, "unit": "tbsp", "note": "torn" }
+  ],
+  "steps": [
+    {
+      "heading": "Prep",
+      "text": "Heat the oven to 375°F. Slice the zucchini in half lengthwise and shave a thin slice off the bottom of each half so it sits steady."
+    },
+    {
+      "heading": "Top",
+      "text": "Brush with olive oil and top with the garlic, then the sliced tomato. Season with salt and pepper and cover with the cheese."
+    },
+    {
+      "heading": "Bake",
+      "text": "Bake for 20 to 30 minutes, until soft. Scatter with basil to serve."
+    }
+  ],
+  "notes": "The original card gives no amounts — these are a starting point for two zucchini."
+}

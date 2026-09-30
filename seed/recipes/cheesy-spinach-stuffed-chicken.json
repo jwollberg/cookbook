@@ -1,0 +1,51 @@
+{
+  "id": "cheesy-spinach-stuffed-chicken",
+  "title": "Cheesy Spinach Stuffed Chicken Breasts",
+  "description": "Chicken breasts with a pocket of cream cheese, spinach, mozzarella and Parmesan, seared golden in cast iron and finished in the oven.",
+  "servings": 3,
+  "prepMin": 20,
+  "cookMin": 25,
+  "restMin": 5,
+  "tags": ["main", "chicken", "baked", "gluten-free"],
+  "ingredients": [
+    { "ingredientId": "cream-cheese", "quantity": 4, "unit": "oz", "note": "cold", "group": "Filling" },
+    { "ingredientId": "mayonnaise", "quantity": 1, "unit": "tbsp", "group": "Filling" },
+    { "ingredientId": "sea-salt", "quantity": 0.25, "unit": "tsp", "group": "Filling" },
+    { "ingredientId": "garlic", "quantity": 2, "unit": "clove", "note": "minced", "group": "Filling" },
+    { "ingredientId": "baby-spinach", "quantity": 1.5, "unit": "cup", "note": "chopped", "group": "Filling" },
+    { "ingredientId": "mozzarella", "quantity": 0.25, "unit": "cup", "group": "Filling" },
+    { "ingredientId": "parmesan", "quantity": 0.25, "unit": "cup", "note": "shredded", "group": "Filling" },
+    { "ingredientId": "chicken-breast", "quantity": 3, "unit": "each", "group": "Chicken" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp", "note": "to season", "group": "Chicken" },
+    { "ingredientId": "black-pepper", "quantity": 0.25, "unit": "tsp", "note": "to season", "group": "Chicken" },
+    { "ingredientId": "garlic-powder", "quantity": 0.5, "unit": "tsp", "note": "to season", "group": "Chicken" },
+    { "ingredientId": "paprika", "quantity": 0.5, "unit": "tsp", "note": "to season", "group": "Chicken" },
+    { "ingredientId": "olive-oil", "quantity": 1, "unit": "tbsp", "group": "Chicken" }
+  ],
+  "steps": [
+    {
+      "heading": "Prep",
+      "text": "Heat the oven to 425°F."
+    },
+    {
+      "heading": "Make the Filling",
+      "text": "In a medium bowl, mix the cream cheese, mayonnaise, salt and garlic well. Add the spinach, mozzarella and Parmesan and mix well."
+    },
+    {
+      "heading": "Stuff",
+      "text": "Cut a slit in the side of each chicken breast to make a deep pocket. Fill each with a third of the mixture and seal the slits with toothpicks — count how many you use."
+    },
+    {
+      "heading": "Season",
+      "text": "Season the outside with salt, pepper, garlic powder and paprika."
+    },
+    {
+      "heading": "Sear",
+      "text": "Heat the oil in a cast-iron pan over medium heat. Once hot, sear the chicken about 4 minutes per side, until golden brown — turn the heat up if it's not browning, down if it's browning too fast."
+    },
+    {
+      "heading": "Finish in the Oven",
+      "text": "Move the pan to the oven for 10 to 15 minutes, depending on thickness, until the chicken reaches 165°F. Let it rest 5 minutes, then remove all the toothpicks."
+    }
+  ]
+}

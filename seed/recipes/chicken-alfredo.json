@@ -1,0 +1,47 @@
+{
+  "id": "chicken-alfredo",
+  "title": "Chicken Alfredo",
+  "description": "Seared, herb-seasoned chicken over fettuccine in a from-scratch Alfredo sauce made with butter, garlic, cream and plenty of Parmesan.",
+  "servings": 4,
+  "prepMin": 10,
+  "cookMin": 25,
+  "restMin": 0,
+  "tags": ["main", "chicken", "pasta"],
+  "ingredients": [
+    { "ingredientId": "chicken-breast", "quantity": 2, "unit": "each", "note": "medium, sliced in half horizontally" },
+    { "ingredientId": "dried-basil", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "dried-oregano", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp" },
+    { "ingredientId": "black-pepper", "quantity": 0.25, "unit": "tsp" },
+    { "ingredientId": "olive-oil", "quantity": 1, "unit": "tbsp" },
+    { "ingredientId": "butter", "quantity": 4, "unit": "tbsp" },
+    { "ingredientId": "garlic", "quantity": 3, "unit": "clove", "note": "minced (about 1 tbsp)" },
+    { "ingredientId": "all-purpose-flour", "quantity": 2, "unit": "tbsp" },
+    { "ingredientId": "heavy-cream", "quantity": 1.5, "unit": "cup" },
+    { "ingredientId": "milk", "quantity": 1.5, "unit": "cup" },
+    { "ingredientId": "parmesan", "quantity": 1, "unit": "cup" },
+    { "ingredientId": "fettuccine", "quantity": 1, "unit": "lb" }
+  ],
+  "steps": [
+    {
+      "heading": "Season",
+      "text": "Season the chicken on both sides with the basil and oregano, then sprinkle with the salt and pepper."
+    },
+    {
+      "heading": "Boil the Pasta",
+      "text": "Cook the fettuccine in a pot of boiling salted water."
+    },
+    {
+      "heading": "Sear the Chicken",
+      "text": "Heat the olive oil in a skillet, add the chicken and cook 4 to 5 minutes per side, until it reaches 165°F. Set aside on a plate."
+    },
+    {
+      "heading": "Make the Sauce",
+      "text": "Melt the butter in the same skillet. Add the garlic and cook until fragrant, about 1 minute. Whisk in the flour and let it turn golden, about 1 minute more. Slowly whisk in the cream and milk and simmer to thicken."
+    },
+    {
+      "heading": "Finish",
+      "text": "Whisk in the Parmesan until melted, then serve over the pasta with the chicken."
+    }
+  ]
+}

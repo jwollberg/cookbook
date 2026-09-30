@@ -1,0 +1,40 @@
+{
+  "id": "honey-mustard-chicken",
+  "title": "Honey Mustard Chicken",
+  "description": "Chicken baked on a bed of softened onion and garlic under a two-mustard honey sauce, with rosemary tucked around. Covered first to cook through, then uncovered and basted to brown.",
+  "servings": 6,
+  "prepMin": 10,
+  "cookMin": 50,
+  "restMin": 0,
+  "tags": ["main", "chicken", "baked", "gluten-free"],
+  "ingredients": [
+    { "ingredientId": "whole-grain-mustard", "quantity": 0.25, "unit": "cup" },
+    { "ingredientId": "dijon-mustard", "quantity": 0.25, "unit": "cup" },
+    { "ingredientId": "honey", "quantity": 0.5, "unit": "cup" },
+    { "ingredientId": "olive-oil", "quantity": 3, "unit": "tsp", "note": "divided" },
+    { "ingredientId": "yellow-onion", "quantity": 0.5, "unit": "each", "note": "small, diced" },
+    { "ingredientId": "garlic", "quantity": 2, "unit": "clove", "note": "minced" },
+    { "ingredientId": "chicken-thighs", "quantity": 2.5, "unit": "lb", "note": "or chicken tenderloins" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp", "note": "or to taste" },
+    { "ingredientId": "black-pepper", "quantity": 0.25, "unit": "tsp", "note": "or to taste" },
+    { "ingredientId": "fresh-rosemary", "quantity": 4, "unit": "sprig", "note": "small" }
+  ],
+  "steps": [
+    {
+      "heading": "Make the Sauce",
+      "text": "In a small bowl, combine both mustards, the honey and 2 tsp of the olive oil."
+    },
+    {
+      "heading": "Soften the Aromatics",
+      "text": "Heat the remaining 1 tsp oil in an oven-safe braiser or cast-iron skillet over medium heat. Sauté the onion until golden and tender, about 5 minutes. Add the garlic and cook 1 to 2 minutes more, until fragrant."
+    },
+    {
+      "heading": "Assemble",
+      "text": "Lay the chicken on top of the onion and garlic (if your pan isn't oven-safe, move everything to a baking dish first). Season the tops with salt and pepper, pour the honey mustard over, and tuck the rosemary sprigs around the chicken."
+    },
+    {
+      "heading": "Bake",
+      "text": "Bake covered at 400°F for 20 minutes. Uncover, baste the chicken with the sauce, and bake 20 to 30 minutes more, until browned on top and cooked through."
+    }
+  ]
+}

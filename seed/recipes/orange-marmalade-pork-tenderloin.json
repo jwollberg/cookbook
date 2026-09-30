@@ -1,0 +1,43 @@
+{
+  "id": "orange-marmalade-pork-tenderloin",
+  "title": "Orange Marmalade Pork Tenderloin",
+  "description": "Tenderloin marinated in sesame ginger dressing, then grilled and slathered near the end with orange marmalade, ginger, garlic, thyme and soy. Slightly sweet, slightly spicy.",
+  "servings": 6,
+  "prepMin": 10,
+  "cookMin": 15,
+  "restMin": 245,
+  "tags": ["main", "pork", "grilled"],
+  "ingredients": [
+    { "ingredientId": "pork-tenderloin", "quantity": 2, "unit": "lb", "note": "one 2 lb tenderloin" },
+    { "ingredientId": "sesame-ginger-dressing", "quantity": 16, "unit": "floz", "note": "one bottle, for the marinade" },
+    { "ingredientId": "orange-marmalade", "quantity": 1, "unit": "jar" },
+    { "ingredientId": "ground-ginger", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "garlic-powder", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "dried-thyme", "quantity": 1.5, "unit": "tsp" },
+    { "ingredientId": "black-pepper", "quantity": 0.25, "unit": "tsp" },
+    { "ingredientId": "soy-sauce", "quantity": 1, "unit": "tsp" }
+  ],
+  "steps": [
+    {
+      "heading": "Marinate",
+      "text": "Marinate the tenderloin in the sesame ginger dressing for 4 hours in the fridge."
+    },
+    {
+      "heading": "Make the Glaze",
+      "text": "Combine the marmalade, ginger, garlic powder, thyme, pepper and soy sauce in a bowl. Set aside."
+    },
+    {
+      "heading": "Grill",
+      "text": "Heat the grill to 350°F. Take the tenderloin out of the marinade and discard the marinade. Grill over medium-high heat with the lid on for 10 minutes, turning once."
+    },
+    {
+      "heading": "Glaze",
+      "text": "Take the lid off, brush the marmalade mixture over the tenderloin, and grill 3 to 5 minutes more."
+    },
+    {
+      "heading": "Rest",
+      "text": "Take the tenderloin off the grill and let it rest 5 minutes before cutting."
+    }
+  ],
+  "notes": "Serve with a green salad and Mason Jar Balsamic Dressing."
+}

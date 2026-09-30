@@ -53,7 +53,7 @@ describe("matching typed text to the ingredient registry", () => {
 
   it("leaves things the registry does not know alone", () => {
     expect(match("paper towels")).toBeUndefined();
-    expect(match("milk")).toBeUndefined();
+    expect(match("orange juice")).toBeUndefined();
   });
 });
 
@@ -62,6 +62,7 @@ describe("parseItem", () => {
 
   it("reads a quantity, a unit and an ingredient", () => {
     expect(parse("2 lb ground beef")).toEqual({ ingredientId: "ground-beef", quantity: 2, unit: "lb" });
+    expect(parse("2 gal milk")).toEqual({ ingredientId: "milk", quantity: 2, unit: "gal" });
     expect(parse("1/2 cup mayo")).toEqual({ ingredientId: "mayonnaise", quantity: 0.5, unit: "cup" });
     expect(parse("1 1/2 cups of white rice")).toEqual({
       ingredientId: "white-rice",
@@ -84,7 +85,7 @@ describe("parseItem", () => {
 
   it("keeps unknown things as free text, amount and all", () => {
     expect(parse("paper towels")).toEqual({ name: "paper towels", quantity: undefined, unit: undefined });
-    expect(parse("2 gal milk")).toEqual({ name: "milk", quantity: 2, unit: "gal" });
+    expect(parse("2 gal orange juice")).toEqual({ name: "orange juice", quantity: 2, unit: "gal" });
   });
 
   it("does not eat the name when the only word after the number is a unit", () => {

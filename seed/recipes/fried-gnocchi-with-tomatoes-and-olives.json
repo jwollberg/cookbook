@@ -1,0 +1,41 @@
+{
+  "id": "fried-gnocchi-with-tomatoes-and-olives",
+  "title": "Fried Gnocchi with Tomatoes & Olives",
+  "description": "Gnocchi pan-fried straight from the pack until puffed and golden, then tossed with semi-dried tomatoes, black olives, lemon zest, basil and Parmesan. Fifteen minutes, one pan.",
+  "servings": 4,
+  "prepMin": 10,
+  "cookMin": 10,
+  "restMin": 0,
+  "tags": ["main", "vegetarian", "skillet", "pasta"],
+  "ingredients": [
+    { "ingredientId": "olive-oil", "quantity": 1, "unit": "tbsp" },
+    { "ingredientId": "red-pepper-flakes", "quantity": 1, "unit": "pinch", "note": "dried crushed chilli" },
+    { "ingredientId": "garlic", "quantity": 1, "unit": "clove", "note": "crushed" },
+    { "ingredientId": "gnocchi", "quantity": 500, "unit": "g" },
+    { "ingredientId": "semi-dried-tomatoes", "quantity": 100, "unit": "g", "note": "chopped" },
+    { "ingredientId": "kalamata-olives", "quantity": 150, "unit": "g", "note": "or other good-quality black olives, pitted" },
+    { "ingredientId": "lemon", "quantity": 0.5, "unit": "each", "note": "zest only" },
+    { "ingredientId": "fresh-basil", "quantity": 0.5, "unit": "cup", "note": "a handful, torn, plus extra to garnish" },
+    { "ingredientId": "parmesan", "quantity": 50, "unit": "g", "note": "freshly grated — omit if vegetarian" },
+    { "ingredientId": "olive-oil", "quantity": 1, "unit": "tbsp", "note": "extra virgin, for drizzling" }
+  ],
+  "steps": [
+    {
+      "heading": "Bloom",
+      "text": "Heat the oil in a large frying pan and add the chilli and garlic. Cook for 1 minute."
+    },
+    {
+      "heading": "Fry the Gnocchi",
+      "text": "Add the gnocchi and cook, stirring occasionally, for 5 to 7 minutes, until slightly puffed and golden."
+    },
+    {
+      "heading": "Toss",
+      "text": "Add the tomatoes, olives, lemon zest and basil and cook for 1 to 2 minutes more."
+    },
+    {
+      "heading": "Finish",
+      "text": "Stir through the Parmesan. Serve drizzled with a little oil and garnished with extra basil leaves."
+    }
+  ],
+  "notes": "Traditional Parmesan is made with animal rennet — leave it out, or use a vegetarian hard cheese, for a strictly vegetarian dish."
+}

@@ -1,0 +1,32 @@
+{
+  "id": "bacon-wrapped-pork-tenderloin",
+  "title": "Bacon-Wrapped Pork Tenderloin",
+  "description": "Two tenderloins wrapped in maple bacon and glazed with maple syrup, roasted hot so the bacon crisps while the pork stays juicy.",
+  "servings": 6,
+  "prepMin": 10,
+  "cookMin": 25,
+  "restMin": 5,
+  "tags": ["main", "pork", "baked", "gluten-free"],
+  "ingredients": [
+    { "ingredientId": "pork-tenderloin", "quantity": 2, "unit": "lb", "note": "a twin pack — 2 tenderloins" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp" },
+    { "ingredientId": "black-pepper", "quantity": 0.5, "unit": "tsp", "note": "freshly ground" },
+    { "ingredientId": "bacon", "quantity": 8, "unit": "slice", "note": "maple-flavored" },
+    { "ingredientId": "maple-syrup", "quantity": 2, "unit": "tbsp" }
+  ],
+  "steps": [
+    {
+      "heading": "Prep",
+      "text": "Heat the oven to 450°F. Line a large rimmed baking pan with foil."
+    },
+    {
+      "heading": "Wrap",
+      "text": "Place the tenderloins on the pan and sprinkle with the salt and pepper. Starting at one end, wrap each tenderloin with 4 slices of bacon, stretching the bacon slightly so it thins out to cover the pork. Drizzle the maple syrup over the top and space the tenderloins 2 to 3 inches apart."
+    },
+    {
+      "heading": "Roast",
+      "text": "Roast for 20 to 25 minutes, turning once halfway, until the bacon browns and the pork reaches 145°F inside. Move to a cutting board and let stand 5 minutes before slicing."
+    }
+  ],
+  "notes": "About 5 g carbs per serving."
+}

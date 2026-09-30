@@ -1,0 +1,53 @@
+{
+  "id": "smoked-carolina-pork-ribs",
+  "title": "Smoked Carolina Pork Ribs",
+  "description": "St. Louis-style ribs rubbed with Dan's Pig Rub, hickory-smoked low and slow for three and a half hours, sauced and wrapped, then crisped over the coals.",
+  "servings": 2,
+  "yieldNote": "1 rack — serves 2 as an entrée, 4 as an appetizer",
+  "prepMin": 30,
+  "cookMin": 250,
+  "restMin": 0,
+  "tags": ["main", "pork", "grilled", "smoked"],
+  "ingredients": [
+    { "ingredientId": "pork-ribs", "quantity": 1, "unit": "each", "group": "Ribs" },
+    { "ingredientId": "apple-juice", "quantity": 1, "unit": "pt", "note": "in a spray bottle, for spritzing", "group": "Ribs" },
+    { "ingredientId": "hickory-chips", "quantity": 2, "unit": "cup", "note": "soaked in water for 1 hour", "group": "Ribs" },
+    { "ingredientId": "bbq-sauce", "quantity": 1, "unit": "cup", "group": "Ribs" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "cup", "note": "kosher", "group": "Dan's Pig Rub", "noScale": true },
+    { "ingredientId": "black-pepper", "quantity": 0.25, "unit": "cup", "note": "freshly ground", "group": "Dan's Pig Rub", "noScale": true },
+    { "ingredientId": "turbinado-sugar", "quantity": 0.5, "unit": "cup", "note": "or raw sugar", "group": "Dan's Pig Rub", "noScale": true },
+    { "ingredientId": "dry-mustard", "quantity": 1, "unit": "tbsp", "group": "Dan's Pig Rub", "noScale": true },
+    { "ingredientId": "ground-cumin", "quantity": 0.5, "unit": "tbsp", "group": "Dan's Pig Rub", "noScale": true },
+    { "ingredientId": "paprika", "quantity": 1, "unit": "tbsp", "note": "smoked", "group": "Dan's Pig Rub", "noScale": true },
+    { "ingredientId": "ground-cinnamon", "quantity": 1, "unit": "tsp", "group": "Dan's Pig Rub", "noScale": true },
+    { "ingredientId": "ground-allspice", "quantity": 1, "unit": "tsp", "group": "Dan's Pig Rub", "noScale": true },
+    { "ingredientId": "cayenne", "quantity": 0.5, "unit": "tsp", "group": "Dan's Pig Rub", "noScale": true }
+  ],
+  "steps": [
+    {
+      "heading": "Mix the Rub",
+      "text": "Stir all the Dan's Pig Rub ingredients together."
+    },
+    {
+      "heading": "Set Up the Grill",
+      "text": "Start a charcoal grill for indirect cooking: coals on one half, an aluminum pan full of water on the other. Put a handful of the wet chips on the hot coals and close the lid."
+    },
+    {
+      "heading": "Prep the Ribs",
+      "text": "On the back of the ribs, slide a butter knife between a bone and the white silver-skin membrane and pull off as much of the membrane as you can. Sprinkle the rub gently over both sides."
+    },
+    {
+      "heading": "Smoke",
+      "text": "Lay the ribs curved-bone side up on the grill, opposite the coals, and close the lid. Every 30 minutes add more coals and wet chips and spritz the ribs with apple juice. Cook at about 250°F for 3½ hours, until the meat has shrunk back from the ends of the bones by about ¼ inch."
+    },
+    {
+      "heading": "Sauce & Wrap",
+      "text": "Take the ribs off, slather both sides with barbecue sauce, and double-wrap them tightly in foil. Return them to the grill to smoke for 30 minutes more."
+    },
+    {
+      "heading": "Crisp",
+      "text": "Unwrap the ribs and crisp them quickly over the hot side of the grill, about 2 minutes per side."
+    }
+  ],
+  "notes": "You'll also need charcoal, a disposable aluminum pan for water, and 2 sheets of heavy-duty foil. The rub makes about 1½ cups, more than one rack needs — it keeps for months in a jar, so it isn't scaled with the servings."
+}

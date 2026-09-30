@@ -1,0 +1,43 @@
+{
+  "id": "apple-crisp",
+  "title": "Apple Crisp",
+  "description": "Four pounds of Granny Smith apples under a buttery oat crumble, baked until the topping is golden. Serve warm with vanilla bean ice cream.",
+  "servings": 12,
+  "yieldNote": "one 13x9 dish",
+  "prepMin": 25,
+  "cookMin": 50,
+  "restMin": 0,
+  "tags": ["dessert", "vegetarian", "baked", "fall"],
+  "ingredients": [
+    { "ingredientId": "apple", "quantity": 4, "unit": "lb", "note": "Granny Smith, peeled and sliced", "group": "Filling" },
+    { "ingredientId": "lemon-juice", "quantity": 2, "unit": "tbsp", "group": "Filling" },
+    { "ingredientId": "sugar", "quantity": 1, "unit": "cup", "group": "Filling" },
+    { "ingredientId": "all-purpose-flour", "quantity": 3, "unit": "tbsp", "group": "Filling" },
+    { "ingredientId": "ground-cinnamon", "quantity": 0.5, "unit": "tsp", "group": "Filling" },
+    { "ingredientId": "all-purpose-flour", "quantity": 1.75, "unit": "cup", "group": "Topping" },
+    { "ingredientId": "rolled-oats", "quantity": 1, "unit": "cup", "note": "old-fashioned", "group": "Topping" },
+    { "ingredientId": "brown-sugar", "quantity": 0.5, "unit": "cup", "group": "Topping" },
+    { "ingredientId": "sugar", "quantity": 0.25, "unit": "cup", "group": "Topping" },
+    { "ingredientId": "ground-cinnamon", "quantity": 0.5, "unit": "tsp", "group": "Topping" },
+    { "ingredientId": "sea-salt", "quantity": 0.25, "unit": "tsp", "group": "Topping" },
+    { "ingredientId": "butter", "quantity": 1, "unit": "cup", "note": "unsalted, softened", "group": "Topping" }
+  ],
+  "steps": [
+    {
+      "heading": "Prep",
+      "text": "Heat the oven to 375°F and butter a 13x9 casserole dish."
+    },
+    {
+      "heading": "Filling",
+      "text": "Peel and slice the apples, pour the lemon juice over them and stir. In a small bowl, combine 1 cup sugar, 3 tbsp flour and ½ tsp cinnamon. Sprinkle over the apples, toss to coat, and tip into the dish."
+    },
+    {
+      "heading": "Topping",
+      "text": "In a large bowl, combine 1¾ cups flour, the oats, brown sugar, ¼ cup sugar, ½ tsp cinnamon and the salt, and mix with your hands. Dice the butter into small cubes, add it, and toss with your fingers until pea-sized clumps form."
+    },
+    {
+      "heading": "Bake",
+      "text": "Spread the topping over the apples and bake for 45 to 50 minutes, until golden brown. Serve with vanilla bean ice cream."
+    }
+  ]
+}
