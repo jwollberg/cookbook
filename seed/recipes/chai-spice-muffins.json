@@ -7,6 +7,14 @@
   "cookMin": 18,
   "restMin": 0,
   "tags": ["dessert", "vegetarian", "baked", "fall"],
+  "image": "/images/recipes/chai-spice-muffins.jpg",
+  "imageCredit": {
+    "author": "Veganbaking.net from USA",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vegan_Date_Spice_Muffins_(4277555192).jpg",
+    "title": "Vegan Date Spice Muffins (4277555192)"
+  },
   "ingredients": [
     { "ingredientId": "all-purpose-flour", "quantity": 1.75, "unit": "cup", "group": "Muffins" },
     { "ingredientId": "ground-cinnamon", "quantity": 2, "unit": "tsp", "group": "Muffins" },

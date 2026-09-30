@@ -7,6 +7,14 @@
   "cookMin": 15,
   "restMin": 245,
   "tags": ["main", "pork", "grilled"],
+  "image": "/images/recipes/orange-marmalade-pork-tenderloin.jpg",
+  "imageCredit": {
+    "author": "Timothy Vollmer",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Garin's_pork_tenderloin_2007.jpg",
+    "title": "Garin's pork tenderloin 2007"
+  },
   "ingredients": [
     { "ingredientId": "pork-tenderloin", "quantity": 2, "unit": "lb", "note": "one 2 lb tenderloin" },
     { "ingredientId": "sesame-ginger-dressing", "quantity": 16, "unit": "floz", "note": "one bottle, for the marinade" },

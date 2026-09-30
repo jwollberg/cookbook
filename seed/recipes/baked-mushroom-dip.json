@@ -8,6 +8,14 @@
   "cookMin": 40,
   "restMin": 0,
   "tags": ["starter", "side", "vegetarian", "baked"],
+  "image": "/images/recipes/baked-mushroom-dip.jpg",
+  "imageCredit": {
+    "author": "Janine from Mililani, Hawaii, United States",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Spinach_%26_artichoke_dip.jpg",
+    "title": "Spinach & artichoke dip"
+  },
   "ingredients": [
     { "ingredientId": "mushrooms", "quantity": 2, "unit": "cup", "note": "diced" },
     { "ingredientId": "butter", "quantity": 1, "unit": "tbsp", "note": "or margarine" },

@@ -8,6 +8,14 @@
   "cookMin": 250,
   "restMin": 0,
   "tags": ["main", "pork", "grilled", "smoked"],
+  "image": "/images/recipes/smoked-carolina-pork-ribs.jpg",
+  "imageCredit": {
+    "author": "Thogru",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ribs_from_the_pit.jpg",
+    "title": "Ribs from the pit"
+  },
   "ingredients": [
     { "ingredientId": "pork-ribs", "quantity": 1, "unit": "each", "group": "Ribs" },
     { "ingredientId": "apple-juice", "quantity": 1, "unit": "pt", "note": "in a spray bottle, for spritzing", "group": "Ribs" },

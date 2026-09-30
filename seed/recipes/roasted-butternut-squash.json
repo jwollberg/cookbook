@@ -7,6 +7,14 @@
   "cookMin": 24,
   "restMin": 0,
   "tags": ["side", "vegetarian", "gluten-free", "fall"],
+  "image": "/images/recipes/roasted-butternut-squash.jpg",
+  "imageCredit": {
+    "author": "Joey Doll",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Roasted_butternut_squash_(41368009070).jpg",
+    "title": "Roasted butternut squash (41368009070)"
+  },
   "ingredients": [
     { "ingredientId": "butternut-squash", "quantity": 1, "unit": "each", "note": "peeled, seeded and cubed" },
     { "ingredientId": "yellow-onion", "quantity": 1, "unit": "each", "note": "small, cut into large pieces" },

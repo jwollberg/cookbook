@@ -7,6 +7,14 @@
   "cookMin": 25,
   "restMin": 0,
   "tags": ["side", "vegetarian", "gluten-free", "baked"],
+  "image": "/images/recipes/baked-zucchini-with-tomato.jpg",
+  "imageCredit": {
+    "author": "Benreis",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zucchini_mit_K%C3%A4se_%C3%BCberbacken_Tanne_Harsdorf.jpg",
+    "title": "Zucchini mit Käse überbacken Tanne Harsdorf"
+  },
   "ingredients": [
     { "ingredientId": "zucchini", "quantity": 2, "unit": "each", "note": "halved lengthwise" },
     { "ingredientId": "olive-oil", "quantity": 1, "unit": "tbsp" },

@@ -7,6 +7,14 @@
   "cookMin": 20,
   "restMin": 0,
   "tags": ["main", "chicken", "skillet"],
+  "image": "/images/recipes/broccoli-chicken-stir-fry.jpg",
+  "imageCredit": {
+    "author": "Discover Lehigh Valley, PA",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chicken_And_Broccoli_%40_Bamboo_Asian_Cuisine.jpg",
+    "title": "Chicken And Broccoli @ Bamboo Asian Cuisine"
+  },
   "ingredients": [
     { "ingredientId": "olive-oil", "quantity": 5, "unit": "tbsp", "note": "divided" },
     { "ingredientId": "chicken-breast", "quantity": 1, "unit": "lb", "note": "cubed" },

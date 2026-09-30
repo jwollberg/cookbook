@@ -7,6 +7,14 @@
   "cookMin": 20,
   "restMin": 0,
   "tags": ["dessert", "vegetarian", "baked", "fall"],
+  "image": "/images/recipes/mini-sweet-potato-pies.jpg",
+  "imageCredit": {
+    "author": "Willis Lam",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Peasant_Pies_Southern_Sweet_Potato_Pie_(16164619769).jpg",
+    "title": "Peasant Pies Southern Sweet Potato Pie (16164619769)"
+  },
   "ingredients": [
     { "ingredientId": "pie-crust", "quantity": 1, "unit": "each", "note": "softened" },
     { "ingredientId": "sweet-potato", "quantity": 2, "unit": "cup", "note": "mashed" },

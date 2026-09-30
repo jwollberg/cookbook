@@ -8,6 +8,14 @@
   "cookMin": 50,
   "restMin": 0,
   "tags": ["dessert", "vegetarian", "baked", "fall"],
+  "image": "/images/recipes/apple-crisp.jpg",
+  "imageCredit": {
+    "author": "Douglas Perkins",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Apple_Crisp.jpg",
+    "title": "Apple Crisp"
+  },
   "ingredients": [
     { "ingredientId": "apple", "quantity": 4, "unit": "lb", "note": "Granny Smith, peeled and sliced", "group": "Filling" },
     { "ingredientId": "lemon-juice", "quantity": 2, "unit": "tbsp", "group": "Filling" },
