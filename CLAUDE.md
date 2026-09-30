@@ -53,7 +53,15 @@ Browser ──► Cloudflare Worker (Astro SSR via @astrojs/cloudflare)
   Gmail does (dots and `+tags` ignored). An empty or missing list admits nobody. The list is checked
   on **every request**, not only at sign-in, so removing someone locks them out immediately.
 - The Google OAuth client is in *Testing* mode, so an address must **also** be a test user in the
-  Google console — a second, separate gate.
+  Google console — a second, separate gate. Adding someone means both: `ALLOWED_EMAILS` and a test
+  user.
+- Google Cloud project `kitchen-atheos` ("Kitchen"), under Josh's personal Google account (no
+  organization). Google Auth Platform: External, Testing, OAuth web client "Kitchen web" with
+  redirect URIs `https://kitchen.atheosstudios.com/auth/callback`,
+  `http://127.0.0.1:4321/auth/callback` and `http://localhost:4321/auth/callback`. OAuth clients
+  cannot be created from a CLI (the IAP OAuth Admin API is gone) — the console is the only route.
+  A lost client secret is replaced from the client's page ("Add secret"), then
+  `npx wrangler secret put GOOGLE_CLIENT_SECRET`.
 - Writes must carry a same-origin `Origin` header (middleware), on top of SameSite=Lax cookies.
 - `/auth/dev` and the "Continue as Dev Cook" button exist only under `import.meta.env.DEV`; the
   production bundle compiles them out. Never add a bypass that is not behind that constant.
