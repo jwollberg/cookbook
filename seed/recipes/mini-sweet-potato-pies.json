@@ -1,0 +1,48 @@
+{
+  "id": "mini-sweet-potato-pies",
+  "title": "Mini Sweet Potato Pies",
+  "description": "Hand pies of spiced sweet potato filling sealed between cinnamon-sugar rounds of pie crust, baked golden and dusted with powdered sugar.",
+  "servings": 6,
+  "prepMin": 30,
+  "cookMin": 20,
+  "restMin": 0,
+  "tags": ["dessert", "vegetarian", "baked", "fall"],
+  "ingredients": [
+    { "ingredientId": "pie-crust", "quantity": 1, "unit": "each", "note": "softened" },
+    { "ingredientId": "sweet-potato", "quantity": 2, "unit": "cup", "note": "mashed" },
+    { "ingredientId": "butter", "quantity": 3, "unit": "tbsp", "note": "softened" },
+    { "ingredientId": "egg", "quantity": 2, "unit": "each" },
+    { "ingredientId": "vanilla-extract", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "ground-cinnamon", "quantity": 0.5, "unit": "tsp", "note": "plus extra for sprinkling" },
+    { "ingredientId": "ground-nutmeg", "quantity": 0.5, "unit": "tsp" },
+    { "ingredientId": "ground-cloves", "quantity": 0.25, "unit": "tsp" },
+    { "ingredientId": "ground-ginger", "quantity": 0.25, "unit": "tsp" },
+    { "ingredientId": "sea-salt", "quantity": 0.25, "unit": "tsp" },
+    { "ingredientId": "brown-sugar", "quantity": 0.25, "unit": "cup" },
+    { "ingredientId": "sugar", "quantity": 0.25, "unit": "cup", "note": "plus extra for sprinkling" },
+    { "ingredientId": "egg", "quantity": 1, "unit": "each", "note": "beaten, for the egg wash", "group": "To finish" },
+    { "ingredientId": "powdered-sugar", "quantity": 1, "unit": "tbsp", "note": "for dusting", "group": "To finish" }
+  ],
+  "steps": [
+    {
+      "heading": "Prep",
+      "text": "Heat the oven to 400°F."
+    },
+    {
+      "heading": "Filling",
+      "text": "In a large mixing bowl, combine the sweet potatoes, butter, eggs, vanilla, spices, salt and both sugars, and mix well."
+    },
+    {
+      "heading": "Cut the Rounds",
+      "text": "Flatten the dough and cut out circles using a bowl or cup. Re-roll the scraps and repeat until all the dough is used."
+    },
+    {
+      "heading": "Assemble",
+      "text": "Butter the dough circles and sprinkle with cinnamon and sugar. Spoon filling onto half of the circles, lay the remaining circles on top (cinnamon-sugar side down), and press the edges firmly with a fork."
+    },
+    {
+      "heading": "Bake",
+      "text": "Set the pies on a baking sheet, brush the tops with egg wash and bake for 20 minutes. Sprinkle with powdered sugar."
+    }
+  ]
+}

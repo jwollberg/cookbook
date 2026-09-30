@@ -1,0 +1,42 @@
+{
+  "id": "spaghettini-with-bacon-and-basil",
+  "title": "Spaghettini with Bacon and Basil",
+  "description": "Thin pasta tossed with bacon, lots of garlic, a pinch of chilli and cherry tomatoes cooked just until they burst, finished with Parmesan and basil.",
+  "servings": 4,
+  "prepMin": 10,
+  "cookMin": 15,
+  "restMin": 0,
+  "tags": ["main", "pasta", "pork"],
+  "sourceUrl": "http://www.kitchendaily.com/recipe/spaghettini-with-bacon-and-basil-142674",
+  "ingredients": [
+    { "ingredientId": "spaghettini", "quantity": 12, "unit": "oz", "note": "or angel hair" },
+    { "ingredientId": "olive-oil", "quantity": 0.25, "unit": "cup" },
+    { "ingredientId": "garlic", "quantity": 6, "unit": "clove", "note": "chopped" },
+    { "ingredientId": "bacon", "quantity": 4, "unit": "oz", "note": "chopped" },
+    { "ingredientId": "red-pepper-flakes", "quantity": 0.25, "unit": "tsp" },
+    { "ingredientId": "cherry-tomatoes", "quantity": 1.5, "unit": "lb" },
+    { "ingredientId": "fresh-basil", "quantity": 3, "unit": "tbsp", "note": "shredded, divided" },
+    { "ingredientId": "parmesan", "quantity": 1.25, "unit": "cup", "note": "grated, divided" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp", "note": "or to taste" },
+    { "ingredientId": "black-pepper", "quantity": 0.25, "unit": "tsp", "note": "freshly ground, or to taste" }
+  ],
+  "steps": [
+    {
+      "heading": "Cook the Pasta",
+      "text": "Cook the pasta in a pot of boiling salted water until tender but still firm to the bite. Drain, keeping 1 cup of the cooking water, and return the pasta to the pot."
+    },
+    {
+      "heading": "Make the Sauce",
+      "text": "Meanwhile, heat the oil in a large skillet over medium-high heat. Add the garlic and stir for 30 seconds. Add the bacon and crushed red pepper and sauté until the bacon is crisp, about 4 minutes. Add the tomatoes and sauté until soft, about 4 minutes."
+    },
+    {
+      "heading": "Toss",
+      "text": "Tip the tomato mixture into the pot with the pasta. Add ¾ cup of the cheese and 2 tbsp of the basil and toss over medium heat until the cheese melts and the sauce coats the pasta, adding cooking water ¼ cup at a time if it looks dry. Season with salt and pepper."
+    },
+    {
+      "heading": "Serve",
+      "text": "Transfer to a bowl and sprinkle with the remaining basil. Serve the rest of the cheese alongside."
+    }
+  ],
+  "notes": "Also in the family file as “Bacon and Tomato Pasta” made with angel hair — the same recipe."
+}

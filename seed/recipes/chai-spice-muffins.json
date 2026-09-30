@@ -1,0 +1,57 @@
+{
+  "id": "chai-spice-muffins",
+  "title": "Chai Spice Muffins",
+  "description": "Applesauce muffins warm with cinnamon, ginger, cardamom and nutmeg, each with a swirl of vanilla cream cheese in the middle.",
+  "servings": 12,
+  "prepMin": 20,
+  "cookMin": 18,
+  "restMin": 0,
+  "tags": ["dessert", "vegetarian", "baked", "fall"],
+  "ingredients": [
+    { "ingredientId": "all-purpose-flour", "quantity": 1.75, "unit": "cup", "group": "Muffins" },
+    { "ingredientId": "ground-cinnamon", "quantity": 2, "unit": "tsp", "group": "Muffins" },
+    { "ingredientId": "ground-ginger", "quantity": 0.5, "unit": "tsp", "group": "Muffins" },
+    { "ingredientId": "ground-cardamom", "quantity": 0.5, "unit": "tsp", "group": "Muffins" },
+    { "ingredientId": "ground-nutmeg", "quantity": 0.5, "unit": "tsp", "group": "Muffins" },
+    { "ingredientId": "baking-soda", "quantity": 1, "unit": "tsp", "group": "Muffins" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp", "group": "Muffins" },
+    { "ingredientId": "brown-sugar", "quantity": 1.25, "unit": "cup", "group": "Muffins" },
+    { "ingredientId": "applesauce", "quantity": 2, "unit": "cup", "group": "Muffins" },
+    { "ingredientId": "egg", "quantity": 2, "unit": "each", "group": "Muffins" },
+    { "ingredientId": "vanilla-extract", "quantity": 1, "unit": "tsp", "group": "Muffins" },
+    { "ingredientId": "neutral-oil", "quantity": 0.5, "unit": "cup", "note": "vegetable oil", "group": "Muffins" },
+    { "ingredientId": "cream-cheese", "quantity": 8, "unit": "oz", "note": "softened", "group": "Cream cheese swirl" },
+    { "ingredientId": "sugar", "quantity": 0.25, "unit": "cup", "group": "Cream cheese swirl" },
+    { "ingredientId": "vanilla-extract", "quantity": 1, "unit": "tsp", "group": "Cream cheese swirl" }
+  ],
+  "steps": [
+    {
+      "heading": "Prep",
+      "text": "Heat the oven to 375°F and grease a muffin pan."
+    },
+    {
+      "heading": "Dry",
+      "text": "In a large bowl, combine the flour, cinnamon, ginger, cardamom, nutmeg, baking soda and salt, and mix well. Set aside."
+    },
+    {
+      "heading": "Wet",
+      "text": "In a separate bowl, combine the applesauce, brown sugar, eggs, 1 tsp vanilla and the oil, and mix well."
+    },
+    {
+      "heading": "Combine",
+      "text": "Pour the dry mixture over the wet and mix well. Set aside."
+    },
+    {
+      "heading": "Cream Cheese",
+      "text": "In another bowl, mix the cream cheese, sugar and 1 tsp vanilla until smooth."
+    },
+    {
+      "heading": "Fill & Swirl",
+      "text": "Pour the batter into the muffin cups. Drop a small dollop of the cream cheese mixture into the center of each and swirl it slightly with a toothpick."
+    },
+    {
+      "heading": "Bake",
+      "text": "Bake for 18 minutes."
+    }
+  ]
+}

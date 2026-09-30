@@ -1,0 +1,42 @@
+{
+  "id": "zucchini-boats",
+  "title": "Zucchini Boats",
+  "description": "Hollowed zucchini filled with browned sausage, tomato, onion and the chopped zucchini insides, topped with Parmesan, mozzarella, breadcrumbs and parsley and baked.",
+  "servings": 6,
+  "prepMin": 20,
+  "cookMin": 30,
+  "restMin": 0,
+  "tags": ["main", "pork", "baked"],
+  "ingredients": [
+    { "ingredientId": "olive-oil", "quantity": 1, "unit": "tbsp" },
+    { "ingredientId": "ground-sausage", "quantity": 1, "unit": "lb" },
+    { "ingredientId": "garlic", "quantity": 1, "unit": "clove", "note": "minced" },
+    { "ingredientId": "yellow-onion", "quantity": 1, "unit": "each", "note": "small, diced" },
+    { "ingredientId": "tomato", "quantity": 2, "unit": "each", "note": "diced" },
+    { "ingredientId": "zucchini", "quantity": 3, "unit": "each", "note": "halved lengthwise, insides scooped out and chopped" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp", "note": "or to taste" },
+    { "ingredientId": "black-pepper", "quantity": 0.25, "unit": "tsp", "note": "or to taste" },
+    { "ingredientId": "parmesan", "quantity": 0.5, "unit": "cup", "group": "Topping" },
+    { "ingredientId": "mozzarella", "quantity": 0.5, "unit": "cup", "group": "Topping" },
+    { "ingredientId": "bread-crumbs", "quantity": 0.25, "unit": "cup", "group": "Topping" },
+    { "ingredientId": "fresh-parsley", "quantity": 2, "unit": "tbsp", "group": "Topping" }
+  ],
+  "steps": [
+    {
+      "heading": "Brown the Sausage",
+      "text": "Heat the oil in a pan and brown the sausage."
+    },
+    {
+      "heading": "Build the Filling",
+      "text": "Add the garlic, tomato, chopped zucchini insides and onion, and season with salt and pepper."
+    },
+    {
+      "heading": "Mix the Topping",
+      "text": "In a mixing bowl, combine the cheeses, parsley and breadcrumbs."
+    },
+    {
+      "heading": "Fill & Bake",
+      "text": "Set the zucchini halves in a baking dish, fill them with the meat mixture, and cover with the topping. Bake at 400°F for 20 minutes."
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "chicken-casserole",
+  "title": "Chicken Casserole",
+  "description": "One-dish chicken and rice: rice, cream of chicken soup and broth bake underneath seasoned chicken thighs, onion and green pepper.",
+  "servings": 6,
+  "prepMin": 15,
+  "cookMin": 45,
+  "restMin": 0,
+  "tags": ["main", "chicken", "baked"],
+  "ingredients": [
+    { "ingredientId": "white-rice", "quantity": 2, "unit": "cup", "note": "uncooked" },
+    { "ingredientId": "cream-of-chicken-soup", "quantity": 2, "unit": "can", "note": "or cream of broccoli" },
+    { "ingredientId": "broth", "quantity": 3.5, "unit": "cup", "note": "chicken — two 14.5 oz cans" },
+    { "ingredientId": "garlic-powder", "quantity": 1, "unit": "tsp", "note": "plus more for the chicken" },
+    { "ingredientId": "seasoned-salt", "quantity": 1, "unit": "tsp", "note": "plus more for the chicken" },
+    { "ingredientId": "chicken-thighs", "quantity": 2, "unit": "lb" },
+    { "ingredientId": "yellow-onion", "quantity": 1, "unit": "each", "note": "chopped" },
+    { "ingredientId": "green-bell-pepper", "quantity": 1, "unit": "each", "note": "chopped — or a head of broccoli" },
+    { "ingredientId": "olive-oil", "quantity": 1, "unit": "tbsp" }
+  ],
+  "steps": [
+    {
+      "heading": "Mix the Base",
+      "text": "Heat the oven to 350°F. Drizzle a large baking dish with a little olive oil. In the dish, stir together the rice, soup, broth, garlic powder and seasoned salt, then stir in the onion and green pepper."
+    },
+    {
+      "heading": "Add the Chicken",
+      "text": "Lay the chicken thighs on top and season them with more garlic powder and seasoned salt."
+    },
+    {
+      "heading": "Bake",
+      "text": "Cover tightly and bake for 30 to 45 minutes, until the rice is tender and the chicken is cooked through."
+    }
+  ],
+  "notes": "The original card gives no amounts for the chicken, onion, pepper or seasoning — the quantities here are a starting point. Uncooked rice can need closer to an hour: if it is still firm at 45 minutes, give it longer, still covered."
+}

@@ -1,0 +1,36 @@
+{
+  "id": "zucchini-soup",
+  "title": "Zucchini Soup",
+  "description": "A quick, light soup: grated zucchini simmered in tomato passata with garlic, finished with fresh herbs and grated Parmesan.",
+  "servings": 4,
+  "prepMin": 10,
+  "cookMin": 15,
+  "restMin": 0,
+  "tags": ["soup", "vegetarian", "gluten-free"],
+  "ingredients": [
+    { "ingredientId": "olive-oil", "quantity": 2, "unit": "tbsp" },
+    { "ingredientId": "garlic", "quantity": 2, "unit": "clove", "note": "finely sliced" },
+    { "ingredientId": "zucchini", "quantity": 4, "unit": "each", "note": "medium, grated" },
+    { "ingredientId": "tomato-sauce", "quantity": 2, "unit": "cup", "note": "tomato passata" },
+    { "ingredientId": "fresh-basil", "quantity": 0.5, "unit": "bunch", "note": "leaves picked — or flat-leaf parsley" },
+    { "ingredientId": "parmesan", "quantity": 0.25, "unit": "cup", "note": "grated, to serve" }
+  ],
+  "steps": [
+    {
+      "heading": "Garlic",
+      "text": "Heat the oil in a large saucepan and cook the garlic over high heat for 30 seconds, until just starting to brown."
+    },
+    {
+      "heading": "Zucchini",
+      "text": "Add the zucchini and cook, stirring, for a couple of minutes."
+    },
+    {
+      "heading": "Simmer",
+      "text": "Add the passata and 2 cups water and bring to a boil. Simmer for 7 to 8 minutes, until the zucchini is tender."
+    },
+    {
+      "heading": "Finish",
+      "text": "Taste and season, then toss through the herbs. Serve with cheese grated over the top."
+    }
+  ]
+}

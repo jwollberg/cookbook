@@ -1,0 +1,27 @@
+{
+  "id": "cinnamon-apples",
+  "title": "Cinnamon Apples",
+  "description": "Sliced apples tossed with brown sugar, cinnamon and nutmeg and simmered in butter until tender.",
+  "servings": 4,
+  "prepMin": 10,
+  "cookMin": 10,
+  "restMin": 0,
+  "tags": ["side", "dessert", "vegetarian", "gluten-free", "fall"],
+  "ingredients": [
+    { "ingredientId": "apple", "quantity": 4, "unit": "each", "note": "peeled and sliced" },
+    { "ingredientId": "brown-sugar", "quantity": 0.5, "unit": "cup", "note": "firmly packed" },
+    { "ingredientId": "ground-cinnamon", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "ground-nutmeg", "quantity": 0.25, "unit": "tsp" },
+    { "ingredientId": "butter", "quantity": 1, "unit": "tbsp" }
+  ],
+  "steps": [
+    {
+      "heading": "Toss",
+      "text": "Toss the apples, brown sugar, cinnamon and nutmeg together in a large zip-top bag until the apples are coated."
+    },
+    {
+      "heading": "Cook",
+      "text": "Cook the apple mixture with 2 tbsp water and the butter in a medium saucepan over medium heat, stirring occasionally, for 8 to 10 minutes, until the apples are tender."
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "lime-chicken-soft-tacos",
+  "title": "Lime-Chicken Soft Tacos",
+  "description": "Cubed chicken simmered with lime, red wine vinegar, garlic and oregano, served in warm flour tortillas with tomato, lettuce, Monterey Jack and salsa.",
+  "servings": 4,
+  "yieldNote": "10 tacos",
+  "prepMin": 15,
+  "cookMin": 30,
+  "restMin": 0,
+  "tags": ["main", "chicken"],
+  "ingredients": [
+    { "ingredientId": "chicken-breast", "quantity": 1.5, "unit": "lb", "note": "cubed" },
+    { "ingredientId": "red-wine-vinegar", "quantity": 2, "unit": "tbsp" },
+    { "ingredientId": "lime", "quantity": 0.5, "unit": "each", "note": "juiced" },
+    { "ingredientId": "sugar", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp" },
+    { "ingredientId": "black-pepper", "quantity": 0.5, "unit": "tsp" },
+    { "ingredientId": "green-onion", "quantity": 2, "unit": "each", "note": "chopped" },
+    { "ingredientId": "garlic", "quantity": 2, "unit": "clove", "note": "minced" },
+    { "ingredientId": "dried-oregano", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "flour-tortillas", "quantity": 10, "unit": "each" },
+    { "ingredientId": "tomato", "quantity": 1, "unit": "each", "note": "diced", "group": "To serve" },
+    { "ingredientId": "lettuce", "quantity": 0.25, "unit": "cup", "note": "shredded", "group": "To serve" },
+    { "ingredientId": "monterey-jack", "quantity": 0.25, "unit": "cup", "group": "To serve" },
+    { "ingredientId": "salsa", "quantity": 0.25, "unit": "cup", "group": "To serve" }
+  ],
+  "steps": [
+    {
+      "heading": "Cook the Chicken",
+      "text": "Sauté the chicken in a medium saucepan over medium-high heat for about 20 minutes."
+    },
+    {
+      "heading": "Season & Simmer",
+      "text": "Add the vinegar, lime juice, sugar, salt, pepper, green onion, garlic and oregano. Simmer for 10 minutes more."
+    },
+    {
+      "heading": "Warm the Tortillas",
+      "text": "Heat an iron skillet over medium heat. Warm each tortilla in the pan, turning once to heat the other side."
+    },
+    {
+      "heading": "Serve",
+      "text": "Fill the warm tortillas with the lime chicken and top with tomato, lettuce, cheese and salsa."
+    }
+  ]
+}

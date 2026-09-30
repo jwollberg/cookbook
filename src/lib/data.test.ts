@@ -208,6 +208,29 @@ describe("a multi-day plan with scaled entries", () => {
   });
 });
 
+/**
+ * Every recipe in the library on one list, staples included.
+ *
+ * The recipes mix units freely — butter in grams, tablespoons and cups;
+ * cream cheese in ounces and 8 oz packages; bacon in slices and ounces — so
+ * this is the check that every ingredient carries the density or count
+ * weight its recipes need. A split here is a missing factor, not a style
+ * choice.
+ */
+describe("the whole library on one list", () => {
+  const plan: MealPlan = {
+    id: "everything",
+    name: "Everything",
+    days: [{ date: "2026-08-10", entries: recipes.map((r) => ({ slot: "dinner" as const, recipeId: r.id })) }],
+  };
+  const dishes = expandPlan(plan, new Map(recipes.map((r) => [r.id, r])), new Map());
+  const list = buildShoppingList(dishes, new Map(ingredients.map((i) => [i.id, i])), { includeStaples: true });
+
+  it("merges every ingredient into a single line", () => {
+    expect(list.splitLines).toEqual([]);
+  });
+});
+
 describe("images", () => {
   it("points every recipe image at a file that exists", () => {
     const missing = recipes

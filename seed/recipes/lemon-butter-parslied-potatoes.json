@@ -1,0 +1,41 @@
+{
+  "id": "lemon-butter-parslied-potatoes",
+  "title": "Lemon Butter Parslied Potatoes",
+  "description": "Boiled red potatoes, sliced and browned in butter with lemon peel and juice, parsley and a last-minute hit of garlic.",
+  "servings": 2,
+  "prepMin": 10,
+  "cookMin": 25,
+  "restMin": 0,
+  "tags": ["side", "vegetarian", "gluten-free"],
+  "ingredients": [
+    { "ingredientId": "red-potato", "quantity": 1, "unit": "lb" },
+    { "ingredientId": "lemon", "quantity": 1, "unit": "each", "note": "small" },
+    { "ingredientId": "butter", "quantity": 2, "unit": "tbsp", "note": "unsalted" },
+    { "ingredientId": "fresh-parsley", "quantity": 2, "unit": "tbsp", "note": "chopped, divided" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp" },
+    { "ingredientId": "black-pepper", "quantity": 0.125, "unit": "tsp" },
+    { "ingredientId": "garlic", "quantity": 1, "unit": "clove", "note": "minced" }
+  ],
+  "steps": [
+    {
+      "heading": "Boil",
+      "text": "Put the potatoes in a 1½- to 2-quart saucepan with enough salted water to cover, and bring to a boil over high heat. Boil uncovered 8 to 10 minutes, until tender; drain."
+    },
+    {
+      "heading": "Slice",
+      "text": "When cool enough to handle, cut the potatoes into scant ½-inch slices."
+    },
+    {
+      "heading": "Lemon",
+      "text": "Grate 1 tsp peel from the lemon and squeeze 1 tsp juice."
+    },
+    {
+      "heading": "Brown",
+      "text": "Melt the butter in a 12-inch nonstick skillet over medium-high heat. Add the lemon peel and juice, 1 tbsp of the parsley, the salt, pepper and potatoes, and cook 4 to 5 minutes, stirring often, until the potatoes begin to brown."
+    },
+    {
+      "heading": "Finish",
+      "text": "Add the garlic and cook 1 minute. Sprinkle with the remaining parsley to serve."
+    }
+  ]
+}

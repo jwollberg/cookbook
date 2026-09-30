@@ -1,0 +1,53 @@
+{
+  "id": "peach-cobbler-coffee-cake",
+  "title": "Peach Cobbler Coffee Cake",
+  "description": "Sour cream coffee cake layered with peach pie filling and sliced peaches, under an oat crumble and a drizzle of glaze.",
+  "servings": 15,
+  "yieldNote": "one 13x9 cake",
+  "prepMin": 25,
+  "cookMin": 75,
+  "restMin": 0,
+  "tags": ["dessert", "vegetarian", "baked"],
+  "ingredients": [
+    { "ingredientId": "butter", "quantity": 1, "unit": "cup", "note": "softened", "group": "Cake" },
+    { "ingredientId": "sugar", "quantity": 1, "unit": "cup", "group": "Cake" },
+    { "ingredientId": "egg", "quantity": 2, "unit": "each", "group": "Cake" },
+    { "ingredientId": "vanilla-extract", "quantity": 3, "unit": "tsp", "group": "Cake" },
+    { "ingredientId": "all-purpose-flour", "quantity": 3, "unit": "cup", "group": "Cake" },
+    { "ingredientId": "baking-powder", "quantity": 1, "unit": "tsp", "group": "Cake" },
+    { "ingredientId": "baking-soda", "quantity": 1, "unit": "tsp", "group": "Cake" },
+    { "ingredientId": "sea-salt", "quantity": 0.5, "unit": "tsp", "group": "Cake" },
+    { "ingredientId": "sour-cream", "quantity": 1.25, "unit": "cup", "group": "Cake" },
+    { "ingredientId": "peach-pie-filling", "quantity": 1, "unit": "can", "note": "21 oz", "group": "Cake" },
+    { "ingredientId": "canned-peaches", "quantity": 1, "unit": "can", "note": "15¼ oz, drained", "group": "Cake" },
+    { "ingredientId": "brown-sugar", "quantity": 1, "unit": "cup", "note": "packed", "group": "Topping" },
+    { "ingredientId": "all-purpose-flour", "quantity": 1, "unit": "cup", "group": "Topping" },
+    { "ingredientId": "rolled-oats", "quantity": 0.5, "unit": "cup", "note": "quick-cooking", "group": "Topping" },
+    { "ingredientId": "ground-cinnamon", "quantity": 0.25, "unit": "tsp", "group": "Topping" },
+    { "ingredientId": "butter", "quantity": 0.5, "unit": "cup", "note": "cold, cubed", "group": "Topping" },
+    { "ingredientId": "powdered-sugar", "quantity": 1, "unit": "cup", "group": "Glaze" },
+    { "ingredientId": "milk", "quantity": 2, "unit": "tbsp", "note": "2% — 1 to 2 tbsp", "group": "Glaze" }
+  ],
+  "steps": [
+    {
+      "heading": "Batter",
+      "text": "In a large bowl, cream the butter and sugar until light and fluffy. Add the eggs one at a time, beating well after each, then beat in the vanilla. Combine the flour, baking powder, baking soda and salt, and add to the creamed mixture alternately with the sour cream. Beat just until combined."
+    },
+    {
+      "heading": "Layer",
+      "text": "Pour half the batter into a greased 13x9-inch baking dish. Combine the pie filling and peaches and spread over the batter. Drop the remaining batter by tablespoonfuls over the filling."
+    },
+    {
+      "heading": "Topping",
+      "text": "Combine the brown sugar, flour, oats and cinnamon in a bowl. Cut in the butter until crumbly and sprinkle over the batter."
+    },
+    {
+      "heading": "Bake",
+      "text": "Bake at 350°F for 70 to 75 minutes, until a toothpick inserted near the center comes out clean. Cool on a wire rack."
+    },
+    {
+      "heading": "Glaze",
+      "text": "In a small bowl, combine the powdered sugar with enough milk to reach a drizzling consistency, and drizzle over the cake."
+    }
+  ]
+}

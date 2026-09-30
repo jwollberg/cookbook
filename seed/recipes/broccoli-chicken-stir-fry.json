@@ -1,0 +1,40 @@
+{
+  "id": "broccoli-chicken-stir-fry",
+  "title": "Broccoli and Chicken Stir Fry",
+  "description": "Chicken and broccoli in a quick honey-soy sauce with fresh garlic and ginger, thickened glossy with a cornstarch slurry. Serve over rice.",
+  "servings": 4,
+  "prepMin": 15,
+  "cookMin": 20,
+  "restMin": 0,
+  "tags": ["main", "chicken", "skillet"],
+  "ingredients": [
+    { "ingredientId": "olive-oil", "quantity": 5, "unit": "tbsp", "note": "divided" },
+    { "ingredientId": "chicken-breast", "quantity": 1, "unit": "lb", "note": "cubed" },
+    { "ingredientId": "broccoli", "quantity": 3, "unit": "cup", "note": "cut into small florets" },
+    { "ingredientId": "sea-salt", "quantity": 0.125, "unit": "tsp", "note": "a dash" },
+    { "ingredientId": "black-pepper", "quantity": 0.125, "unit": "tsp", "note": "a dash" },
+    { "ingredientId": "garlic", "quantity": 3, "unit": "clove", "note": "minced (about 1 tbsp)" },
+    { "ingredientId": "fresh-ginger", "quantity": 1, "unit": "tbsp", "note": "minced" },
+    { "ingredientId": "soy-sauce", "quantity": 0.25, "unit": "cup", "note": "low sodium", "group": "Sauce" },
+    { "ingredientId": "honey", "quantity": 0.25, "unit": "cup", "group": "Sauce" },
+    { "ingredientId": "cornstarch", "quantity": 1, "unit": "tbsp", "group": "Cornstarch slurry" }
+  ],
+  "steps": [
+    {
+      "heading": "Cook the Broccoli",
+      "text": "Heat 3 tbsp of the oil in a skillet. Once hot, add the broccoli and cook until soft, about 5 minutes (add 2 tbsp water while it cooks if you like it softer). Move to a plate."
+    },
+    {
+      "heading": "Cook the Chicken",
+      "text": "Add the remaining 2 tbsp oil and the chicken to the skillet, sprinkle with salt and pepper, and cook until the chicken reaches 165°F."
+    },
+    {
+      "heading": "Mix the Sauce",
+      "text": "In a small bowl, whisk the soy sauce and honey with ¼ cup water. Separately, mix the cornstarch with 2 tbsp water."
+    },
+    {
+      "heading": "Bring It Together",
+      "text": "Add the ginger and garlic to the chicken and stir until fragrant. Return the broccoli, pour in the sauce and the slurry, and stir until thickened. Serve over rice."
+    }
+  ]
+}

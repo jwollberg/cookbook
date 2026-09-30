@@ -1,0 +1,46 @@
+{
+  "id": "chocolate-crusted-new-york-cheesecake",
+  "title": "Chocolate Crusted New York Cheesecake",
+  "description": "Dense New York cheesecake on a chocolate graham crust, baked an hour and left to cool slowly in the oven so it sets without cracking.",
+  "servings": 12,
+  "prepMin": 30,
+  "cookMin": 60,
+  "restMin": 600,
+  "tags": ["dessert", "vegetarian", "baked", "make-ahead"],
+  "ingredients": [
+    { "ingredientId": "graham-crackers", "quantity": 15, "unit": "each", "note": "crushed", "group": "Crust" },
+    { "ingredientId": "butter", "quantity": 0.333, "unit": "cup", "note": "melted", "group": "Crust" },
+    { "ingredientId": "sugar", "quantity": 0.333, "unit": "cup", "group": "Crust" },
+    { "ingredientId": "cocoa-powder", "quantity": 0.333, "unit": "cup", "group": "Crust" },
+    { "ingredientId": "cream-cheese", "quantity": 4, "unit": "package", "note": "8 oz each, softened", "group": "Filling" },
+    { "ingredientId": "sugar", "quantity": 1.5, "unit": "cup", "group": "Filling" },
+    { "ingredientId": "milk", "quantity": 0.75, "unit": "cup", "group": "Filling" },
+    { "ingredientId": "egg", "quantity": 4, "unit": "each", "group": "Filling" },
+    { "ingredientId": "sour-cream", "quantity": 1, "unit": "package", "note": "small (8 oz) container", "group": "Filling" },
+    { "ingredientId": "vanilla-extract", "quantity": 1, "unit": "tbsp", "group": "Filling" },
+    { "ingredientId": "all-purpose-flour", "quantity": 0.25, "unit": "cup", "group": "Filling" }
+  ],
+  "steps": [
+    {
+      "heading": "Prep",
+      "text": "Set the filling ingredients out to come to room temperature. Heat the oven to 350°F and grease the bottom and sides of a 9-inch springform pan."
+    },
+    {
+      "heading": "Crust",
+      "text": "In a food processor, combine the graham crackers, sugar and cocoa powder, then move to a medium bowl. Add the butter slowly and mix until the texture is even — it should clump together and hold its shape; if not, add a little more butter. Press firmly into the bottom of the pan, spreading evenly and keeping the sides clean. Set aside."
+    },
+    {
+      "heading": "Filling",
+      "text": "In a large bowl, mix the cream cheese and sugar evenly (with an electric mixer, only until smooth — over-mixing whips in too much air). Add the milk, vanilla and sour cream and mix by hand until incorporated. Add the eggs one at a time, mixing by hand between each. Add the flour and mix by hand until smooth."
+    },
+    {
+      "heading": "Bake",
+      "text": "Set the springform pan on a cookie sheet. Pour in the filling and smooth the surface with a spoon, then tap the pan for a bit to bring air bubbles to the surface. Bake for 1 hour."
+    },
+    {
+      "heading": "Cool Slowly",
+      "text": "Turn the oven off and leave the cheesecake inside with the door closed for about 5 hours. Once cool, remove the pan sides and slide onto a serving dish. Refrigerate at least 4 to 5 hours more before serving."
+    }
+  ],
+  "notes": "For a regular crust, leave out the cocoa and sugar and use only 2 to 3 tbsp butter. Chocolate chips or other mix-ins can be stirred into the filling after the flour."
+}

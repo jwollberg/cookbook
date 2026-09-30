@@ -1,0 +1,52 @@
+{
+  "id": "pumpkin-mac-and-cheese",
+  "title": "Pumpkin Mac and Cheese",
+  "description": "Roasted, sage-seasoned pumpkin folded through a white cheddar sauce — a third of it blended in to make the sauce silky, the rest left in cubes — then baked under a cheese crust.",
+  "servings": 4,
+  "prepMin": 25,
+  "cookMin": 40,
+  "restMin": 0,
+  "tags": ["main", "vegetarian", "baked", "pasta", "fall"],
+  "ingredients": [
+    { "ingredientId": "pie-pumpkin", "quantity": 1, "unit": "each", "note": "peeled, seeded and cut into 1-inch cubes" },
+    { "ingredientId": "olive-oil", "quantity": 2, "unit": "tbsp" },
+    { "ingredientId": "sea-salt", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "black-pepper", "quantity": 2, "unit": "tsp", "note": "divided" },
+    { "ingredientId": "dried-sage", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "ground-nutmeg", "quantity": 0.25, "unit": "tsp" },
+    { "ingredientId": "garlic-powder", "quantity": 1, "unit": "tsp" },
+    { "ingredientId": "butter", "quantity": 40, "unit": "g" },
+    { "ingredientId": "all-purpose-flour", "quantity": 40, "unit": "g" },
+    { "ingredientId": "milk", "quantity": 600, "unit": "ml" },
+    { "ingredientId": "cheddar", "quantity": 250, "unit": "g", "note": "white cheddar — divided" },
+    { "ingredientId": "parmesan", "quantity": 50, "unit": "g", "note": "shredded, divided" },
+    { "ingredientId": "mozzarella", "quantity": 50, "unit": "g" },
+    { "ingredientId": "elbow-macaroni", "quantity": 4, "unit": "oz", "note": "dry — about 250 g once cooked" }
+  ],
+  "steps": [
+    {
+      "heading": "Roast the Pumpkin",
+      "text": "Heat the oven to 375°F. On a baking sheet, toss the pumpkin cubes with the oil, salt, 1 tsp of the pepper, the sage and the garlic powder. Roast for 20 minutes."
+    },
+    {
+      "heading": "Cook the Pasta",
+      "text": "Meanwhile, cook the macaroni in well-salted boiling water until just tender, then drain."
+    },
+    {
+      "heading": "Make the Sauce",
+      "text": "While the pumpkin roasts, melt the butter in a large oven-safe skillet. Mix in the flour slowly and stir well, then add the milk a little at a time, mixing well after each addition. Heat until thickened, then season with the nutmeg and the remaining 1 tsp pepper."
+    },
+    {
+      "heading": "Add the Cheese",
+      "text": "Stir in 200 g of the cheddar and 25 g of the Parmesan until melted and smooth."
+    },
+    {
+      "heading": "Fold It Together",
+      "text": "Blend a third of the roasted pumpkin until smooth and stir it into the sauce. Add the rest of the cubes and stir to coat, then add the macaroni and stir to coat."
+    },
+    {
+      "heading": "Bake",
+      "text": "Top with the remaining cheddar, Parmesan and the mozzarella. Raise the oven to 400°F and bake for 10 minutes, until melted and bubbling."
+    }
+  ]
+}
