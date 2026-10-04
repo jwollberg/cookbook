@@ -171,6 +171,15 @@
   .as-end .pill-button {
     max-width: 150px;
   }
+  /* Like the shell's own menus: full-width under the bar, not hanging off the
+     household button (which ran off the left edge). */
+  .as-end .menu-panel {
+    position: fixed;
+    top: 64px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
 }
 
 /* ---------------------------------------------------------------------

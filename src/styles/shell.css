@@ -118,6 +118,9 @@
   background: var(--as-card); border: 1px solid var(--as-line); border-radius: var(--as-r); box-shadow: var(--as-shadow-lg);
   padding: 8px; display: grid; gap: 2px;
 }
+/* On a phone the bar is full, so its menus drop down full-width under it instead of hanging
+   off their button (which pushed the switcher's card off the left edge). */
+@media (max-width: 760px) { .as-menu { position: fixed; top: 64px; left: 12px; right: 12px; width: auto; } }
 .as-menu-h { font: 700 11.5px/1 var(--as-font); color: var(--as-muted); text-transform: uppercase; letter-spacing: 0.06em; padding: 8px 10px 6px; }
 .as-app { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; padding: 8px 10px; border-radius: 12px; text-decoration: none; color: var(--as-ink); }
 .as-app:hover { background: var(--as-sunk); }
