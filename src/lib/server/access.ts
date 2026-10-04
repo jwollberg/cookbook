@@ -43,7 +43,17 @@ const enc = new TextEncoder();
 
 export interface AccessClaims {
   email: string;
+  /**
+   * From the Google login itself: Access → Identity providers → Google → OIDC
+   * Claims ("picture", "name") puts them in the token's `custom` claim. Absent
+   * on a token issued before that was set up, until the next sign-in.
+   */
+  name?: string;
+  picture?: string;
 }
+
+/** Only Google's own photo host — this URL ends up in an <img>. */
+const GOOGLE_PHOTO = /^https:\/\/lh3\.googleusercontent\.com\//;
 
 export async function verifyAccessJwt(
   token: string | null | undefined,
@@ -63,6 +73,7 @@ export async function verifyAccessJwt(
       nbf?: number;
       iss?: string;
       email?: string;
+      custom?: { name?: unknown; picture?: unknown };
     };
     if (header.alg !== "RS256" || !header.kid) return null;
 
@@ -96,7 +107,12 @@ export async function verifyAccessJwt(
       return null;
     }
     if (typeof payload.email !== "string" || !payload.email) return null;
-    return { email: payload.email };
+    const custom = payload.custom ?? {};
+    return {
+      email: payload.email,
+      name: typeof custom.name === "string" && custom.name.trim() ? custom.name.trim().slice(0, 80) : undefined,
+      picture: typeof custom.picture === "string" && GOOGLE_PHOTO.test(custom.picture) ? custom.picture : undefined,
+    };
   } catch {
     return null;
   }

@@ -152,6 +152,23 @@ export async function userForEmail(db: D1Database, email: string): Promise<Viewe
 }
 
 /**
+ * Keep a person's photo and name in step with their Google account, as the
+ * login passes them along. Writes only when something changed, which is
+ * almost never.
+ */
+export async function refreshProfile(
+  db: D1Database,
+  viewer: Viewer,
+  from: { name?: string; picture?: string },
+): Promise<Viewer> {
+  const name = from.name ?? viewer.name;
+  const picture = from.picture ?? viewer.picture;
+  if (name === viewer.name && picture === viewer.picture) return viewer;
+  await db.prepare("UPDATE users SET name = ?, picture = ? WHERE id = ?").bind(name, picture, viewer.id).run();
+  return { ...viewer, name, picture };
+}
+
+/**
  * "Josh's Kitchen", from the name Google gave us or, for someone who arrived
  * through Access (which sends only the address), the address's first word.
  */

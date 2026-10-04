@@ -105,6 +105,17 @@ describe("Cloudflare Access token", () => {
     expect(await verifyAccessJwt(await token({}, keys.privateKey, "unknown-kid"), env)).toBeNull();
   });
 
+  it("reads the Google photo and name, and only a photo from Google's photo host", async () => {
+    const pic = "https://lh3.googleusercontent.com/a/abc=s96-c";
+    expect(await verifyAccessJwt(await token({ custom: { picture: pic, name: " Sam Cook " } }), env)).toEqual({
+      email: "sam.cook@gmail.com",
+      name: "Sam Cook",
+      picture: pic,
+    });
+    const odd = await verifyAccessJwt(await token({ custom: { picture: "https://evil.example/x.png" } }), env);
+    expect(odd?.picture).toBeUndefined();
+  });
+
   it("fails closed when it isn't set up or there is no token", async () => {
     const good = await token();
     expect(await verifyAccessJwt(good, { ACCESS_TEAM_DOMAIN: TEAM })).toBeNull();

@@ -17,7 +17,7 @@ import { defineMiddleware } from "astro:middleware";
 import { accessToken, verifyAccessJwt } from "./lib/server/access";
 import { isAllowed } from "./lib/server/auth";
 import { DEV_USER } from "./lib/server/context";
-import { ensureHousehold, loadViewer, upsertUser, userForEmail } from "./lib/server/db";
+import { ensureHousehold, loadViewer, refreshProfile, upsertUser, userForEmail } from "./lib/server/db";
 
 const PUBLIC = [/^\/robots\.txt$/];
 /** The old sign-in pages. Access signs people in now; send old bookmarks home. */
@@ -61,7 +61,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     if (!claims || !isAllowed(claims.email, env.ALLOWED_EMAILS)) {
       return refuse(url.pathname, "This account isn't on the list. Ask Josh to add you.");
     }
-    viewer = await userForEmail(env.DB, claims.email);
+    viewer = await refreshProfile(env.DB, await userForEmail(env.DB, claims.email), claims);
     locals.owner = isAllowed(claims.email, env.OWNER_EMAILS);
   }
 
