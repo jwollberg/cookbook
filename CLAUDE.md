@@ -8,7 +8,7 @@ cooking sheet + one aggregated shopping list.
 - **Sibling property:** `jwollberg/atheosstudios` owns `atheosstudios.com`. Separate repo, separate
   hosting. Never edit one expecting the other to change.
 - Same stack as Homeschool Hero (`C:\Projects\Homeschool Hero`): Workers + static assets (not
-  Pages), D1, R2, Google OAuth done server-side.
+  Pages), D1, R2. Sign-in is Cloudflare Access (see below).
 
 ## Architecture
 
@@ -45,26 +45,32 @@ Browser ──► Cloudflare Worker (Astro SSR via @astrojs/cloudflare)
 
 ## Sign-in and access
 
-- **Google OAuth 2.0 authorization code + PKCE, server-side** (`src/pages/auth/*`,
-  `src/lib/server/auth.ts`). The browser only ever holds our own signed session cookie
-  (`__Host-kitchen_session`, HMAC-SHA256 with `SESSION_SECRET`, 30 days). Rotating the secret signs
-  everyone out.
-- **Closed by default.** Only addresses in the `ALLOWED_EMAILS` secret may sign in, compared the way
-  Gmail does (dots and `+tags` ignored). An empty or missing list admits nobody. The list is checked
-  on **every request**, not only at sign-in, so removing someone locks them out immediately.
-- The Google OAuth client is in *Testing* mode, so an address must **also** be a test user in the
-  Google console — a second, separate gate. Adding someone means both: `ALLOWED_EMAILS` and a test
-  user.
-- Google Cloud project `kitchen-atheos` ("Kitchen"), under Josh's personal Google account (no
-  organization). Google Auth Platform: External, Testing, OAuth web client "Kitchen web" with
-  redirect URIs `https://kitchen.atheosstudios.com/auth/callback`,
-  `http://127.0.0.1:4321/auth/callback` and `http://localhost:4321/auth/callback`. OAuth clients
-  cannot be created from a CLI (the IAP OAuth Admin API is gone) — the console is the only route.
-  A lost client secret is replaced from the client's page ("Add secret"), then
-  `npx wrangler secret put GOOGLE_CLIENT_SECRET`.
-- Writes must carry a same-origin `Origin` header (middleware), on top of SameSite=Lax cookies.
-- `/auth/dev` and the "Continue as Dev Cook" button exist only under `import.meta.env.DEV`; the
-  production bundle compiles them out. Never add a bypass that is not behind that constant.
+- **Cloudflare Access does the sign-in** — Google, the one login shared by every Atheos app
+  (Home, Budget, the trackers). Access app "Kitchen" on `kitchen.atheosstudios.com`, policy
+  "Household (Josh, Reagen, Gwen)", Google as the only identity provider, 30-day sessions. Team
+  domain `atheosstudios.cloudflareaccess.com`. The Google OAuth client behind it lives in the
+  Google project `atheos-access` (Testing mode, so a new person must also be a **test user**
+  there).
+- **The Worker re-checks everything** (`src/middleware.ts`, `src/lib/server/access.ts`): the
+  Access JWT's signature against the team's keys, its audience (`ACCESS_AUD`), issuer and expiry,
+  then the email against `ALLOWED_EMAILS` (compared the way Gmail does). Anything missing or
+  wrong fails closed (403), so a mistake in the Access policy still lets nobody in. The list is
+  checked on **every request**, so removing someone locks them out immediately.
+- **Adding someone = three places:** the Access policy, `ALLOWED_EMAILS`
+  (`npx wrangler secret put ALLOWED_EMAILS`), and a test user in `atheos-access`.
+- People are matched **by email** (`userForEmail` in `db.ts`): users from the old Google-OAuth
+  days are keyed by their Google `sub`, newcomers by a random id. Access sends only the address,
+  so a newcomer's household is named from it ("Gwenevere's Kitchen") — rename it on /household.
+- `OWNER_EMAILS` (Josh) sees every app in the app switcher; everyone else sees Home and Kitchen.
+- Sign out is `/cdn-cgi/access/logout`. The old `/login` and `/auth/*` pages are gone and
+  redirect home. (`kitchen-atheos`, the Google project the old login used, is no longer needed.)
+- The dev server signs you in as "Dev Cook" (`import.meta.env.DEV`, compiled out of builds).
+  Never add a bypass that is not behind that constant.
+- Writes must carry a same-origin `Origin` header (middleware).
+- **Glance:** `src/worker.ts` exports a `Glance` RPC entrypoint (`summary({ email, today })` →
+  household, tonight's dishes, planned days, list count) for Kitchen's tile on
+  home.atheosstudios.com. Only another Worker in the account can call it, through a service
+  binding; it still answers only for people on `ALLOWED_EMAILS`.
 
 ## Households
 
@@ -147,7 +153,10 @@ length while cooking, and one-handed on a phone in a supermarket aisle.
   food. One accent, burnt orange `#c2410c`. Every text colour clears AA on every surface it sits on.
 - Soft radii, hairlines rather than boxes, generous space. Photos do the talking: recipe cards are
   image + title, with a one-tap "+" to put the recipe on the list.
-- Phones get a bottom tab bar (thumb reach); desktop gets the top nav.
+- **The frame is the shared Atheos app shell** (`src/styles/shell.css`, `src/lib/apps.json`; the
+  canonical copy is `C:ProjectsWebsitesWebsite-Homeapp-shell`). Kitchen's colors: the
+  orange as `--app`, and the shell's neutrals mapped to Kitchen's warm ones in `global.css`.
+  Phones get the floating tab bar (thumb reach); desktop gets the nav in the top bar.
 - Quantities use tabular numerals in a **fixed-width** column (`.ing-qty`, `.shop-row`) so every
   name starts at the same x. A list that doesn't align has to be read line by line.
 - Min 44px tap targets: this gets used one-handed with wet hands.
@@ -166,10 +175,8 @@ npm run db:migrate:local  # / db:migrate:remote — apply migrations/
 npm run db:seed:local     # / db:seed:remote — load seed/ (never overwrites existing records)
 ```
 
-First run locally: `npm run db:migrate:local && npm run db:seed:local && npm run dev`, then use
-"Continue as Dev Cook" on the sign-in page. `.dev.vars` (gitignored) may hold `SESSION_SECRET`,
-`ALLOWED_EMAILS`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` for testing real sign-in locally
-(redirect URI `http://127.0.0.1:4321/auth/callback`).
+First run locally: `npm run db:migrate:local && npm run db:seed:local && npm run dev` — the dev
+server signs you in as Dev Cook; there is no sign-in page.
 
 ## Deploying — pushing to `main` deploys
 
@@ -180,7 +187,7 @@ exercised. Non-production branches build but do not deploy.
 
 - **Migrations are not part of the build.** `npm run db:migrate:remote` is manual; apply a
   migration *after* the code that tolerates it is live, or ship code that handles both shapes.
-- Secrets are set with `npx wrangler secret put <NAME>`: `GOOGLE_CLIENT_ID`,
-  `GOOGLE_CLIENT_SECRET`, `SESSION_SECRET`, `ALLOWED_EMAILS` (comma-separated).
+- Secrets are set with `npx wrangler secret put <NAME>`: `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`,
+  `ALLOWED_EMAILS`, `OWNER_EMAILS` (comma-separated emails).
 - DNS is Cloudflare. `kitchen.atheosstudios.com` is a Workers custom domain (a "Worker" record),
   declared in `wrangler.jsonc` `routes`.

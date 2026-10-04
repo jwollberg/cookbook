@@ -17,8 +17,8 @@
   },
 
   "routes": [{ "pattern": "kitchen.atheosstudios.com", "custom_domain": true }],
-  // One address only. Sign-in is bound to it (the OAuth redirect URI), so a
-  // workers.dev or preview URL could only ever show the sign-in page anyway.
+  // One address only: Cloudflare Access guards this hostname, and a workers.dev
+  // or preview URL would not be behind it (the Worker would refuse, too).
   "workers_dev": false,
   "preview_urls": false,
 
@@ -44,9 +44,9 @@
     "APP_URL": "https://kitchen.atheosstudios.com"
   }
 
-  // Secrets (`wrangler secret put <NAME>` in production, .dev.vars locally):
-  //   GOOGLE_CLIENT_ID      OAuth web client, Google Auth Platform
-  //   GOOGLE_CLIENT_SECRET
-  //   SESSION_SECRET        signs the session cookie; rotating it signs everyone out
-  //   ALLOWED_EMAILS        comma-separated; the only accounts that may sign in
+  // Secrets (`wrangler secret put <NAME>`), none of them sensitive keys:
+  //   ACCESS_TEAM_DOMAIN    atheosstudios.cloudflareaccess.com (Cloudflare Access does the sign-in)
+  //   ACCESS_AUD            the Kitchen Access application's audience tag
+  //   ALLOWED_EMAILS        comma-separated; the only accounts that may use Kitchen
+  //   OWNER_EMAILS          who sees every Atheos app in the switcher (Josh)
 }
