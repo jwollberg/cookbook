@@ -45,6 +45,8 @@ export default defineConfig({
   adapter: cloudflare({
     // `astro dev` gets real local D1 and R2 bindings from wrangler.jsonc.
     platformProxy: { enabled: true },
+    // Our own entry adds `Glance`, the RPC entrypoint Home's Kitchen tile calls.
+    workerEntryPoint: { path: "src/worker.ts", namedExports: ["Glance"] },
   }),
   integrations: [react()],
 

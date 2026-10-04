@@ -1,23 +1,25 @@
 ---
+/**
+ * Kitchen's frame — the shared Atheos app shell (canonical copy in
+ * C:\Projects\Websites\Website-Home\app-shell): brand, nav, household,
+ * app switcher, account, and the floating tab bar on phones.
+ */
+import "../styles/shell.css";
 import "../styles/global.css";
 import Icon from "../components/Icon";
+import registry from "../lib/apps.json";
+import { SIGN_OUT_URL } from "../lib/server/access";
 import { countList, listHouseholds } from "../lib/server/db";
 
 interface Props {
   title: string;
   description?: string;
-  /** The sign-in page: no navigation, nobody to show it to. */
-  bare?: boolean;
 }
 
-const {
-  title,
-  description = "Recipes, meal plans, and a shopping list that adds itself up.",
-  bare = false,
-} = Astro.props;
+const { title, description = "Recipes, meal plans, and a shopping list that adds itself up." } = Astro.props;
 
-const { viewer, household } = Astro.locals;
-const signedIn = !bare && Boolean(viewer && household);
+const { viewer, household, owner } = Astro.locals;
+const signedIn = Boolean(viewer && household);
 const db = Astro.locals.runtime.env.DB;
 const [households, listCount] = signedIn
   ? await Promise.all([listHouseholds(db), countList(db, household.id)])
@@ -38,6 +40,12 @@ const nav = [
 
 const initial = (viewer?.name ?? viewer?.email ?? "?").trim().charAt(0).toUpperCase();
 const pageTitle = title === "Kitchen" ? title : `${title} · Kitchen`;
+
+// The app switcher shows only the apps this person can open.
+const apps = registry.apps.filter((a) => owner || a.who === "household");
+const self = registry.apps.find((a) => a.id === "kitchen")!;
+const svg = (inner: string) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
 ---
 
 <!doctype html>
@@ -55,24 +63,22 @@ const pageTitle = title === "Kitchen" ? title : `${title} · Kitchen`;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=Inter+Tight:wght@600..800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..750&family=Inter+Tight:wght@600..800&display=swap"
     />
   </head>
-  <body class={signedIn ? "has-tabbar" : undefined}>
+  <body class={signedIn ? "as-has-tabbar" : undefined}>
     <a class="skip" href="#main">Skip to content</a>
 
     {
       signedIn && (
-        <header class="topbar">
-          <div class="wrap topbar-inner">
-            <a class="brand" href="/">
-              <span class="brand-mark">
-                <Icon name="pot" />
-              </span>
+        <header class="as-top">
+          <div class="as-top-in">
+            <a class="as-brand" href="/">
+              <span class="as-mark" set:html={svg(self.icon)} />
               Kitchen
             </a>
 
-            <nav class="topnav" aria-label="Primary">
+            <nav class="as-nav" aria-label="Primary">
               {nav.map((item) => (
                 <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
                   {item.label}
@@ -85,7 +91,7 @@ const pageTitle = title === "Kitchen" ? title : `${title} · Kitchen`;
               ))}
             </nav>
 
-            <div class="topbar-end">
+            <div class="as-end">
               <details class="menu" data-menu>
                 <summary class="pill-button" aria-label={`Household: ${household.name}. Switch household`}>
                   <Icon name="home" />
@@ -113,10 +119,30 @@ const pageTitle = title === "Kitchen" ? title : `${title} · Kitchen`;
                 </div>
               </details>
 
+              <details class="as-switch" data-menu>
+                <summary class="as-round" aria-label="Switch app" set:html={svg(registry.switcherIcon)} />
+                <nav class="as-menu" aria-label="Apps">
+                  {apps.map((a) => (
+                    <a
+                      class="as-app"
+                      href={a.url}
+                      aria-current={a.id === "kitchen" ? "true" : undefined}
+                      style={`--c:${a.light.app};--cd:${a.dark.app}`}
+                    >
+                      <span class="as-mark" set:html={svg(a.icon)} />
+                      <span>
+                        <b>{a.name}</b>
+                        <small>{a.blurb}</small>
+                      </span>
+                    </a>
+                  ))}
+                </nav>
+              </details>
+
               <details class="menu" data-menu>
-                <summary class="avatar" aria-label="Account">
+                <summary class="as-round as-avatar" aria-label="Account">
                   {viewer.picture ? (
-                    <img src={viewer.picture} alt="" referrerpolicy="no-referrer" width="36" height="36" />
+                    <img src={viewer.picture} alt="" referrerpolicy="no-referrer" width="38" height="38" />
                   ) : (
                     initial
                   )}
@@ -139,12 +165,10 @@ const pageTitle = title === "Kitchen" ? title : `${title} · Kitchen`;
                     <span class="grow">Households</span>
                   </a>
                   <div class="menu-sep" />
-                  <form method="post" action="/auth/logout">
-                    <button class="menu-item">
-                      <Icon name="logout" />
-                      <span class="grow">Sign out</span>
-                    </button>
-                  </form>
+                  <a class="menu-item" href={SIGN_OUT_URL}>
+                    <Icon name="logout" />
+                    <span class="grow">Sign out</span>
+                  </a>
                 </div>
               </details>
             </div>
@@ -173,10 +197,10 @@ const pageTitle = title === "Kitchen" ? title : `${title} · Kitchen`;
 
     {
       signedIn && (
-        <nav class="tabbar" aria-label="Primary">
+        <nav class="as-tabbar" aria-label="Primary">
           <a href="/" aria-current={isActive("/") ? "page" : undefined}>
-            <Icon name="home" />
-            Home
+            <Icon name="pot" />
+            Today
           </a>
           {nav.map((item) => (
             <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
@@ -195,7 +219,8 @@ const pageTitle = title === "Kitchen" ? title : `${title} · Kitchen`;
 
     <script is:inline>
       // Menus are <details>: they open with no JavaScript at all. This only
-      // closes them on an outside click or Escape, like a menu should.
+      // closes them on an outside click or Escape, like a menu should — and
+      // one menu opening closes the others.
       document.addEventListener("click", (event) => {
         document.querySelectorAll("details[data-menu][open]").forEach((menu) => {
           if (!menu.contains(event.target)) menu.removeAttribute("open");

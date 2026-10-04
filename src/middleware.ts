@@ -1,5 +1,12 @@
 /**
- * The sign-in gate. Every page and API route passes through here.
+ * The gate. Every page and API route passes through here.
+ *
+ * In production Cloudflare Access stands in front of the whole hostname and
+ * does the Google sign-in (the same login as every other Atheos app). It signs
+ * each request it lets through; we check that signature again here and the
+ * email against ALLOWED_EMAILS, so a mistake in the Access policy still lets
+ * nobody in. The dev server (import.meta.env.DEV, compiled out of a build)
+ * signs you in as the local Dev Cook instead.
  *
  * Static files (JS, CSS, the starter photos) are served by Cloudflare before
  * the Worker runs and never reach this — which is exactly why nothing private
@@ -7,37 +14,58 @@
  */
 
 import { defineMiddleware } from "astro:middleware";
-import { isAllowed, readSession } from "./lib/server/auth";
-import { isDevViewer, sessionSecret } from "./lib/server/context";
-import { ensureHousehold, loadViewer } from "./lib/server/db";
+import { accessToken, verifyAccessJwt } from "./lib/server/access";
+import { isAllowed } from "./lib/server/auth";
+import { DEV_USER } from "./lib/server/context";
+import { ensureHousehold, loadViewer, upsertUser, userForEmail } from "./lib/server/db";
 
-/** Reachable while signed out: the sign-in flow itself, and robots.txt. */
-const PUBLIC = [/^\/login\/?$/, /^\/auth\//, /^\/robots\.txt$/];
+const PUBLIC = [/^\/robots\.txt$/];
+/** The old sign-in pages. Access signs people in now; send old bookmarks home. */
+const RETIRED = [/^\/login\/?$/, /^\/auth\//];
 
 const isApi = (path: string) => path.startsWith("/api/") || path.startsWith("/photos/");
 
+function refuse(path: string, message: string): Response {
+  if (isApi(path)) {
+    return new Response(JSON.stringify({ error: message }), {
+      status: 403,
+      headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+    });
+  }
+  return new Response(
+    `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Not allowed</title>
+<body style="font:16px/1.5 system-ui;max-width:32rem;margin:15vh auto;padding:0 20px;color:#1c1917">
+<h1 style="font-size:22px">Kitchen is private</h1><p>${message}</p>
+<p><a href="/cdn-cgi/access/logout">Sign in with a different account</a></p></body>`,
+    { status: 403, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } },
+  );
+}
+
 export const onRequest = defineMiddleware(async (context, next) => {
-  const { url, request, locals, cookies } = context;
+  const { url, request, locals } = context;
   if (PUBLIC.some((re) => re.test(url.pathname))) return next();
+  if (RETIRED.some((re) => re.test(url.pathname))) return context.redirect("/");
 
   const env = locals.runtime.env;
-  const session = await readSession(cookies, url, sessionSecret(env));
-  const viewer = session ? await loadViewer(env.DB, session.uid) : null;
-
-  // The allowlist is checked on every request, not only at sign-in, so taking
-  // someone off it locks them out immediately rather than in thirty days.
-  const allowed = viewer && (isDevViewer(viewer) || isAllowed(viewer.email, env.ALLOWED_EMAILS));
-  if (!viewer || !allowed) {
-    if (isApi(url.pathname)) {
-      return new Response(JSON.stringify({ error: "Your session has ended — sign in again." }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
+  let viewer;
+  if (import.meta.env.DEV) {
+    viewer = (await loadViewer(env.DB, DEV_USER.id)) ?? (await upsertUser(env.DB, DEV_USER));
+    locals.owner = true;
+  } else {
+    if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD || !env.ALLOWED_EMAILS) {
+      return refuse(url.pathname, "The login isn't set up yet, so nobody can get in.");
     }
-    return context.redirect(`/login?next=${encodeURIComponent(url.pathname + url.search)}`);
+    // The allowlist is checked on every request, so taking someone off it
+    // locks them out immediately.
+    const claims = await verifyAccessJwt(accessToken(request), env);
+    if (!claims || !isAllowed(claims.email, env.ALLOWED_EMAILS)) {
+      return refuse(url.pathname, "This account isn't on the list. Ask Josh to add you.");
+    }
+    viewer = await userForEmail(env.DB, claims.email);
+    locals.owner = isAllowed(claims.email, env.OWNER_EMAILS);
   }
 
-  // Writes must come from our own pages. SameSite=Lax already keeps the
+  // Writes must come from our own pages. SameSite cookies already keep Access's
   // cookie off cross-site POSTs; this is the second lock on the same door.
   if (request.method !== "GET" && request.method !== "HEAD") {
     const origin = request.headers.get("Origin");

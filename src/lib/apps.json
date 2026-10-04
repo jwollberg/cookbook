@@ -1,0 +1,56 @@
+{
+  "$comment": "The private apps, in switcher order. Colors: light/dark for --app, --app-hover, --app-soft, --app-ink. Icon: inner SVG of a 24x24, stroke=currentColor, stroke-width 2, round caps/joins. 'who': owner = Josh only; household = Josh, Gwen, Reagen (must match the Cloudflare Access policies).",
+  "apps": [
+    {
+      "id": "home",
+      "name": "Home",
+      "blurb": "All your apps",
+      "url": "https://home.atheosstudios.com/",
+      "who": "household",
+      "light": { "app": "#334155", "hover": "#1e293b", "soft": "#e5e9f0", "ink": "#ffffff" },
+      "dark": { "app": "#a9b8cc", "hover": "#c3cfdf", "soft": "#232b38", "ink": "#0c0e14" },
+      "icon": "<path d=\"M3.5 11 12 4.5l8.5 6.5\"/><path d=\"M5.5 9.5V20h13V9.5\"/><path d=\"M10 20v-5.5h4V20\"/>"
+    },
+    {
+      "id": "kitchen",
+      "name": "Kitchen",
+      "blurb": "Recipes, meal plan, shopping list",
+      "url": "https://kitchen.atheosstudios.com/",
+      "who": "household",
+      "light": { "app": "#c2410c", "hover": "#a8380b", "soft": "#fdf1ea", "ink": "#ffffff" },
+      "dark": { "app": "#f08a4b", "hover": "#f6a26e", "soft": "#3a2216", "ink": "#140c08" },
+      "icon": "<path d=\"M4.5 10.5h15V16a4 4 0 0 1-4 4h-7a4 4 0 0 1-4-4z\"/><path d=\"M2.5 10.5h19\"/><path d=\"M9.5 7c0-1.2 1.2-1.3 1.2-2.5M14.3 7c0-1.2 1.2-1.3 1.2-2.5\"/>"
+    },
+    {
+      "id": "budget",
+      "name": "Budget",
+      "blurb": "Envelopes, bills, debt payoff",
+      "url": "https://budget.atheosstudios.com/",
+      "who": "owner",
+      "light": { "app": "#4a3aa7", "hover": "#3d2f8f", "soft": "#ece9fb", "ink": "#ffffff" },
+      "dark": { "app": "#9085e9", "hover": "#a59cf0", "soft": "#262246", "ink": "#0c0f17" },
+      "icon": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"3\"/><path d=\"m3 7 9 6 9-6\"/>"
+    },
+    {
+      "id": "elderdeep",
+      "name": "Elderdeep",
+      "blurb": "Game tracker — plans and bugs",
+      "url": "https://elderdeep.atheosstudios.com/tracker/",
+      "who": "owner",
+      "light": { "app": "#8a5a2b", "hover": "#734a22", "soft": "#f5ece2", "ink": "#ffffff" },
+      "dark": { "app": "#d09a5e", "hover": "#ddb07c", "soft": "#33261a", "ink": "#140f0a" },
+      "icon": "<path d=\"M2.5 20 9 8l3.5 5.5L15 10l6.5 10z\"/><path d=\"M10.5 20v-2.5a1.75 1.75 0 0 1 3.5 0V20\"/>"
+    },
+    {
+      "id": "graveerror",
+      "name": "Grave Error",
+      "blurb": "Game tracker — plans and bugs",
+      "url": "https://graveerror.atheosstudios.com/tracker/",
+      "who": "owner",
+      "light": { "app": "#33607f", "hover": "#2a4f69", "soft": "#e4edf3", "ink": "#ffffff" },
+      "dark": { "app": "#7fb0d4", "hover": "#9cc3e0", "soft": "#1a2a37", "ink": "#0d1a24" },
+      "icon": "<path d=\"M6.5 20.5V11a5.5 5.5 0 0 1 11 0v9.5\"/><path d=\"M12 8.5v7M9.25 11.25h5.5\"/><path d=\"M3.5 20.5h17\"/>"
+    }
+  ],
+  "switcherIcon": "<rect x=\"4\" y=\"4\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"14\" y=\"4\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"4\" y=\"14\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"14\" y=\"14\" width=\"6\" height=\"6\" rx=\"1.5\"/>"
+}

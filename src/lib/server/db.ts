@@ -23,6 +23,7 @@ import {
   type ShoppingExtras,
 } from "../schema";
 import { emptyExtras } from "../list";
+import { canonicalEmail } from "./auth";
 
 const now = () => new Date().toISOString();
 
@@ -125,9 +126,37 @@ export async function upsertUser(
   return toViewer(row);
 }
 
-/** "Josh's Kitchen", from the Google name or failing that the address. */
+/**
+ * The person signed in through Cloudflare Access, by email. Everyone who
+ * signed in before the switch to Access is keyed by their Google id, so the
+ * match is on the address (compared the Gmail way), never on an id. Someone
+ * new gets a row of their own; a later visit finds it the same way.
+ */
+export async function userForEmail(db: D1Database, email: string): Promise<Viewer> {
+  const exact = await db
+    .prepare("SELECT id, email, name, picture, household_id FROM users WHERE lower(email) = ?")
+    .bind(email.trim().toLowerCase())
+    .first<UserRow>();
+  if (exact) return toViewer(exact);
+
+  // The same Gmail inbox spelled differently (dots, +tags). There are only a
+  // handful of users, so comparing them all is cheaper than being clever.
+  const wanted = canonicalEmail(email);
+  const { results } = await db
+    .prepare("SELECT id, email, name, picture, household_id FROM users")
+    .all<UserRow>();
+  const match = results.find((row) => canonicalEmail(row.email) === wanted);
+  if (match) return toViewer(match);
+
+  return upsertUser(db, { id: crypto.randomUUID(), email: email.trim() });
+}
+
+/**
+ * "Josh's Kitchen", from the name Google gave us or, for someone who arrived
+ * through Access (which sends only the address), the address's first word.
+ */
 export function defaultHouseholdName(viewer: Pick<Viewer, "name" | "email">): string {
-  const first = viewer.name?.trim().split(/\s+/)[0] || viewer.email.split("@")[0];
+  const first = viewer.name?.trim().split(/\s+/)[0] || viewer.email.split("@")[0].split(/[._+-]/)[0];
   const pretty = first.charAt(0).toUpperCase() + first.slice(1);
   return `${pretty}'s Kitchen`;
 }

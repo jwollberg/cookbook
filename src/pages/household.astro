@@ -2,6 +2,7 @@
 import SiteLayout from "../layouts/SiteLayout.astro";
 import Icon from "../components/Icon";
 import { listHouseholds } from "../lib/server/db";
+import { SIGN_OUT_URL } from "../lib/server/access";
 
 const { viewer, household } = Astro.locals;
 const households = await listHouseholds(Astro.locals.runtime.env.DB);
@@ -92,9 +93,7 @@ const notice = Astro.url.searchParams.has("created")
           <strong>{viewer.name ?? viewer.email}</strong>
           <span class="small muted" style="display: block;">{viewer.email} · signed in with Google</span>
         </span>
-        <form method="post" action="/auth/logout">
-          <button class="btn"><Icon name="logout" /> Sign out</button>
-        </form>
+        <a class="btn" href={SIGN_OUT_URL}><Icon name="logout" /> Sign out</a>
       </div>
     </section>
   </div>

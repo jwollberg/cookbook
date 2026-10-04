@@ -1,11 +1,12 @@
 /**
- * The sign-in gate. Every one of these failing open would let a stranger
+ * The gate: the allowlist and the Cloudflare Access token. Every one of these failing open would let a stranger
  * into the household's kitchen, so they are tested rather than trusted.
  */
 
-import { describe, it, expect } from "vitest";
-import { canonicalEmail, checkClaims, isAllowed, safeNext, type GoogleClaims } from "./auth";
-import { sign, unsign, pkceChallenge } from "./crypto";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { canonicalEmail, isAllowed, safeNext } from "./auth";
+import { accessToken, resetAccessKeys, verifyAccessJwt } from "./access";
+import { toBase64Url } from "./crypto";
 
 const LIST = "sam.cook@gmail.com, alex@example.com pat.baker@gmail.com";
 
@@ -37,68 +38,6 @@ describe("allowlist", () => {
   });
 });
 
-describe("Google ID token claims", () => {
-  const CLIENT = "client-123.apps.googleusercontent.com";
-  const good = (over: Partial<GoogleClaims> = {}): GoogleClaims => ({
-    iss: "https://accounts.google.com",
-    aud: CLIENT,
-    sub: "1234",
-    email: "sam.cook@gmail.com",
-    email_verified: true,
-    exp: Math.floor(Date.now() / 1000) + 600,
-    ...over,
-  });
-
-  it("accepts a well-formed token", () => {
-    expect(checkClaims(good(), CLIENT)).toBeNull();
-    expect(checkClaims(good({ iss: "accounts.google.com" }), CLIENT)).toBeNull();
-  });
-
-  it("rejects another app's token, a stranger issuer, an expired token", () => {
-    expect(checkClaims(good({ aud: "someone-else" }), CLIENT)).not.toBeNull();
-    expect(checkClaims(good({ iss: "https://evil.example" }), CLIENT)).not.toBeNull();
-    expect(checkClaims(good({ exp: Math.floor(Date.now() / 1000) - 1 }), CLIENT)).not.toBeNull();
-  });
-
-  it("rejects an unverified address — anyone can type an address into a new account", () => {
-    expect(checkClaims(good({ email_verified: false }), CLIENT)).not.toBeNull();
-    expect(checkClaims(good({ email_verified: undefined }), CLIENT)).not.toBeNull();
-  });
-});
-
-describe("signed tokens", () => {
-  const SECRET = "test-secret";
-
-  it("round-trips a payload", async () => {
-    const token = await sign({ uid: "u1", exp: Date.now() + 1000 }, SECRET);
-    expect(await unsign<{ uid: string; exp: number }>(token, SECRET)).toMatchObject({ uid: "u1" });
-  });
-
-  it("rejects a tampered payload", async () => {
-    const token = await sign({ uid: "u1", exp: Date.now() + 1000 }, SECRET);
-    const [, sig] = token.split(".");
-    const forged = `${btoa(JSON.stringify({ uid: "admin", exp: Date.now() + 1000 })).replace(/=+$/, "")}.${sig}`;
-    expect(await unsign(forged, SECRET)).toBeNull();
-  });
-
-  it("rejects the wrong secret, an expired token, and junk", async () => {
-    const token = await sign({ uid: "u1", exp: Date.now() + 1000 }, SECRET);
-    expect(await unsign(token, "other-secret")).toBeNull();
-    const old = await sign({ uid: "u1", exp: Date.now() - 1 }, SECRET);
-    expect(await unsign(old, SECRET)).toBeNull();
-    expect(await unsign("not-a-token", SECRET)).toBeNull();
-    expect(await unsign(undefined, SECRET)).toBeNull();
-    expect(await unsign(token, undefined)).toBeNull();
-  });
-
-  it("computes the RFC 7636 PKCE challenge", async () => {
-    // The worked example from RFC 7636, appendix B.
-    expect(await pkceChallenge("dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk")).toBe(
-      "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM",
-    );
-  });
-});
-
 describe("safeNext", () => {
   it("allows same-site paths", () => {
     expect(safeNext("/recipes/falafel?x=1")).toBe("/recipes/falafel?x=1");
@@ -108,8 +47,75 @@ describe("safeNext", () => {
     expect(safeNext("https://evil.example")).toBe("/");
     expect(safeNext("//evil.example")).toBe("/");
     expect(safeNext("/\\evil.example")).toBe("/");
-    expect(safeNext("/login")).toBe("/");
-    expect(safeNext("/auth/callback")).toBe("/");
+    expect(safeNext("/cdn-cgi/access/logout")).toBe("/");
     expect(safeNext(null)).toBe("/");
+  });
+});
+
+describe("Cloudflare Access token", () => {
+  const TEAM = "team.cloudflareaccess.com";
+  const AUD = "kitchen-aud";
+  const env = { ACCESS_TEAM_DOMAIN: TEAM, ACCESS_AUD: AUD };
+  const enc = new TextEncoder();
+  const b64 = (o: unknown) => toBase64Url(enc.encode(JSON.stringify(o)));
+  let keys: CryptoKeyPair;
+  let stranger: CryptoKeyPair;
+
+  const gen = () =>
+    crypto.subtle.generateKey(
+      { name: "RSASSA-PKCS1-v1_5", modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: "SHA-256" },
+      true,
+      ["sign", "verify"],
+    ) as Promise<CryptoKeyPair>;
+
+  async function token(over: Record<string, unknown> = {}, signer = keys.privateKey, kid = "k1") {
+    const now = Math.floor(Date.now() / 1000);
+    const head = b64({ alg: "RS256", kid });
+    const body = b64({ aud: [AUD], email: "sam.cook@gmail.com", iss: `https://${TEAM}`, exp: now + 600, ...over });
+    const sig = await crypto.subtle.sign("RSASSA-PKCS1-v1_5", signer, enc.encode(`${head}.${body}`));
+    return `${head}.${body}.${toBase64Url(new Uint8Array(sig))}`;
+  }
+
+  beforeAll(async () => {
+    keys = await gen();
+    stranger = await gen();
+    const jwk = await crypto.subtle.exportKey("jwk", keys.publicKey);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) =>
+        url === `https://${TEAM}/cdn-cgi/access/certs`
+          ? new Response(JSON.stringify({ keys: [{ ...jwk, kid: "k1" }] }))
+          : new Response("no", { status: 404 }),
+      ),
+    );
+  });
+  afterEach(() => resetAccessKeys());
+
+  it("accepts a token Access signed for this app", async () => {
+    expect(await verifyAccessJwt(await token(), env)).toEqual({ email: "sam.cook@gmail.com" });
+    expect(await verifyAccessJwt(await token({ aud: AUD }), env)).not.toBeNull();
+  });
+
+  it("refuses a forged signature, another app's token, an expired one, a stranger issuer", async () => {
+    expect(await verifyAccessJwt(await token({}, stranger.privateKey), env)).toBeNull();
+    expect(await verifyAccessJwt(await token({ aud: ["budget-aud"] }), env)).toBeNull();
+    expect(await verifyAccessJwt(await token({ exp: Math.floor(Date.now() / 1000) - 1 }), env)).toBeNull();
+    expect(await verifyAccessJwt(await token({ iss: "https://evil.example" }), env)).toBeNull();
+    expect(await verifyAccessJwt(await token({ email: "" }), env)).toBeNull();
+    expect(await verifyAccessJwt(await token({}, keys.privateKey, "unknown-kid"), env)).toBeNull();
+  });
+
+  it("fails closed when it isn't set up or there is no token", async () => {
+    const good = await token();
+    expect(await verifyAccessJwt(good, { ACCESS_TEAM_DOMAIN: TEAM })).toBeNull();
+    expect(await verifyAccessJwt(good, { ACCESS_AUD: AUD })).toBeNull();
+    expect(await verifyAccessJwt(null, env)).toBeNull();
+    expect(await verifyAccessJwt("junk", env)).toBeNull();
+  });
+
+  it("reads the token from the header or the cookie", () => {
+    expect(accessToken(new Request("https://k.test/", { headers: { "Cf-Access-Jwt-Assertion": "a.b.c" } }))).toBe("a.b.c");
+    expect(accessToken(new Request("https://k.test/", { headers: { Cookie: "x=1; CF_Authorization=d.e.f" } }))).toBe("d.e.f");
+    expect(accessToken(new Request("https://k.test/"))).toBeNull();
   });
 });

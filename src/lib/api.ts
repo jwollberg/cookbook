@@ -25,11 +25,14 @@ async function send<T>(method: string, path: string, body?: unknown, contentType
     credentials: "same-origin",
     headers: body === undefined ? undefined : { "Content-Type": contentType ?? "application/json" },
     body: body === undefined ? undefined : isJson ? JSON.stringify(body) : (body as BodyInit),
+    // No API route redirects. A redirect means Cloudflare Access's sign-in
+    // expired mid-visit and wants to send us to Google, which a fetch can't do.
+    redirect: "manual",
   });
 
-  if (res.status === 401) {
-    // The session ended mid-visit. Send them through sign-in and back here.
-    window.location.assign(`/login?next=${encodeURIComponent(location.pathname + location.search)}`);
+  if (res.type === "opaqueredirect" || res.status === 401) {
+    // Reloading the page goes through the sign-in and lands back here.
+    window.location.reload();
     throw new ApiError("Signed out.", 401);
   }
 
