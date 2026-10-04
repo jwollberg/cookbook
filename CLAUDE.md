@@ -63,7 +63,8 @@ Browser ──► Cloudflare Worker (Astro SSR via @astrojs/cloudflare)
   so a newcomer's household is named from it ("Gwenevere's Kitchen") — rename it on /household.
 - `OWNER_EMAILS` (Josh) sees every app in the app switcher; everyone else sees Home and Kitchen.
 - Sign out is `/cdn-cgi/access/logout`. The old `/login` and `/auth/*` pages are gone and
-  redirect home. (`kitchen-atheos`, the Google project the old login used, is no longer needed.)
+  redirect home. (`kitchen-atheos`, the Google project the old login used, was deleted on 2026-10-04 — restorable
+  until early November with `gcloud projects undelete kitchen-atheos` if ever needed.)
 - The dev server signs you in as "Dev Cook" (`import.meta.env.DEV`, compiled out of builds).
   Never add a bypass that is not behind that constant.
 - Writes must carry a same-origin `Origin` header (middleware).
