@@ -104,6 +104,7 @@
 .as-round { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; flex: none; cursor: pointer; text-decoration: none; }
 .as-avatar { background: var(--app); color: var(--app-ink); font: 700 15px/1 var(--as-font); overflow: hidden; }
 .as-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.as-avatar svg { width: 20px; height: 20px; }
 
 /* ---------- app switcher (a <details>: works with no script) ---------- */
 .as-switch { position: relative; }
@@ -128,6 +129,21 @@
   :root:where(:not([data-theme="light"])) .as-app .as-mark { background: var(--cd); color: #0c0e14; }
 }
 :root[data-theme="dark"] .as-app .as-mark { background: var(--cd); color: #0c0e14; }
+
+/* ---------- account menu: the avatar opens it (a <details>, like the switcher) ---------- */
+.as-me { position: relative; }
+.as-me > summary { list-style: none; }
+.as-me > summary::-webkit-details-marker { display: none; }
+.as-me[open] > summary { box-shadow: 0 0 0 3px var(--app-soft); }
+.as-me-head { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; padding: 8px 10px 12px; margin-bottom: 4px; border-bottom: 1px solid var(--as-line); }
+.as-me-head .as-avatar { cursor: default; }
+.as-me-head b { display: block; font: 650 14.5px/1.2 var(--as-font); color: var(--as-ink); }
+.as-me-head small { display: block; font: 500 12.5px/1.3 var(--as-font); color: var(--as-muted); overflow-wrap: anywhere; }
+.as-item { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px; padding: 8px 10px; border: 0; border-radius: 12px; background: none; text-align: left; text-decoration: none; color: var(--as-ink); font: 600 14px/1.25 var(--as-font); cursor: pointer; }
+.as-item:hover { background: var(--as-sunk); }
+.as-item svg { width: 18px; height: 18px; flex: none; color: var(--as-muted); }
+.as-item small { display: block; font: 500 12px/1.3 var(--as-font); color: var(--as-muted); }
+.as-sep { height: 1px; margin: 4px 6px; background: var(--as-line); }
 
 /* ---------- phone tab bar ---------- */
 .as-tabbar { display: none; }

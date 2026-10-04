@@ -38,7 +38,8 @@ const nav = [
   { href: "/shopping", label: "Shopping list", short: "List", icon: "bag", badge: true },
 ] as const;
 
-const initial = (viewer?.name ?? viewer?.email ?? "?").trim().charAt(0).toUpperCase();
+const who = viewer?.name ?? viewer?.email ?? "Signed in";
+const initial = who.trim().charAt(0).toUpperCase();
 const pageTitle = title === "Kitchen" ? title : `${title} · Kitchen`;
 
 // The app switcher shows only the apps this person can open.
@@ -139,37 +140,55 @@ const svg = (inner: string) =>
                 </nav>
               </details>
 
-              <details class="menu" data-menu>
-                <summary class="as-round as-avatar" aria-label="Account">
+              {/* The shared shell's account menu (app-shell/README.md): same in every app. */}
+              <details class="as-me" data-menu>
+                <summary class="as-round as-avatar" aria-label={`Account: ${who}`}>
                   {viewer.picture ? (
                     <img src={viewer.picture} alt="" referrerpolicy="no-referrer" width="38" height="38" />
                   ) : (
                     initial
                   )}
                 </summary>
-                <div class="menu-panel">
-                  <div class="menu-head">
-                    <strong>{viewer.name ?? viewer.email}</strong>
-                    <div class="small muted">{viewer.email}</div>
+                <nav class="as-menu" aria-label="Account">
+                  <div class="as-me-head">
+                    <span class="as-round as-avatar" aria-hidden="true">
+                      {viewer.picture ? (
+                        <img src={viewer.picture} alt="" referrerpolicy="no-referrer" width="38" height="38" />
+                      ) : (
+                        initial
+                      )}
+                    </span>
+                    <span>
+                      <b>{who}</b>
+                      {who !== viewer.email && <small>{viewer.email}</small>}
+                    </span>
                   </div>
-                  <a class="menu-item" href="/edit">
+                  <a class="as-item" href="/edit">
                     <Icon name="pencil" />
-                    <span class="grow">Edit recipes</span>
+                    <span>Edit recipes</span>
                   </a>
-                  <a class="menu-item" href="/cook">
+                  <a class="as-item" href="/cook">
                     <Icon name="pot" />
-                    <span class="grow">Cooking sheet</span>
+                    <span>Cooking sheet</span>
                   </a>
-                  <a class="menu-item" href="/household">
+                  <a class="as-item" href="/household">
                     <Icon name="home" />
-                    <span class="grow">Households</span>
+                    <span>Households</span>
                   </a>
-                  <div class="menu-sep" />
-                  <a class="menu-item" href={SIGN_OUT_URL}>
-                    <Icon name="logout" />
-                    <span class="grow">Sign out</span>
+                  <div class="as-sep" />
+                  <a class="as-item" href={SIGN_OUT_URL}>
+                    <Fragment set:html={svg(registry.accountIcons.switch)} />
+                    <span>
+                      Switch account<small>Signs you out, then pick a Google account</small>
+                    </span>
                   </a>
-                </div>
+                  <a class="as-item" href={SIGN_OUT_URL}>
+                    <Fragment set:html={svg(registry.accountIcons.signOut)} />
+                    <span>
+                      Sign out<small>Of every Atheos app</small>
+                    </span>
+                  </a>
+                </nav>
               </details>
             </div>
           </div>

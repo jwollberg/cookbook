@@ -7,8 +7,18 @@
       "blurb": "All your apps",
       "url": "https://home.atheosstudios.com/",
       "who": "household",
-      "light": { "app": "#334155", "hover": "#1e293b", "soft": "#e5e9f0", "ink": "#ffffff" },
-      "dark": { "app": "#a9b8cc", "hover": "#c3cfdf", "soft": "#232b38", "ink": "#0c0e14" },
+      "light": {
+        "app": "#334155",
+        "hover": "#1e293b",
+        "soft": "#e5e9f0",
+        "ink": "#ffffff"
+      },
+      "dark": {
+        "app": "#a9b8cc",
+        "hover": "#c3cfdf",
+        "soft": "#232b38",
+        "ink": "#0c0e14"
+      },
       "icon": "<path d=\"M3.5 11 12 4.5l8.5 6.5\"/><path d=\"M5.5 9.5V20h13V9.5\"/><path d=\"M10 20v-5.5h4V20\"/>"
     },
     {
@@ -17,8 +27,18 @@
       "blurb": "Recipes, meal plan, shopping list",
       "url": "https://kitchen.atheosstudios.com/",
       "who": "household",
-      "light": { "app": "#c2410c", "hover": "#a8380b", "soft": "#fdf1ea", "ink": "#ffffff" },
-      "dark": { "app": "#f08a4b", "hover": "#f6a26e", "soft": "#3a2216", "ink": "#140c08" },
+      "light": {
+        "app": "#c2410c",
+        "hover": "#a8380b",
+        "soft": "#fdf1ea",
+        "ink": "#ffffff"
+      },
+      "dark": {
+        "app": "#f08a4b",
+        "hover": "#f6a26e",
+        "soft": "#3a2216",
+        "ink": "#140c08"
+      },
       "icon": "<path d=\"M4.5 10.5h15V16a4 4 0 0 1-4 4h-7a4 4 0 0 1-4-4z\"/><path d=\"M2.5 10.5h19\"/><path d=\"M9.5 7c0-1.2 1.2-1.3 1.2-2.5M14.3 7c0-1.2 1.2-1.3 1.2-2.5\"/>"
     },
     {
@@ -27,8 +47,18 @@
       "blurb": "Envelopes, bills, debt payoff",
       "url": "https://budget.atheosstudios.com/",
       "who": "owner",
-      "light": { "app": "#4a3aa7", "hover": "#3d2f8f", "soft": "#ece9fb", "ink": "#ffffff" },
-      "dark": { "app": "#9085e9", "hover": "#a59cf0", "soft": "#262246", "ink": "#0c0f17" },
+      "light": {
+        "app": "#4a3aa7",
+        "hover": "#3d2f8f",
+        "soft": "#ece9fb",
+        "ink": "#ffffff"
+      },
+      "dark": {
+        "app": "#9085e9",
+        "hover": "#a59cf0",
+        "soft": "#262246",
+        "ink": "#0c0f17"
+      },
       "icon": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"3\"/><path d=\"m3 7 9 6 9-6\"/>"
     },
     {
@@ -37,8 +67,18 @@
       "blurb": "Game tracker — plans and bugs",
       "url": "https://elderdeep.atheosstudios.com/tracker/",
       "who": "owner",
-      "light": { "app": "#8a5a2b", "hover": "#734a22", "soft": "#f5ece2", "ink": "#ffffff" },
-      "dark": { "app": "#d09a5e", "hover": "#ddb07c", "soft": "#33261a", "ink": "#140f0a" },
+      "light": {
+        "app": "#8a5a2b",
+        "hover": "#734a22",
+        "soft": "#f5ece2",
+        "ink": "#ffffff"
+      },
+      "dark": {
+        "app": "#d09a5e",
+        "hover": "#ddb07c",
+        "soft": "#33261a",
+        "ink": "#140f0a"
+      },
       "icon": "<path d=\"M2.5 20 9 8l3.5 5.5L15 10l6.5 10z\"/><path d=\"M10.5 20v-2.5a1.75 1.75 0 0 1 3.5 0V20\"/>"
     },
     {
@@ -47,10 +87,27 @@
       "blurb": "Game tracker — plans and bugs",
       "url": "https://graveerror.atheosstudios.com/tracker/",
       "who": "owner",
-      "light": { "app": "#33607f", "hover": "#2a4f69", "soft": "#e4edf3", "ink": "#ffffff" },
-      "dark": { "app": "#7fb0d4", "hover": "#9cc3e0", "soft": "#1a2a37", "ink": "#0d1a24" },
+      "light": {
+        "app": "#33607f",
+        "hover": "#2a4f69",
+        "soft": "#e4edf3",
+        "ink": "#ffffff"
+      },
+      "dark": {
+        "app": "#7fb0d4",
+        "hover": "#9cc3e0",
+        "soft": "#1a2a37",
+        "ink": "#0d1a24"
+      },
       "icon": "<path d=\"M6.5 20.5V11a5.5 5.5 0 0 1 11 0v9.5\"/><path d=\"M12 8.5v7M9.25 11.25h5.5\"/><path d=\"M3.5 20.5h17\"/>"
     }
   ],
-  "switcherIcon": "<rect x=\"4\" y=\"4\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"14\" y=\"4\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"4\" y=\"14\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"14\" y=\"14\" width=\"6\" height=\"6\" rx=\"1.5\"/>"
+  "switcherIcon": "<rect x=\"4\" y=\"4\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"14\" y=\"4\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"4\" y=\"14\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"14\" y=\"14\" width=\"6\" height=\"6\" rx=\"1.5\"/>",
+  "accountIcons": {
+    "switch": "<path d=\"M17 2l4 4-4 4\"/><path d=\"M3 11V9a3 3 0 0 1 3-3h15\"/><path d=\"M7 22l-4-4 4-4\"/><path d=\"M21 13v2a3 3 0 0 1-3 3H3\"/>",
+    "signOut": "<path d=\"M9 20H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3\"/><path d=\"m16 17 5-5-5-5\"/><path d=\"M21 12H9\"/>",
+    "person": "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6\"/>",
+    "settings": "<path d=\"M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1\"/><circle cx=\"15\" cy=\"6\" r=\"2\"/><circle cx=\"9\" cy=\"12\" r=\"2\"/><circle cx=\"17\" cy=\"18\" r=\"2\"/>"
+  },
+  "signOutUrl": "/cdn-cgi/access/logout"
 }
