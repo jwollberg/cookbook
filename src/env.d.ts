@@ -1,9 +1,9 @@
 /// <reference types="astro/client" />
 
-type D1Database = import("@cloudflare/workers-types").D1Database;
-type R2Bucket = import("@cloudflare/workers-types").R2Bucket;
+type D1Database = import("./lib/server/d1").D1Database;
+type R2Bucket = import("./lib/server/bucket").R2Bucket;
 
-/** Bindings and secrets — see wrangler.jsonc. */
+/** The settings and secrets (app.env on Vault), the database and the photos. */
 interface Env {
   DB: D1Database;
   PHOTOS: R2Bucket;
@@ -16,25 +16,20 @@ interface Env {
   ALLOWED_EMAILS?: string;
   /** Comma-separated; who sees every Atheos app in the switcher (Josh). */
   OWNER_EMAILS?: string;
+  /** The household's time zone, for "today" (America/Chicago). */
+  TIME_ZONE?: string;
+  /** Shared by the Atheos containers on Vault; lets Home ask /internal/glance. */
+  INTERNAL_TOKEN?: string;
 }
 
-type Runtime = import("@astrojs/cloudflare").Runtime<Env>;
-
 declare namespace App {
-  interface Locals extends Runtime {
+  interface Locals {
+    /** Set first by the middleware on every request (src/lib/server/platform.ts). */
+    runtime: import("./lib/server/platform").Runtime;
     /** Set by the middleware on every request except robots.txt. */
     viewer: import("./lib/server/db").Viewer;
     household: import("./lib/server/db").Household;
     /** Josh: the app switcher shows him every app, everyone else Home and Kitchen. */
     owner: boolean;
-  }
-}
-
-/** Workers RPC, as much of it as src/worker.ts uses (the bundled types lag behind). */
-declare module "cloudflare:workers" {
-  export abstract class WorkerEntrypoint<E = unknown> {
-    protected readonly env: E;
-    protected readonly ctx: import("@cloudflare/workers-types").ExecutionContext;
-    constructor(ctx: import("@cloudflare/workers-types").ExecutionContext, env: E);
   }
 }

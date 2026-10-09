@@ -7,7 +7,7 @@
  * the whole page down with it.
  */
 
-import type { D1Database } from "@cloudflare/workers-types";
+import type { D1Database } from "./d1";
 import {
   IngredientSchema,
   MealPlanSchema,

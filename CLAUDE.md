@@ -3,42 +3,46 @@
 Private household kitchen app: shared recipes → meals → a weekly plan per household → generated
 cooking sheet + one aggregated shopping list.
 
-- **Live at** `https://kitchen.atheosstudios.com` — a Cloudflare Worker (custom domain), repo
-  `jwollberg/cookbook` (the repo name predates the rename to Kitchen).
+- **Live at** `https://kitchen.atheosstudios.com` — a Node server on **Vault** (Josh's Unraid
+  server) behind a Cloudflare Tunnel and Cloudflare Access, repo `jwollberg/cookbook` (the repo
+  name predates the rename to Kitchen). Hosting, operations and secrets:
+  `../Websites/Website-Home/vault/README.md`.
 - **Sibling property:** `jwollberg/atheosstudios` owns `atheosstudios.com`. Separate repo, separate
   hosting. Never edit one expecting the other to change.
-- Same stack as Homeschool Hero (`C:\Projects\Homeschool Hero`): Workers + static assets (not
-  Pages), D1, R2. Sign-in is Cloudflare Access (see below).
+- Astro SSR on Node (`@astrojs/node`, standalone), SQLite through a D1-shaped API
+  (`src/lib/server/d1.ts`), photos in a folder through an R2-shaped API
+  (`src/lib/server/bucket.ts`); `src/lib/server/platform.ts` builds `locals.runtime` from the
+  environment. Sign-in is Cloudflare Access (see below).
 
 ## Architecture
 
 ```
-Browser ──► Cloudflare Worker (Astro SSR via @astrojs/cloudflare)
+Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (Astro SSR via @astrojs/node)
               ├─ src/middleware.ts   Google sign-in gate on EVERY page and API route
-              ├─ pages render from D1 per request
-              ├─ /api/*              JSON writes, straight to D1 — live the moment they return
-              └─ /photos/*           uploaded photos streamed from R2 (behind the gate too)
-            D1 "kitchen"   users, households, library docs, household planning docs
-            R2 "kitchen-photos"
+              ├─ pages render from SQLite per request
+              ├─ /api/*              JSON writes, straight to SQLite — live the moment they return
+              └─ /photos/*           uploaded photos from the photos folder (behind the gate too)
+            /data/app.sqlite   users, households, library docs, household planning docs
+            /data/photos/      uploaded photos
 ```
 
-- **Everything is rendered by the Worker, behind sign-in.** Static files (`dist/`: JS, CSS, the
-  starter photos in `public/images/`) are served by Cloudflare *before* the Worker runs and skip the
-  gate. So **nothing private may ever be a static file** — no prerendered pages, no data under
-  `public/`. `public/.assetsignore` keeps the Worker bundle itself out of the assets.
+- **Everything is rendered by the server, behind sign-in.** Static files (`dist/client/`: JS, CSS,
+  the starter photos in `public/images/`) are served *before* the middleware runs and skip its
+  gate (Access still stands in front). So **nothing private may ever be a static file** — no
+  prerendered pages, no data under `public/`.
 - **Documents, validated.** Recipes, meals, ingredients, plans and the shopping list are JSON
-  documents in D1, parsed with the zod schemas in `src/lib/schema.ts` on every read and write. The
+  documents in the database, parsed with the zod schemas in `src/lib/schema.ts` on every read and write. The
   aggregation code consumes whole documents; do not normalise them into columns.
 - **Recipe saves are atomic**: a recipe plus any ingredients it introduced go in one `db.batch`, so a
   recipe can never reference an ingredient that failed to write. The server also refuses a recipe
   whose ingredient ids do not exist.
 - **The seed** (`seed/*.json`) is the starter library, loaded with `scripts/seed.mjs` using
-  `INSERT OR IGNORE` — once live, D1 is the source of truth and re-seeding never overwrites an edit.
+  `INSERT OR IGNORE` — once live, the database is the source of truth and re-seeding never overwrites an edit.
   `src/lib/data.test.ts` validates the seed (schema, referential integrity, the Greek-dinner totals).
 
 ### Loaders — do not cross them
 
-- `src/lib/server/*` — Worker only (D1, cookies, secrets). Never import from a React island.
+- `src/lib/server/*` — server only (the database, cookies, secrets). Never import from a React island.
 - `src/lib/api.ts` — browser only (fetch to `/api/*`). Never import from Astro frontmatter.
 - `src/lib/{units,shopping,scaling,list,plans,dates,format}.ts` — pure, used on both sides.
 - `src/lib/constants.ts` holds the enums so islands can use them without pulling zod into the bundle.
@@ -51,13 +55,13 @@ Browser ──► Cloudflare Worker (Astro SSR via @astrojs/cloudflare)
   domain `atheosstudios.cloudflareaccess.com`. The Google OAuth client behind it lives in the
   Google project `atheos-access` (Testing mode, so a new person must also be a **test user**
   there).
-- **The Worker re-checks everything** (`src/middleware.ts`, `src/lib/server/access.ts`): the
+- **The server re-checks everything** (`src/middleware.ts`, `src/lib/server/access.ts`): the
   Access JWT's signature against the team's keys, its audience (`ACCESS_AUD`), issuer and expiry,
   then the email against `ALLOWED_EMAILS` (compared the way Gmail does). Anything missing or
   wrong fails closed (403), so a mistake in the Access policy still lets nobody in. The list is
   checked on **every request**, so removing someone locks them out immediately.
-- **Adding someone = three places:** the Access policy, `ALLOWED_EMAILS`
-  (`npx wrangler secret put ALLOWED_EMAILS`), and a test user in `atheos-access`.
+- **Adding someone = three places:** the Access policy, `ALLOWED_EMAILS` (in Kitchen's `app.env`
+  on Vault), and a test user in `atheos-access`.
 - People are matched **by email** (`userForEmail` in `db.ts`): users from the old Google-OAuth
   days are keyed by their Google `sub`, newcomers by a random id. Access sends only the address,
   so a newcomer's household is named from it ("Gwenevere's Kitchen") — rename it on /household.
@@ -68,10 +72,10 @@ Browser ──► Cloudflare Worker (Astro SSR via @astrojs/cloudflare)
 - The dev server signs you in as "Dev Cook" (`import.meta.env.DEV`, compiled out of builds).
   Never add a bypass that is not behind that constant.
 - Writes must carry a same-origin `Origin` header (middleware).
-- **Glance:** `src/worker.ts` exports a `Glance` RPC entrypoint (`summary({ email, today })` →
-  household, tonight's dishes, planned days, list count) for Kitchen's tile on
-  home.atheosstudios.com. Only another Worker in the account can call it, through a service
-  binding; it still answers only for people on `ALLOWED_EMAILS`.
+- **Glance:** `/internal/glance` (POST `{ email, today }` → household, tonight's dishes, planned
+  days, list count) feeds Kitchen's tile on home.atheosstudios.com. Only the Home container on
+  Vault reaches it, with `INTERNAL_TOKEN`; the tunnel never routes /internal/. It still answers
+  only for people on `ALLOWED_EMAILS`.
 
 ## Households
 
@@ -103,8 +107,8 @@ Extras (`ShoppingExtras`) are recipes and meals added directly (with servings) a
 Plans autosave (debounced) — there is no commit noise to avoid any more, and a household shares
 them.
 
-Dates: `src/lib/dates.ts` works in local time and formats by hand. The Worker runs in UTC, so "today"
-comes from the visitor's time zone (`request.cf.timezone`, see `viewerToday`). `toISOString()`
+Dates: `src/lib/dates.ts` works in local time and formats by hand. The server runs in UTC, so "today"
+comes from the household's time zone (`TIME_ZONE`, America/Chicago; see `viewerToday`). `toISOString()`
 converts to UTC first and near midnight reports the wrong day — it silently moves a dinner onto the
 wrong day's shopping list.
 
@@ -118,7 +122,7 @@ wrong day's shopping list.
 - `shopping` + `shopping_ticks` — per household.
 - Photos: starter photos are openly licensed Wikimedia images in `public/images/recipes/` and
   **must** carry `imageCredit` (CC BY / BY-SA require visible attribution; the data test enforces
-  it). Uploaded photos live in R2 at `/photos/recipes/<id>/<key>` and need no credit.
+  it). Uploaded photos live in the photos folder at `/photos/recipes/<id>/<key>` and need no credit.
 
 ## Units and aggregation — read before touching `src/lib/units.ts`
 
@@ -167,28 +171,27 @@ length while cooking, and one-handed on a phone in a supermarket aisle.
 ## Commands
 
 ```bash
-npm run dev               # astro dev on 127.0.0.1:4321, local D1/R2 via wrangler's platform proxy
-npm run build             # astro check && astro build  (Worker bundle in dist/_worker.js)
-npm run preview           # build, then wrangler dev on :8787 — the real Workers runtime
+npm run dev               # astro dev on 127.0.0.1:4321; the database is .data/app.sqlite
+npm run build             # astro check && astro build  (the server in dist/server/entry.mjs)
+npm start                 # the built server
 npm test                  # vitest
-npm run ci                # tests, then build — what a deploy runs
-npm run db:migrate:local  # / db:migrate:remote — apply migrations/
-npm run db:seed:local     # / db:seed:remote — load seed/ (never overwrites existing records)
+npm run ci                # tests, then build — what Vault's deploy runs
+npm run db:seed           # load seed/ into .data/app.sqlite (never overwrites existing records)
 ```
 
-First run locally: `npm run db:migrate:local && npm run db:seed:local && npm run dev` — the dev
-server signs you in as Dev Cook; there is no sign-in page.
+First run locally: `npm run dev`, open any page (the database is created and migrated on the first
+request), then `npm run db:seed`. The dev server signs you in as Dev Cook; there is no sign-in page.
 
 ## Deploying — pushing to `main` deploys
 
-Cloudflare **Workers Builds** is connected to `jwollberg/cookbook` (build command `npm run ci`,
-deploy command `npx wrangler deploy`, preview builds off), the same model as Homeschool Hero. So `git push` to `main`
+Vault's deployer fetches `main` every two minutes and builds the `Dockerfile`, whose first stage
+runs `npm run ci`; only a passing build replaces the running container. So `git push` to `main`
 IS the deploy: hold it to the bar a manual deploy would get — tests green, build clean, the change
-exercised. Non-production branches build but do not deploy.
+exercised. Other branches are never built.
 
-- **Migrations are not part of the build.** `npm run db:migrate:remote` is manual; apply a
-  migration *after* the code that tolerates it is live, or ship code that handles both shapes.
-- Secrets are set with `npx wrangler secret put <NAME>`: `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`,
-  `ALLOWED_EMAILS`, `OWNER_EMAILS` (comma-separated emails).
-- DNS is Cloudflare. `kitchen.atheosstudios.com` is a Workers custom domain (a "Worker" record),
-  declared in `wrangler.jsonc` `routes`.
+- **Migrations apply themselves** when the server opens the database (`migrations/*.sql`, recorded
+  in `d1_migrations`), so a migration ships with the code that needs it, and must tolerate the
+  code before it for the minute between.
+- Secrets and settings live in Kitchen's `app.env` on Vault (`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`,
+  `ALLOWED_EMAILS`, `OWNER_EMAILS`, `TIME_ZONE`, `INTERNAL_TOKEN`): Home's `vault/README.md`.
+- DNS is Cloudflare: `kitchen.atheosstudios.com` is a proxied CNAME to the tunnel `atheos-vault`.

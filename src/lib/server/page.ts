@@ -21,7 +21,7 @@ export async function loadKitchen(locals: App.Locals) {
   };
 }
 
-/** The visitor's time zone, as Cloudflare reports it. */
+/** The household's time zone (TIME_ZONE on Vault; the platform's `cf.timezone`). */
 function timeZone(locals: App.Locals): string | undefined {
   const tz = (locals.runtime?.cf as { timezone?: string } | undefined)?.timezone;
   return typeof tz === "string" && tz ? tz : undefined;

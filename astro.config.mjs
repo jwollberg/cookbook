@@ -3,7 +3,7 @@ import { dirname, join } from "node:path";
 
 import { defineConfig } from "astro/config";
 
-import cloudflare from "@astrojs/cloudflare";
+import node from "@astrojs/node";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -39,24 +39,18 @@ const reactJsxDevRuntime = join(
 
 export default defineConfig({
   site,
-  // Every page is rendered per request by the Worker, behind sign-in. A
+  // Every page is rendered per request by the Node server on Vault, behind sign-in. A
   // prerendered page would be a static file, and static files skip the gate.
   output: "server",
-  adapter: cloudflare({
-    // `astro dev` gets real local D1 and R2 bindings from wrangler.jsonc.
-    platformProxy: { enabled: true },
-    // Our own entry adds `Glance`, the RPC entrypoint Home's Kitchen tile calls.
-    workerEntryPoint: { path: "src/worker.ts", namedExports: ["Glance"] },
-  }),
+  adapter: node({ mode: "standalone" }),
+  // Behind Cloudflare's tunnel the server hears plain HTTP; trusting the tunnel's
+  // X-Forwarded-Proto for this one hostname gives every request its real https origin,
+  // which the middleware's same-origin check on writes compares against.
+  security: { allowedDomains: [{ hostname: new URL(site).hostname, protocol: "https" }] },
   integrations: [react()],
 
   vite: {
     plugins: [tailwindcss()],
-    resolve: {
-      // React 19's default server renderer reaches for MessageChannel, which
-      // the Workers runtime does not provide; its edge build does not.
-      alias: import.meta.env.PROD ? { "react-dom/server": "react-dom/server.edge" } : undefined,
-    },
     // Client only. Applied to the SSR environment as well, the raw CJS file
     // reaches Vite's module runner, which provides no `require` and throws
     // "require is not defined" while server-rendering the islands.

@@ -1,9 +1,8 @@
 /**
- * Load the starter library (seed/*.json) into D1.
+ * Load the starter library (seed/*.json) into the database.
  *
  *   node scripts/seed.mjs            # writes scripts/seed.sql
- *   npm run db:seed:local            # ...and applies it to the local D1
- *   npm run db:seed:remote           # ...or to the deployed one
+ *   npm run db:seed                  # ...and applies it to the dev database (.data/app.sqlite)
  *
  * INSERT OR IGNORE throughout: once the site is live the database is the
  * source of truth, and re-running the seed must never overwrite an edit made

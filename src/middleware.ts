@@ -15,6 +15,7 @@
 
 import { defineMiddleware } from "astro:middleware";
 import { accessToken, verifyAccessJwt } from "./lib/server/access";
+import { isInternal, platform } from "./lib/server/platform";
 import { isAllowed } from "./lib/server/auth";
 import { DEV_USER } from "./lib/server/context";
 import { ensureHousehold, loadViewer, refreshProfile, upsertUser, userForEmail } from "./lib/server/db";
@@ -43,6 +44,11 @@ function refuse(path: string, message: string): Response {
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { url, request, locals } = context;
+  locals.runtime = platform();
+  // Home's glance, from the Home container on Vault: the token, never a login.
+  if (url.pathname.startsWith("/internal/")) {
+    return isInternal(request, locals.runtime.env) ? next() : new Response("Not found", { status: 404 });
+  }
   if (PUBLIC.some((re) => re.test(url.pathname))) return next();
   if (RETIRED.some((re) => re.test(url.pathname))) return context.redirect("/");
 
