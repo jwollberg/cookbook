@@ -120,6 +120,26 @@
         "ink": "#0d1a24"
       },
       "icon": "<path d=\"M6.5 20.5V11a5.5 5.5 0 0 1 11 0v9.5\"/><path d=\"M12 8.5v7M9.25 11.25h5.5\"/><path d=\"M3.5 20.5h17\"/>"
+    },
+    {
+      "id": "holdout",
+      "name": "Holdout",
+      "blurb": "Game tracker — plans and bugs",
+      "url": "https://holdout.atheosstudios.com/tracker/",
+      "who": "owner",
+      "light": {
+        "app": "#4d5c1f",
+        "hover": "#3e4b18",
+        "soft": "#eef1e2",
+        "ink": "#ffffff"
+      },
+      "dark": {
+        "app": "#b0c46e",
+        "hover": "#c3d38b",
+        "soft": "#272d14",
+        "ink": "#12160a"
+      },
+      "icon": "<path d=\"M6 20.5V4.5h2.5V7h2.25V4.5h2.5V7h2.25V4.5H18v16\"/><path d=\"M12 10v2.5\"/><path d=\"M10 20.5V17a2 2 0 0 1 4 0v3.5\"/><path d=\"M3.5 20.5h17\"/>"
     }
   ],
   "switcherIcon": "<rect x=\"4\" y=\"4\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"14\" y=\"4\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"4\" y=\"14\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"14\" y=\"14\" width=\"6\" height=\"6\" rx=\"1.5\"/>",
