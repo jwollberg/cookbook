@@ -46,6 +46,13 @@ export function normalizeEmail(email: string): string {
   return `${local}@${domain}`;
 }
 
+/**
+ * The key a person's own data is kept under in every app (its `owner` column): the normalized
+ * email, so case, dots and +tags never split one person in two. Every read and write of their
+ * data is filtered by it in the app's data layer.
+ */
+export const ownerKey = (email: string): string => normalizeEmail(email);
+
 const list = (raw: string | undefined) => (raw ?? "").split(/[\s,;]+/).map((s) => s.trim()).filter((s) => s.includes("@"));
 
 /** The app's own lists, as it had them before the People list: its stand-in while Home is away. */

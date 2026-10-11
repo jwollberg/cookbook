@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { accessFor, fromEnv, people, resetPeople } from "./people";
+import { accessFor, fromEnv, ownerKey, people, resetPeople } from "./people";
 
 const env = { INTERNAL_TOKEN: "t", ALLOWED_EMAILS: "josh.wollberg@gmail.com", OWNER_EMAILS: "josh.wollberg@gmail.com", PEOPLE: "josh.wollberg@gmail.com=Josh" };
 const home = [
@@ -47,5 +47,12 @@ describe("the People list, as an app sees it", () => {
   it("without INTERNAL_TOKEN (a dev server) uses the app's own lists", async () => {
     expect(fromEnv({ ALLOWED_EMAILS: "a@x.com, b@y.com" }, "kitchen").map((p) => p.email)).toEqual(["a@x.com", "b@y.com"]);
     expect((await accessFor("a@x.com", "kitchen", { ALLOWED_EMAILS: "a@x.com" })).allowed).toBe(true);
+  });
+
+  it("keys a person's data by one owner key, however their email is written", () => {
+    const keys = ["josh.wollberg@gmail.com", "JoshWollberg@gmail.com", "josh.wollberg+x@gmail.com", " Josh.Wollberg@GoogleMail.com "].map(ownerKey);
+    expect(new Set(keys)).toEqual(new Set(["joshwollberg@gmail.com"]));
+    expect(ownerKey("Pat.Smith@Example.com")).toBe("pat.smith@example.com");
+    expect(ownerKey("pat.smith@example.com")).not.toBe(ownerKey("patsmith@example.com"));
   });
 });
