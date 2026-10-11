@@ -4,131 +4,34 @@
  * islands alike.
  */
 
+/** The icons: Tabler Icons (tabler.io/icons), MIT license, Copyright (c) 2020-2026 Paweł Kuna. */
 const PATHS = {
-  home: (
-    <>
-      <path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z" />
-    </>
-  ),
-  book: (
-    <>
-      <path d="M6 4h11.5a.5.5 0 0 1 .5.5V20H7.5A2.5 2.5 0 0 1 5 17.5V5a1 1 0 0 1 1-1z" />
-      <path d="M5 17.5A2.5 2.5 0 0 1 7.5 15H18" />
-    </>
-  ),
-  cloche: (
-    <>
-      <path d="M3.5 17.5h17" />
-      <path d="M5.5 17.5a6.5 6.5 0 0 1 13 0" />
-      <path d="M12 8.5V6.5M10 6.5h4" />
-    </>
-  ),
-  calendar: (
-    <>
-      <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" />
-      <path d="M3.5 10h17M8 3v4M16 3v4" />
-    </>
-  ),
-  bag: (
-    <>
-      <path d="M5.5 8.5h13l-1 11.5h-11z" />
-      <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" />
-    </>
-  ),
-  pot: (
-    <>
-      <path d="M4.5 10.5h15V16a4 4 0 0 1-4 4h-7a4 4 0 0 1-4-4z" />
-      <path d="M2.5 10.5h19" />
-      <path d="M9.5 7c0-1.2 1.2-1.3 1.2-2.5M14.3 7c0-1.2 1.2-1.3 1.2-2.5" />
-    </>
-  ),
-  search: (
-    <>
-      <circle cx="11" cy="11" r="6.5" />
-      <path d="m20 20-4.2-4.2" />
-    </>
-  ),
-  plus: <path d="M12 5v14M5 12h14" />,
-  minus: <path d="M5 12h14" />,
-  check: <path d="m5 12.5 4.5 4.5L19 7" />,
-  x: <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" />,
-  chevronDown: <path d="m6 9 6 6 6-6" />,
-  chevronLeft: <path d="m15 6-6 6 6 6" />,
-  chevronRight: <path d="m9 6 6 6-6 6" />,
-  arrowRight: <path d="M5 12h14M13 6l6 6-6 6" />,
-  clock: (
-    <>
-      <circle cx="12" cy="12" r="8.5" />
-      <path d="M12 7.5V12l3 2" />
-    </>
-  ),
-  users: (
-    <>
-      <circle cx="9" cy="8.5" r="3.5" />
-      <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
-      <path d="M15.5 5.2a3.5 3.5 0 0 1 0 6.6M21.5 20a6.5 6.5 0 0 0-4-6" />
-    </>
-  ),
-  pencil: (
-    <>
-      <path d="M4 20h4.5L19.5 9a2.1 2.1 0 0 0-3-3L5.5 17z" />
-      <path d="m14.5 7.5 3 3" />
-    </>
-  ),
-  trash: (
-    <>
-      <path d="M4 7h16M10 11v6M14 11v6" />
-      <path d="M6 7l1 13h10l1-13M9 7V4h6v3" />
-    </>
-  ),
-  camera: (
-    <>
-      <path d="M4 8h3.2l1.8-2.5h6L16.8 8H20a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
-      <circle cx="12" cy="13.5" r="3.5" />
-    </>
-  ),
-  printer: (
-    <>
-      <path d="M7 9V3.5h10V9" />
-      <rect x="3" y="9" width="18" height="8" rx="2" />
-      <path d="M7 14h10v6.5H7z" />
-    </>
-  ),
-  logout: (
-    <>
-      <path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" />
-      <path d="m10 16-4-4 4-4M6 12h10" />
-    </>
-  ),
-  grip: (
-    <>
-      <circle cx="9" cy="7" r="1.2" fill="currentColor" />
-      <circle cx="15" cy="7" r="1.2" fill="currentColor" />
-      <circle cx="9" cy="12" r="1.2" fill="currentColor" />
-      <circle cx="15" cy="12" r="1.2" fill="currentColor" />
-      <circle cx="9" cy="17" r="1.2" fill="currentColor" />
-      <circle cx="15" cy="17" r="1.2" fill="currentColor" />
-    </>
-  ),
-  upload: (
-    <>
-      <path d="M12 16V4.5M7 9.5l5-5 5 5M5 20h14" />
-    </>
-  ),
-  settings: (
-    <>
-      <circle cx="12" cy="12" r="3" />
-      <path d="M12 2.8v2.4M12 18.8v2.4M4.2 7.5l2.1 1.2M17.7 15.3l2.1 1.2M4.2 16.5l2.1-1.2M17.7 8.7l2.1-1.2" />
-    </>
-  ),
-  list: (
-    <>
-      <path d="M9 6.5h11M9 12h11M9 17.5h11" />
-      <circle cx="4.5" cy="6.5" r="1" fill="currentColor" />
-      <circle cx="4.5" cy="12" r="1" fill="currentColor" />
-      <circle cx="4.5" cy="17.5" r="1" fill="currentColor" />
-    </>
-  ),
+  home: <><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></>,
+  book: <><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></>,
+  cloche: <path d="M19 3v12h-5c-.023 -3.681 .184 -7.406 5 -12m0 12v6h-1v-3m-10 -14v17m-3 -17v3a3 3 0 1 0 6 0v-3" />,
+  calendar: <><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></>,
+  bag: <><path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304" /><path d="M9 11v-5a3 3 0 0 1 6 0v5" /></>,
+  pot: <><path d="M4 11h16a1 1 0 0 1 1 1v.5c0 1.5 -2.517 5.573 -4 6.5v1a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-1c-1.687 -1.054 -4 -5 -4 -6.5v-.5a1 1 0 0 1 1 -1" /><path d="M12 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2" /><path d="M16 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2" /><path d="M8 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2" /></>,
+  search: <><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></>,
+  plus: <><path d="M12 5l0 14" /><path d="M5 12l14 0" /></>,
+  minus: <path d="M5 12l14 0" />,
+  check: <path d="M5 12l5 5l10 -10" />,
+  x: <><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></>,
+  chevronDown: <path d="M6 9l6 6l6 -6" />,
+  chevronLeft: <path d="M15 6l-6 6l6 6" />,
+  chevronRight: <path d="M9 6l6 6l-6 6" />,
+  arrowRight: <><path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /></>,
+  clock: <><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 7v5l3 3" /></>,
+  users: <><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></>,
+  pencil: <><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></>,
+  trash: <><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></>,
+  camera: <><path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" /><path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></>,
+  printer: <><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 15a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2l0 -4" /></>,
+  logout: <><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></>,
+  grip: <><path d="M8 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M8 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M8 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M14 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M14 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M14 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></>,
+  upload: <><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 9l5 -5l5 5" /><path d="M12 4l0 12" /></>,
+  settings: <><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></>,
+  list: <><path d="M9 6l11 0" /><path d="M9 12l11 0" /><path d="M9 18l11 0" /><path d="M5 6l0 .01" /><path d="M5 12l0 .01" /><path d="M5 18l0 .01" /></>,
 } as const;
 
 export type IconName = keyof typeof PATHS;

@@ -1,5 +1,5 @@
 {
-  "$comment": "The private apps, in switcher order. Colors: light/dark for --app, --app-hover, --app-soft, --app-ink. Icon: inner SVG of a 24x24, stroke=currentColor, stroke-width 2, round caps/joins. 'who': owner = Josh only; household = Josh, Gwen, Reagen (must match the Cloudflare Access policies).",
+  "$comment": "The private apps, in switcher order. Colors: light/dark for --app, --app-hover, --app-soft, --app-ink. Icon: the inside of a Tabler Icons outline icon (tabler.io/icons, MIT), 24x24, stroke=currentColor, stroke-width 2, round caps/joins. 'who': owner = Josh only; household = Josh, Gwen, Reagen (must match the Cloudflare Access policies).",
   "apps": [
     {
       "id": "home",
@@ -19,7 +19,7 @@
         "soft": "#232b38",
         "ink": "#0c0e14"
       },
-      "icon": "<path d=\"M3.5 11 12 4.5l8.5 6.5\"/><path d=\"M5.5 9.5V20h13V9.5\"/><path d=\"M10 20v-5.5h4V20\"/>"
+      "icon": "<path d=\"M5 12l-2 0l9 -9l9 9l-2 0\"/><path d=\"M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7\"/><path d=\"M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6\"/>"
     },
     {
       "id": "kitchen",
@@ -39,7 +39,7 @@
         "soft": "#3a2216",
         "ink": "#140c08"
       },
-      "icon": "<path d=\"M4.5 10.5h15V16a4 4 0 0 1-4 4h-7a4 4 0 0 1-4-4z\"/><path d=\"M2.5 10.5h19\"/><path d=\"M9.5 7c0-1.2 1.2-1.3 1.2-2.5M14.3 7c0-1.2 1.2-1.3 1.2-2.5\"/>"
+      "icon": "<path d=\"M4 11h16a1 1 0 0 1 1 1v.5c0 1.5 -2.517 5.573 -4 6.5v1a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-1c-1.687 -1.054 -4 -5 -4 -6.5v-.5a1 1 0 0 1 1 -1\"/><path d=\"M12 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2\"/><path d=\"M16 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2\"/><path d=\"M8 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2\"/>"
     },
     {
       "id": "supercut",
@@ -59,7 +59,7 @@
         "soft": "#3a1727",
         "ink": "#1a0a11"
       },
-      "icon": "<path d=\"M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z\"/><path d=\"m6.2 5.3 3.1 3.9\"/><path d=\"m12.4 3.4 3.1 4\"/><path d=\"M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z\"/>"
+      "icon": "<path d=\"M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12\"/><path d=\"M8 4l0 16\"/><path d=\"M16 4l0 16\"/><path d=\"M4 8l4 0\"/><path d=\"M4 16l4 0\"/><path d=\"M4 12l16 0\"/><path d=\"M16 8l4 0\"/><path d=\"M16 16l4 0\"/>"
     },
     {
       "id": "budget",
@@ -79,7 +79,7 @@
         "soft": "#262246",
         "ink": "#0c0f17"
       },
-      "icon": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"3\"/><path d=\"m3 7 9 6 9-6\"/>"
+      "icon": "<path d=\"M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0\"/><path d=\"M3 8a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2l0 -8\"/><path d=\"M18 12h.01\"/><path d=\"M6 12h.01\"/>"
     },
     {
       "id": "smarthome",
@@ -99,7 +99,7 @@
         "soft": "#123532",
         "ink": "#06201d"
       },
-      "icon": "<path d=\"M4 11.5 12 5l8 6.5\"/><path d=\"M6 10v9.5h12V10\"/><path d=\"M9.25 15.25a4 4 0 0 1 5.5 0\"/><path d=\"M11.1 17.4a1.3 1.3 0 0 1 1.8 0\"/>"
+      "icon": "<path d=\"M15 22v-2\"/><path d=\"M18 22v-4\"/><path d=\"M21 22v-6\"/><path d=\"M19 12.494v-.494h2l-9 -9l-9 9h2v7a2 2 0 0 0 2 2h4\"/><path d=\"M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v.5\"/>"
     },
     {
       "id": "planning",
@@ -119,15 +119,15 @@
         "soft": "#1b2640",
         "ink": "#0a1020"
       },
-      "icon": "<path d=\"M10.5 6.5h9M10.5 12h9M10.5 17.5h9\"/><path d=\"m3.8 6.4 1.5 1.5 2.7-2.8\"/><path d=\"m3.8 11.9 1.5 1.5 2.7-2.8\"/><circle cx=\"5.6\" cy=\"17.5\" r=\"1.4\"/>"
+      "icon": "<path d=\"M3.5 5.5l1.5 1.5l2.5 -2.5\"/><path d=\"M3.5 11.5l1.5 1.5l2.5 -2.5\"/><path d=\"M3.5 17.5l1.5 1.5l2.5 -2.5\"/><path d=\"M11 6l9 0\"/><path d=\"M11 12l9 0\"/><path d=\"M11 18l9 0\"/>"
     }
   ],
-  "switcherIcon": "<rect x=\"4\" y=\"4\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"14\" y=\"4\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"4\" y=\"14\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"14\" y=\"14\" width=\"6\" height=\"6\" rx=\"1.5\"/>",
+  "switcherIcon": "<path d=\"M4 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4\"/><path d=\"M14 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4\"/><path d=\"M4 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4\"/><path d=\"M14 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4\"/>",
   "accountIcons": {
-    "switch": "<path d=\"M17 2l4 4-4 4\"/><path d=\"M3 11V9a3 3 0 0 1 3-3h15\"/><path d=\"M7 22l-4-4 4-4\"/><path d=\"M21 13v2a3 3 0 0 1-3 3H3\"/>",
-    "signOut": "<path d=\"M9 20H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3\"/><path d=\"m16 17 5-5-5-5\"/><path d=\"M21 12H9\"/>",
-    "person": "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6\"/>",
-    "settings": "<path d=\"M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1\"/><circle cx=\"15\" cy=\"6\" r=\"2\"/><circle cx=\"9\" cy=\"12\" r=\"2\"/><circle cx=\"17\" cy=\"18\" r=\"2\"/>"
+    "switch": "<path d=\"M4 12v-3a3 3 0 0 1 3 -3h13m-3 -3l3 3l-3 3\"/><path d=\"M20 12v3a3 3 0 0 1 -3 3h-13m3 3l-3 -3l3 -3\"/>",
+    "signOut": "<path d=\"M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2\"/><path d=\"M9 12h12l-3 -3\"/><path d=\"M18 15l3 -3\"/>",
+    "person": "<path d=\"M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0\"/><path d=\"M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2\"/>",
+    "settings": "<path d=\"M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065\"/><path d=\"M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0\"/>"
   },
   "signOutUrl": "/cdn-cgi/access/logout"
 }
