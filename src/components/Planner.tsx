@@ -222,10 +222,7 @@ export default function Planner({ owner, plans, recipes, meals, today, monday }:
 
       <div className="planner">
         <aside className="planner-library panel panel-pad" style={{ display: "grid", gap: 14 }}>
-          <div style={{ display: "grid", gap: 4 }}>
-            <strong>Drag onto a day</strong>
-            <span className="small muted">Or tap + to add to {addTarget === today ? "today" : "Monday"}.</span>
-          </div>
+          <strong>Drag onto a day</strong>
           <div className="search">
             <Icon name="search" />
             <input
@@ -407,7 +404,7 @@ function DayCell({
                   placeholder={String(recipe?.servings ?? "—")}
                   onChange={(e) => onPatch(i, { servings: e.target.value ? Number(e.target.value) : undefined })}
                   aria-label="Servings"
-                  title="Servings — blank uses the recipe's own"
+                  title="Servings"
                 />
               </div>
             </div>

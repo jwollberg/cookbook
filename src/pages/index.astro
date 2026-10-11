@@ -8,7 +8,7 @@ import { mealImages, recipeCard } from "../lib/format";
 import { emptyPlan, entryCount, mondayOf, planIdFor } from "../lib/plans";
 import { WEEKDAYS, formatRange, fromIso } from "../lib/dates";
 
-const { library, planning, kitchen, owner, viewer, recipesById, mealsById } = await loadKitchen(Astro.locals);
+const { library, planning, owner, viewer, recipesById, mealsById } = await loadKitchen(Astro.locals);
 const today = viewerToday(Astro.locals);
 const monday = mondayOf(today);
 const week = planning.plans.find((p) => p.id === planIdFor(monday)) ?? emptyPlan(monday);
@@ -43,9 +43,6 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
       <div class="hero-copy">
         <span class="eyebrow">{hello}</span>
         <h1>What are we cooking this week?</h1>
-        <p class="lede">
-          Pick recipes, plan the week for {kitchen}, and let the shopping list add itself up.
-        </p>
         <form class="search" action="/recipes" method="get" role="search" style="max-width: 460px;">
           <Icon name="search" />
           <input class="input" type="search" name="q" placeholder="Search recipes…" aria-label="Search recipes" />
@@ -71,10 +68,7 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
       {
         planned === 0 ? (
           <div class="empty">
-            <p>
-              Nothing planned for {formatRange(week.days[0].date, week.days[6].date)} yet. Drop a few
-              dinners onto the week and the shopping list fills itself in.
-            </p>
+            <p>Nothing planned for {formatRange(week.days[0].date, week.days[6].date)} yet.</p>
             <a class="btn btn-primary" href="/plan">
               <Icon name="calendar" /> Plan the week
             </a>

@@ -144,15 +144,11 @@ const svg = (inner: string) =>
                   <div class="as-sep" />
                   <a class="as-item" href={SIGN_OUT_URL}>
                     <Fragment set:html={svg(registry.accountIcons.switch)} />
-                    <span>
-                      Switch account<small>Signs you out, then pick a Google account</small>
-                    </span>
+                    <span>Switch account</span>
                   </a>
                   <a class="as-item" href={SIGN_OUT_URL}>
                     <Fragment set:html={svg(registry.accountIcons.signOut)} />
-                    <span>
-                      Sign out<small>Of every Atheos app</small>
-                    </span>
+                    <span>Sign out</span>
                   </a>
                 </nav>
               </details>
@@ -171,7 +167,6 @@ const svg = (inner: string) =>
         <footer class="footer no-print">
           <div class="wrap footer-inner">
             <span>Kitchen · {kitchenName(viewer)}</span>
-            <span>Recipes are shared by everyone; your plans and your list are yours alone.</span>
           </div>
         </footer>
       )

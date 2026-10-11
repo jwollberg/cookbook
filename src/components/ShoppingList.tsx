@@ -395,7 +395,6 @@ export default function ShoppingList(props: Props) {
               <p className="small muted" aria-live="polite">
                 Adds <strong style={{ color: "var(--ink)" }}>{preview}</strong>
                 {previewAisle ? ` · ${previewAisle}` : " · other"}
-                {parsed.ingredientId ? " — merges with any recipe that needs it" : ""}
               </p>
             )}
             {extras.items.length > 0 && (
@@ -466,9 +465,6 @@ export default function ShoppingList(props: Props) {
         {!hasAnything ? (
           <div className="empty" style={{ marginTop: 12 }}>
             <strong style={{ fontSize: 17, color: "var(--ink)" }}>Your list is empty.</strong>
-            <p>
-              Add a recipe or a meal, type anything you need, or plan the week and it fills itself in.
-            </p>
             <div className="actions">
               <a className="btn btn-primary" href="/recipes">
                 <Icon name="book" /> Browse recipes
@@ -528,11 +524,6 @@ export default function ShoppingList(props: Props) {
           <p className="small muted" style={{ marginTop: 12 }}>
             {list.splitLines.length} ingredient{list.splitLines.length === 1 ? " is" : "s are"} shown in more than one
             unit — no conversion factor exists for them, so they are listed separately rather than guessed.
-          </p>
-        )}
-        {!includeStaples && hasAnything && (
-          <p className="small muted" style={{ marginTop: 6 }}>
-            Staples like salt and pepper are hidden unless you add them yourself. Tick “Staples” to see them all.
           </p>
         )}
       </section>

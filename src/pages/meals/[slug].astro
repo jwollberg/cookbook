@@ -130,12 +130,7 @@ const images = mealImages(meal, recipesById).slice(0, 4);
     {
       meal.timeline.length > 0 && (
         <section class="section" style="max-width: 760px;">
-          <div class="section-head">
-            <div style="display: grid; gap: 6px;">
-              <h2>Game plan</h2>
-              <p class="muted">The useful order interleaves the recipes rather than running them one after another.</p>
-            </div>
-          </div>
+          <div class="section-head"><h2>Game plan</h2></div>
           <ol class="timeline">
             {meal.timeline.map((step, i) => {
               const recipe = step.recipeId ? recipesById.get(step.recipeId) : undefined;
@@ -162,15 +157,7 @@ const images = mealImages(meal, recipesById).slice(0, 4);
     }
 
     <section class="section">
-      <div class="section-head">
-        <div style="display: grid; gap: 6px;">
-          <h2>Everything you need</h2>
-          <p class="muted">
-            Merged across all {components.length} dishes and grouped by aisle — shared ingredients are already
-            added together.
-          </p>
-        </div>
-      </div>
+      <div class="section-head"><h2>Everything you need</h2></div>
       <div class="panel panel-pad" style="columns: 300px 2; column-gap: 40px;">
         {
           shopping.groups.map((group) => (

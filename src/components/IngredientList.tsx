@@ -170,9 +170,6 @@ export default function IngredientList({
             </button>
           </div>
         )}
-        <p className="small muted" style={{ textAlign: "center" }}>
-          Goes on your list — no plan needed.
-        </p>
       </div>
 
       <Toast toast={list.toast} />

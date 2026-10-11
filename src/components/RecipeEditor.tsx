@@ -194,6 +194,11 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds 
   }
 
   const photo = pendingPhoto?.url ?? recipe.image;
+  const photoNote = pendingPhoto
+    ? "Uploads when you create the recipe."
+    : recipe.imageCredit
+      ? `Current photo: ${recipe.imageCredit.author}, ${recipe.imageCredit.license}.`
+      : null;
 
   return (
     <div style={{ display: "grid", gap: 20, maxWidth: 880 }}>
@@ -230,13 +235,11 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds 
                 </button>
               )}
             </div>
-            <p className="small muted" style={{ maxWidth: 360 }}>
-              {pendingPhoto
-                ? "Uploads when you create the recipe."
-                : recipe.imageCredit
-                  ? `Current photo: ${recipe.imageCredit.author}, ${recipe.imageCredit.license}.`
-                  : "Snap it on your phone or pick a file — it is resized before upload."}
-            </p>
+            {photoNote && (
+              <p className="small muted" style={{ maxWidth: 360 }}>
+                {photoNote}
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -248,7 +251,7 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds 
           <input className="input" value={recipe.title} onChange={(e) => set("title", e.target.value)} placeholder="Greek Lemon Potatoes" />
         </Field>
         <div style={{ display: "grid", gap: 14, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
-          <Field label="Subtitle" hint="Traditional or native name">
+          <Field label="Subtitle">
             <input
               className="input"
               value={recipe.subtitle ?? ""}
@@ -256,7 +259,7 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds 
               placeholder="Patates Sto Fourno"
             />
           </Field>
-          <Field label="Address" hint={isNew ? "Made from the title" : "Fixed once created"}>
+          <Field label="Address">
             <input className="input" value={`/recipes/${recipe.id || slugify(recipe.title)}`} readOnly style={{ color: "var(--muted)" }} />
           </Field>
         </div>
@@ -265,7 +268,6 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds 
             className="textarea"
             value={recipe.description ?? ""}
             onChange={(e) => set("description", e.target.value || undefined)}
-            placeholder="One or two lines on what makes it worth cooking."
           />
         </Field>
         <div style={{ display: "grid", gap: 14, gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))" }}>
@@ -278,12 +280,12 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds 
           <Field label="Cook (min)">
             <input className="input num" type="number" min={0} value={recipe.cookMin} onChange={(e) => set("cookMin", Number(e.target.value) || 0)} />
           </Field>
-          <Field label="Chill (min)" hint="Hands-off">
+          <Field label="Chill (min)">
             <input className="input num" type="number" min={0} value={recipe.restMin} onChange={(e) => set("restMin", Number(e.target.value) || 0)} />
           </Field>
         </div>
         <div style={{ display: "grid", gap: 14, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
-          <Field label="Yield" hint="When a count beats servings">
+          <Field label="Yield">
             <input className="input" value={recipe.yieldNote ?? ""} onChange={(e) => set("yieldNote", e.target.value || undefined)} placeholder="12–14 small patties" />
           </Field>
           <Field label="Tags" hint="Comma separated">
@@ -362,7 +364,6 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds 
             className="textarea"
             value={recipe.notes ?? ""}
             onChange={(e) => set("notes", e.target.value || undefined)}
-            placeholder="Anything worth knowing that is not a step."
           />
         </Field>
       </section>
@@ -542,7 +543,7 @@ function IngredientRow({
           <input type="checkbox" className="check" checked={row.optional} onChange={(e) => onChange({ optional: e.target.checked })} />
           Optional
         </label>
-        <label className="small" style={{ display: "flex", alignItems: "center", gap: 6 }} title="Held fixed when the recipe is scaled — e.g. oil for frying">
+        <label className="small" style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <input type="checkbox" className="check" checked={row.noScale} onChange={(e) => onChange({ noScale: e.target.checked })} />
           Don't scale
         </label>

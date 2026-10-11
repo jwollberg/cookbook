@@ -87,7 +87,7 @@ export default function RecipeBrowser({
 
       {filtered.length === 0 ? (
         <div className="empty">
-          <p>Nothing matches that. Try another search or clear the filters.</p>
+          <p>Nothing matches that.</p>
         </div>
       ) : (
         <div className="card-grid">
