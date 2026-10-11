@@ -42,6 +42,26 @@
       "icon": "<path d=\"M4.5 10.5h15V16a4 4 0 0 1-4 4h-7a4 4 0 0 1-4-4z\"/><path d=\"M2.5 10.5h19\"/><path d=\"M9.5 7c0-1.2 1.2-1.3 1.2-2.5M14.3 7c0-1.2 1.2-1.3 1.2-2.5\"/>"
     },
     {
+      "id": "supercut",
+      "name": "Supercut",
+      "blurb": "Any line from our films and shows, as clips",
+      "url": "https://home.atheosstudios.com/supercut/",
+      "who": "household",
+      "light": {
+        "app": "#a3195b",
+        "hover": "#8a1450",
+        "soft": "#fbe8f0",
+        "ink": "#ffffff"
+      },
+      "dark": {
+        "app": "#f07aad",
+        "hover": "#f598c0",
+        "soft": "#3a1727",
+        "ink": "#1a0a11"
+      },
+      "icon": "<path d=\"M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z\"/><path d=\"m6.2 5.3 3.1 3.9\"/><path d=\"m12.4 3.4 3.1 4\"/><path d=\"M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z\"/>"
+    },
+    {
       "id": "budget",
       "name": "Budget",
       "blurb": "Envelopes, bills, debt payoff",
@@ -82,64 +102,24 @@
       "icon": "<path d=\"M4 11.5 12 5l8 6.5\"/><path d=\"M6 10v9.5h12V10\"/><path d=\"M9.25 15.25a4 4 0 0 1 5.5 0\"/><path d=\"M11.1 17.4a1.3 1.3 0 0 1 1.8 0\"/>"
     },
     {
-      "id": "elderdeep",
-      "name": "Elderdeep",
-      "blurb": "Game tracker — plans and bugs",
-      "url": "https://elderdeep.atheosstudios.com/tracker/",
+      "id": "planning",
+      "name": "Planning",
+      "blurb": "Plans and issues, every project",
+      "url": "https://planning.atheosstudios.com/",
       "who": "owner",
       "light": {
-        "app": "#8a5a2b",
-        "hover": "#734a22",
-        "soft": "#f5ece2",
+        "app": "#2457d6",
+        "hover": "#1d47b3",
+        "soft": "#e8eefc",
         "ink": "#ffffff"
       },
       "dark": {
-        "app": "#d09a5e",
-        "hover": "#ddb07c",
-        "soft": "#33261a",
-        "ink": "#140f0a"
+        "app": "#7ea6ff",
+        "hover": "#9cbcff",
+        "soft": "#1b2640",
+        "ink": "#0a1020"
       },
-      "icon": "<path d=\"M2.5 20 9 8l3.5 5.5L15 10l6.5 10z\"/><path d=\"M10.5 20v-2.5a1.75 1.75 0 0 1 3.5 0V20\"/>"
-    },
-    {
-      "id": "graveerror",
-      "name": "Grave Error",
-      "blurb": "Game tracker — plans and bugs",
-      "url": "https://graveerror.atheosstudios.com/tracker/",
-      "who": "owner",
-      "light": {
-        "app": "#33607f",
-        "hover": "#2a4f69",
-        "soft": "#e4edf3",
-        "ink": "#ffffff"
-      },
-      "dark": {
-        "app": "#7fb0d4",
-        "hover": "#9cc3e0",
-        "soft": "#1a2a37",
-        "ink": "#0d1a24"
-      },
-      "icon": "<path d=\"M6.5 20.5V11a5.5 5.5 0 0 1 11 0v9.5\"/><path d=\"M12 8.5v7M9.25 11.25h5.5\"/><path d=\"M3.5 20.5h17\"/>"
-    },
-    {
-      "id": "holdout",
-      "name": "Holdout",
-      "blurb": "Game tracker — plans and bugs",
-      "url": "https://holdout.atheosstudios.com/tracker/",
-      "who": "owner",
-      "light": {
-        "app": "#4d5c1f",
-        "hover": "#3e4b18",
-        "soft": "#eef1e2",
-        "ink": "#ffffff"
-      },
-      "dark": {
-        "app": "#b0c46e",
-        "hover": "#c3d38b",
-        "soft": "#272d14",
-        "ink": "#12160a"
-      },
-      "icon": "<path d=\"M6 20.5V4.5h2.5V7h2.25V4.5h2.5V7h2.25V4.5H18v16\"/><path d=\"M12 10v2.5\"/><path d=\"M10 20.5V17a2 2 0 0 1 4 0v3.5\"/><path d=\"M3.5 20.5h17\"/>"
+      "icon": "<path d=\"M10.5 6.5h9M10.5 12h9M10.5 17.5h9\"/><path d=\"m3.8 6.4 1.5 1.5 2.7-2.8\"/><path d=\"m3.8 11.9 1.5 1.5 2.7-2.8\"/><circle cx=\"5.6\" cy=\"17.5\" r=\"1.4\"/>"
     }
   ],
   "switcherIcon": "<rect x=\"4\" y=\"4\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"14\" y=\"4\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"4\" y=\"14\" width=\"6\" height=\"6\" rx=\"1.5\"/><rect x=\"14\" y=\"14\" width=\"6\" height=\"6\" rx=\"1.5\"/>",
