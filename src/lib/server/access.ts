@@ -6,8 +6,8 @@
  * with a JWT (header `Cf-Access-Jwt-Assertion`, cookie `CF_Authorization`).
  * We verify that signature against the team's public keys, the audience
  * (this app), the issuer and the expiry. The middleware then checks the email
- * against ALLOWED_EMAILS, so a mistake in the Access policy still lets nobody
- * in — it fails closed.
+ * against Home's People list (./people.ts), so a mistake in the Access policy
+ * still lets nobody in — it fails closed.
  *
  * Same check as Budget and Home (Website-Budget/src/lib/server/access.ts).
  */

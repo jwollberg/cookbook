@@ -1,40 +1,49 @@
 /**
- * The gate: the allowlist and the Cloudflare Access token. Every one of these failing open would let a stranger
+ * The gate: Home's People list and the Cloudflare Access token. Every one of these failing open would let a stranger
  * into the household's kitchen, so they are tested rather than trusted.
  */
 
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { canonicalEmail, isAllowed, safeNext } from "./auth";
+import { canonicalEmail, safeNext } from "./auth";
 import { accessToken, resetAccessKeys, verifyAccessJwt } from "./access";
+import { accessFor, resetPeople } from "./people";
 import { toBase64Url } from "./crypto";
 
-const LIST = "sam.cook@gmail.com, alex@example.com pat.baker@gmail.com";
+describe("who may use Kitchen: Home's People list", () => {
+  // The app's own list, which stands in only until Home first answers.
+  const env = { INTERNAL_TOKEN: "t", ALLOWED_EMAILS: "sam.cook@gmail.com, alex@example.com", OWNER_EMAILS: "sam.cook@gmail.com" };
+  const answer = (people: unknown[]) => vi.stubGlobal("fetch", async () => new Response(JSON.stringify({ people })));
 
-describe("allowlist", () => {
-  it("admits listed accounts", () => {
-    expect(isAllowed("sam.cook@gmail.com", LIST)).toBe(true);
-    expect(isAllowed("alex@example.com", LIST)).toBe(true);
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    resetPeople();
+  });
+
+  it("follows the People list, not ALLOWED_EMAILS, once Home answers", async () => {
+    answer([
+      { email: "sam.cook@gmail.com", name: "Sam", owner: true, apps: ["home", "kitchen", "budget"] },
+      { email: "pat.baker@gmail.com", name: "Pat", owner: false, apps: ["home", "kitchen"] },
+      { email: "alex@example.com", name: "Alex", owner: false, apps: ["home"] },
+    ]);
+    expect(await accessFor("SamCook+food@Gmail.com", "kitchen", env)).toEqual({ allowed: true, owner: true, name: "Sam", apps: ["home", "kitchen", "budget"] });
+    expect(await accessFor("pat.baker@gmail.com", "kitchen", env)).toMatchObject({ allowed: true, owner: false, apps: ["home", "kitchen"] });
+    expect((await accessFor("alex@example.com", "kitchen", env)).allowed).toBe(false); // on ALLOWED_EMAILS, not given Kitchen
+    expect((await accessFor("someone@gmail.com", "kitchen", env)).allowed).toBe(false);
+    expect((await accessFor(undefined, "kitchen", env)).allowed).toBe(false);
+  });
+
+  it("fails closed for anyone Home's list doesn't have, even with an empty list", async () => {
+    answer([]);
+    expect((await accessFor("sam.cook@gmail.com", "kitchen", env)).allowed).toBe(false);
   });
 
   it("matches Gmail the way Gmail does: no dots, no plus tags, any case", () => {
-    expect(isAllowed("SamCook@Gmail.com", LIST)).toBe(true);
-    expect(isAllowed("sam.cook+kitchen@googlemail.com", LIST)).toBe(true);
     expect(canonicalEmail("s.a.m+x@gmail.com")).toBe("sam@gmail.com");
+    expect(canonicalEmail("Sam.Cook+kitchen@googlemail.com")).toBe("samcook@gmail.com");
   });
 
   it("keeps dots meaningful outside Gmail", () => {
     expect(canonicalEmail("first.last@example.com")).toBe("first.last@example.com");
-    expect(isAllowed("firstlast@example.com", "first.last@example.com")).toBe(false);
-  });
-
-  it("refuses everyone else", () => {
-    expect(isAllowed("someone@gmail.com", LIST)).toBe(false);
-    expect(isAllowed(undefined, LIST)).toBe(false);
-  });
-
-  it("fails closed when the list is missing or empty", () => {
-    expect(isAllowed("sam.cook@gmail.com", undefined)).toBe(false);
-    expect(isAllowed("sam.cook@gmail.com", "  ")).toBe(false);
   });
 });
 

@@ -57,15 +57,18 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
   there).
 - **The server re-checks everything** (`src/middleware.ts`, `src/lib/server/access.ts`): the
   Access JWT's signature against the team's keys, its audience (`ACCESS_AUD`), issuer and expiry,
-  then the email against `ALLOWED_EMAILS` (compared the way Gmail does). Anything missing or
-  wrong fails closed (403), so a mistake in the Access policy still lets nobody in. The list is
-  checked on **every request**, so removing someone locks them out immediately.
-- **Adding someone = three places:** the Access policy, `ALLOWED_EMAILS` (in Kitchen's `app.env`
-  on Vault), and a test user in `atheos-access`.
+  then the email against **Home's People list** (`src/lib/server/people.ts`, a copy of Home's
+  `vault/app-platform/people.ts`: asks `atheos-home:8080/internal/people` with `INTERNAL_TOKEN`,
+  keeps the answer 30 s and the last good one while Home is away). Anything missing or wrong
+  fails closed (403), so a mistake in the Access policy still lets nobody in. It is checked on
+  **every request**, so removing someone locks them out within half a minute. `ALLOWED_EMAILS` /
+  `OWNER_EMAILS` in `app.env` only stand in until Home first answers (and on the dev server).
+- **Adding someone:** invite them on home.atheosstudios.com/people (Home keeps the Access policy
+  in step), plus a test user in `atheos-access`.
 - People are matched **by email** (`userForEmail` in `db.ts`): users from the old Google-OAuth
   days are keyed by their Google `sub`, newcomers by a random id. Access sends only the address,
   so a newcomer's household is named from it ("Gwenevere's Kitchen") — rename it on /household.
-- `OWNER_EMAILS` (Josh) sees every app in the app switcher; everyone else sees Home and Kitchen.
+- The app switcher lists Home plus the apps the People list gives that person (`locals.apps`).
 - Sign out is `/cdn-cgi/access/logout`. The old `/login` and `/auth/*` pages are gone and
   redirect home. (`kitchen-atheos`, the Google project the old login used, was deleted on 2026-10-04 — restorable
   until early November with `gcloud projects undelete kitchen-atheos` if ever needed.)
@@ -75,7 +78,7 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
 - **Glance:** `/internal/glance` (POST `{ email, today }` → household, tonight's dishes, planned
   days, list count) feeds Kitchen's tile on home.atheosstudios.com. Only the Home container on
   Vault reaches it, with `INTERNAL_TOKEN`; the tunnel never routes /internal/. It still answers
-  only for people on `ALLOWED_EMAILS`.
+  only for people the People list lets use Kitchen.
 
 ## Households
 

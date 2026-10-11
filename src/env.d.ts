@@ -12,9 +12,9 @@ interface Env {
   ACCESS_TEAM_DOMAIN?: string;
   /** This app's Access audience tag. */
   ACCESS_AUD?: string;
-  /** Comma-separated; the only accounts that may use Kitchen. */
+  /** Comma-separated; who may use Kitchen until Home's People list first answers (people.ts). */
   ALLOWED_EMAILS?: string;
-  /** Comma-separated; who sees every Atheos app in the switcher (Josh). */
+  /** Comma-separated; the owners (Josh) until Home's People list first answers. */
   OWNER_EMAILS?: string;
   /** The household's time zone, for "today" (America/Chicago). */
   TIME_ZONE?: string;
@@ -29,7 +29,9 @@ declare namespace App {
     /** Set by the middleware on every request except robots.txt. */
     viewer: import("./lib/server/db").Viewer;
     household: import("./lib/server/db").Household;
-    /** Josh: the app switcher shows him every app, everyone else Home and Kitchen. */
+    /** Owns Home's People list (Josh), from that list. */
     owner: boolean;
+    /** Every app this person may open, from Home's People list: the app switcher shows these. */
+    apps: string[];
   }
 }

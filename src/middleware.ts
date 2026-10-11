@@ -4,9 +4,9 @@
  * In production Cloudflare Access stands in front of the whole hostname and
  * does the Google sign-in (the same login as every other Atheos app). It signs
  * each request it lets through; we check that signature again here and the
- * email against ALLOWED_EMAILS, so a mistake in the Access policy still lets
- * nobody in. The dev server (import.meta.env.DEV, compiled out of a build)
- * signs you in as the local Dev Cook instead.
+ * email against Home's People list (./lib/server/people.ts), so a mistake in
+ * the Access policy still lets nobody in. The dev server (import.meta.env.DEV,
+ * compiled out of a build) signs you in as the local Dev Cook instead.
  *
  * Static files (JS, CSS, the starter photos) are served by Cloudflare before
  * the Worker runs and never reach this — which is exactly why nothing private
@@ -16,8 +16,9 @@
 import { defineMiddleware } from "astro:middleware";
 import { accessToken, verifyAccessJwt } from "./lib/server/access";
 import { isInternal, platform } from "./lib/server/platform";
-import { isAllowed } from "./lib/server/auth";
+import { accessFor } from "./lib/server/people";
 import { DEV_USER } from "./lib/server/context";
+import registry from "./lib/apps.json";
 import { ensureHousehold, loadViewer, refreshProfile, upsertUser, userForEmail } from "./lib/server/db";
 
 const PUBLIC = [/^\/robots\.txt$/];
@@ -57,18 +58,21 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (import.meta.env.DEV) {
     viewer = (await loadViewer(env.DB, DEV_USER.id)) ?? (await upsertUser(env.DB, DEV_USER));
     locals.owner = true;
+    locals.apps = registry.apps.map((a) => a.id);
   } else {
-    if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD || !env.ALLOWED_EMAILS) {
+    if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) {
       return refuse(url.pathname, "The login isn't set up yet, so nobody can get in.");
     }
-    // The allowlist is checked on every request, so taking someone off it
-    // locks them out immediately.
+    // The People list is checked on every request (Home's answer is kept for
+    // half a minute), so taking someone off it locks them out within that.
     const claims = await verifyAccessJwt(accessToken(request), env);
-    if (!claims || !isAllowed(claims.email, env.ALLOWED_EMAILS)) {
+    const access = claims ? await accessFor(claims.email, "kitchen", env) : null;
+    if (!claims || !access?.allowed) {
       return refuse(url.pathname, "This account isn't on the list. Ask Josh to add you.");
     }
     viewer = await refreshProfile(env.DB, await userForEmail(env.DB, claims.email), claims);
-    locals.owner = isAllowed(claims.email, env.OWNER_EMAILS);
+    locals.owner = access.owner;
+    locals.apps = access.apps;
   }
 
   // Writes must come from our own pages. SameSite cookies already keep Access's

@@ -1,10 +1,9 @@
 /**
- * Who may use Kitchen.
+ * Small helpers for who is who.
  *
  * Signing in is Cloudflare Access's job (Google, shared by every Atheos app —
- * see ./access.ts). This is the second lock: an account must also be on
- * ALLOWED_EMAILS, checked on every request, and an empty or missing list lets
- * nobody in rather than everybody.
+ * see ./access.ts). Who may use Kitchen is Home's People list (./people.ts),
+ * checked by the middleware on every request.
  */
 
 /**
@@ -22,21 +21,6 @@ export function canonicalEmail(email: string): string {
     return `${local.split("+")[0].replace(/\./g, "")}@gmail.com`;
   }
   return `${local}@${domain}`;
-}
-
-export function parseAllowlist(raw: string | undefined): Set<string> {
-  return new Set(
-    (raw ?? "")
-      .split(/[\s,;]+/)
-      .map((e) => e.trim())
-      .filter((e) => e.includes("@"))
-      .map(canonicalEmail),
-  );
-}
-
-export function isAllowed(email: string | undefined, raw: string | undefined): boolean {
-  if (!email) return false;
-  return parseAllowlist(raw).has(canonicalEmail(email));
 }
 
 /**

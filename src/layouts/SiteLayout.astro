@@ -18,7 +18,7 @@ interface Props {
 
 const { title, description = "Recipes, meal plans, and a shopping list that adds itself up." } = Astro.props;
 
-const { viewer, household, owner } = Astro.locals;
+const { viewer, household } = Astro.locals;
 const signedIn = Boolean(viewer && household);
 const db = Astro.locals.runtime.env.DB;
 const [households, listCount] = signedIn
@@ -42,8 +42,9 @@ const who = viewer?.name ?? viewer?.email ?? "Signed in";
 const initial = who.trim().charAt(0).toUpperCase();
 const pageTitle = title === "Kitchen" ? title : `${title} · Kitchen`;
 
-// The app switcher shows only the apps this person can open.
-const apps = registry.apps.filter((a) => owner || a.who === "household");
+// The app switcher shows only the apps this person may open (Home's People list).
+const viewerApps = Astro.locals.apps ?? [];
+const apps = registry.apps.filter((a) => a.id === "home" || viewerApps.includes(a.id));
 const self = registry.apps.find((a) => a.id === "kitchen")!;
 const svg = (inner: string) =>
   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
