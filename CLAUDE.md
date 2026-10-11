@@ -1,6 +1,6 @@
 # Kitchen — working notes
 
-Private household kitchen app: shared recipes → meals → a weekly plan per household → generated
+Private household kitchen app: shared recipes → meals → each person's own weekly plan → generated
 cooking sheet + one aggregated shopping list.
 
 - **Live at** `https://kitchen.atheosstudios.com` — a Node server on **Vault** (Josh's Unraid
@@ -22,7 +22,7 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
               ├─ pages render from SQLite per request
               ├─ /api/*              JSON writes, straight to SQLite — live the moment they return
               └─ /photos/*           uploaded photos from the photos folder (behind the gate too)
-            /data/app.sqlite   users, households, library docs, household planning docs
+            /data/app.sqlite   users, library docs, each person's planning docs
             /data/photos/      uploaded photos
 ```
 
@@ -65,9 +65,10 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
   `OWNER_EMAILS` in `app.env` only stand in until Home first answers (and on the dev server).
 - **Adding someone:** invite them on home.atheosstudios.com/people (Home keeps the Access policy
   in step), plus a test user in `atheos-access`.
-- People are matched **by email** (`userForEmail` in `db.ts`): users from the old Google-OAuth
-  days are keyed by their Google `sub`, newcomers by a random id. Access sends only the address,
-  so a newcomer's household is named from it ("Gwenevere's Kitchen") — rename it on /household.
+- People are matched **by email**, compared with `ownerKey` (`people.ts`: case, dots and +tags
+  don't matter; `usersForEmail` / `userForEmail` in `db.ts`). Users from the old Google-OAuth days
+  are keyed by their Google `sub`, newcomers by a random id. Access sends only the address, so a
+  newcomer's kitchen is named from it ("Gwenevere's kitchen", `kitchenName`).
 - The app switcher lists Home plus the apps the People list gives that person (`locals.apps`).
 - Sign out is `/cdn-cgi/access/logout`. The old `/login` and `/auth/*` pages are gone and
   redirect home. (`kitchen-atheos`, the Google project the old login used, was deleted on 2026-10-04 — restorable
@@ -75,21 +76,31 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
 - The dev server signs you in as "Dev Cook" (`import.meta.env.DEV`, compiled out of builds).
   Never add a bypass that is not behind that constant.
 - Writes must carry a same-origin `Origin` header (middleware).
-- **Glance:** `/internal/glance` (POST `{ email, today }` → household, tonight's dishes, planned
-  days, list count) feeds Kitchen's tile on home.atheosstudios.com. Only the Home container on
-  Vault reaches it, with `INTERNAL_TOKEN`; the tunnel never routes /internal/. It still answers
-  only for people the People list lets use Kitchen.
+- **Home's calls.** Only the Home container on Vault reaches `/internal/`, with `INTERNAL_TOKEN`
+  (the middleware); the tunnel never routes it.
+  - `/internal/glance` (POST `{ email, today }` → `{ kitchen, tonight, plannedDays, listCount }`)
+    feeds Kitchen's tile on home.atheosstudios.com: the asker's own kitchen, never anyone
+    else's. Someone who has never opened Kitchen gets an empty week, and no users row. It still
+    answers only for people the People list lets use Kitchen.
+  - `/internal/forget` (POST `{ email }` → `{ ok, removed: { <table>: count } }`, 400 without an
+    address) is Home removing someone: `forgetPerson` deletes their plans, list, ticks, pantry and
+    users row (every row that is them by `ownerKey`). The recipes, meals and ingredients they
+    wrote stay in the library; only the `updated_by` naming them is cleared.
 
-## Households
+## Whose data is whose
 
 - **Shared by everyone:** ingredients, recipes, meals — one recipe book any approved user edits.
-- **Per household:** week plans (`plans`, keyed `week-<monday>`), the shopping list (`shopping`),
-  its ticks (`shopping_ticks`), the pantry.
-- **Any approved user may work in any household** — there are no memberships to check. Each person
-  gets their own household ("Josh's Kitchen") on first sign-in; `users.household_id` records which
-  one they are working in, and the header switcher changes it.
-- **Writes name their household explicitly** (`householdId` in the body), never "whatever the
-  session says now" — otherwise switching household in one tab would redirect another tab's edits.
+- **Each person's own:** week plans (`plans`, keyed `week-<monday>`), the shopping list
+  (`shopping`), its ticks (`shopping_ticks`), the pantry — keyed by `users.id`. There are no
+  households any more (migration 0002 gave each one's rows to whoever made it).
+- **The data layer does the filtering.** Every function in `db.ts` that touches planning takes the
+  viewer's `users.id` and reads or writes only their rows; pages and routes pass
+  `locals.viewer.id` and never filter themselves. Owning the People list (Josh) grants nothing
+  here: nobody sees anyone else's week or list.
+- **Writes name their owner** (`owner`, the user id the page was rendered for), and the API
+  answers 404 for any owner but the viewer — someone else's plan or list is "not found", never
+  403 or their data. That also stops a tab left open from before switching Google account from
+  saving its week over the new account's.
 
 ## The shopping list
 
@@ -102,16 +113,15 @@ Extras (`ShoppingExtras`) are recipes and meals added directly (with servings) a
   could be olive or neutral) — a wrong merge is worse than a loose line.
 - Hand-added items go on **after** pantry subtraction and show even if they are staples.
 - Edits are **operations** (`ListEditSchema`), applied server-side to the latest copy with
-  optimistic concurrency on `updated_at` (`mutateShopping`) — two people adding at once both keep
+  optimistic concurrency on `updated_at` (`mutateShopping`) — two phones adding at once both keep
   what they added. Ticks are rows, so concurrent ticking never conflicts.
 - The plan choice lives on the list: absent = automatic (`pickCurrentPlan`: the earliest unfinished
   week with something planned), `null` = no plan, or a plan id.
 
-Plans autosave (debounced) — there is no commit noise to avoid any more, and a household shares
-them.
+Plans autosave (debounced).
 
 Dates: `src/lib/dates.ts` works in local time and formats by hand. The server runs in UTC, so "today"
-comes from the household's time zone (`TIME_ZONE`, America/Chicago; see `viewerToday`). `toISOString()`
+comes from the kitchen's time zone (`TIME_ZONE`, America/Chicago; see `viewerToday`). `toISOString()`
 converts to UTC first and near midnight reports the wrong day — it silently moves a dinner onto the
 wrong day's shopping list.
 
@@ -121,8 +131,8 @@ wrong day's shopping list.
   text. This is what makes shopping-list aggregation possible at all.
 - `recipes`, `meals` — meals have components with roles (main / side / starter / dessert / drink /
   sauce) and an optional timeline that interleaves them.
-- `plans` — per household: days → entries (meal or recipe, slot, servings).
-- `shopping` + `shopping_ticks` — per household.
+- `plans` — per person (`user_id`): days → entries (meal or recipe, slot, servings).
+- `shopping` + `shopping_ticks`, `pantry` — per person (`user_id`).
 - Photos: starter photos are openly licensed Wikimedia images in `public/images/recipes/` and
   **must** carry `imageCredit` (CC BY / BY-SA require visible attribution; the data test enforces
   it). Uploaded photos live in the photos folder at `/photos/recipes/<id>/<key>` and need no credit.
