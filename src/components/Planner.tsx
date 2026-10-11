@@ -33,8 +33,8 @@ export interface PlannerMeal {
 }
 
 interface Props {
-  householdId: string;
-  householdName: string;
+  /** Whose week this is (their user id), named on every save. */
+  owner: string;
   plans: MealPlan[];
   recipes: PlannerRecipe[];
   meals: PlannerMeal[];
@@ -45,7 +45,7 @@ interface Props {
 
 type SaveState = "saved" | "saving" | "error";
 
-export default function Planner({ householdId, householdName, plans, recipes, meals, today, monday }: Props) {
+export default function Planner({ owner, plans, recipes, meals, today, monday }: Props) {
   const [byId, setById] = useState(() => new Map(plans.map((p) => [p.id, p])));
   const [week, setWeek] = useState(monday);
   const [plan, setPlan] = useState<MealPlan>(() => byId.get(planIdFor(monday)) ?? emptyPlan(monday));
@@ -67,7 +67,7 @@ export default function Planner({ householdId, householdName, plans, recipes, me
     clearTimeout(timer.current);
     timer.current = setTimeout(async () => {
       try {
-        const { plan: saved } = await savePlan(householdId, plan);
+        const { plan: saved } = await savePlan(owner, plan);
         setById((m) => new Map(m).set(saved.id, saved));
         dirty.current = false;
         setSaveState("saved");
@@ -76,7 +76,7 @@ export default function Planner({ householdId, householdName, plans, recipes, me
       }
     }, 600);
     return () => clearTimeout(timer.current);
-  }, [plan, householdId]);
+  }, [plan, owner]);
 
   // Warn before leaving with a save still in flight.
   useEffect(() => {
@@ -125,7 +125,7 @@ export default function Planner({ householdId, householdName, plans, recipes, me
     if (dirty.current) {
       // Flush the pending save for the week being left before moving on.
       clearTimeout(timer.current);
-      void savePlan(householdId, plan).then(({ plan: saved }) => setById((m) => new Map(m).set(saved.id, saved)));
+      void savePlan(owner, plan).then(({ plan: saved }) => setById((m) => new Map(m).set(saved.id, saved)));
       setById((m) => new Map(m).set(plan.id, plan));
       dirty.current = false;
       setSaveState("saved");
@@ -201,7 +201,7 @@ export default function Planner({ householdId, householdName, plans, recipes, me
           )}
           <span className="savebar" data-state={saveState} role="status" style={{ marginLeft: 6 }}>
             <span className="dot" />
-            {saveState === "saving" ? "Saving…" : saveState === "error" ? "Not saved — check your connection" : `Saved to ${householdName}`}
+            {saveState === "saving" ? "Saving…" : saveState === "error" ? "Not saved — check your connection" : "Saved"}
           </span>
         </div>
 

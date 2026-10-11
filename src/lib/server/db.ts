@@ -2,6 +2,12 @@
  * D1 access. SERVER ONLY — imported from Astro pages, API routes and the
  * middleware, never from a React island.
  *
+ * The library (ingredients, recipes, meals) is everyone's. Planning (week
+ * plans, the shopping list, its ticks, the pantry) is each person's own:
+ * every function that touches it takes that person's users.id and reads or
+ * writes only their rows, so someone else's simply isn't there — a page or
+ * route never filters it itself.
+ *
  * Documents are validated with the zod schemas on the way in and on the way
  * out. A record that fails on read is skipped and logged rather than taking
  * the whole page down with it.
@@ -23,7 +29,7 @@ import {
   type ShoppingExtras,
 } from "../schema";
 import { emptyExtras } from "../list";
-import { canonicalEmail } from "./auth";
+import { ownerKey } from "./people";
 
 const now = () => new Date().toISOString();
 
@@ -46,7 +52,7 @@ function parseDocs<T>(rows: { data: string }[] | undefined, schema: Parser<T>, l
 export class ConflictError extends Error {}
 
 // ---------------------------------------------------------------------------
-// Users and households
+// People
 // ---------------------------------------------------------------------------
 
 export interface Viewer {
@@ -54,16 +60,6 @@ export interface Viewer {
   email: string;
   name: string | null;
   picture: string | null;
-  householdId: string | null;
-}
-
-export interface Household {
-  id: string;
-  name: string;
-  createdBy: string;
-  createdAt: string;
-  /** Display name of whoever it was made for. */
-  creatorName?: string | null;
 }
 
 interface UserRow {
@@ -71,15 +67,6 @@ interface UserRow {
   email: string;
   name: string | null;
   picture: string | null;
-  household_id: string | null;
-}
-
-interface HouseholdRow {
-  id: string;
-  name: string;
-  created_by: string;
-  created_at: string;
-  creator_name?: string | null;
 }
 
 const toViewer = (row: UserRow): Viewer => ({
@@ -87,20 +74,11 @@ const toViewer = (row: UserRow): Viewer => ({
   email: row.email,
   name: row.name,
   picture: row.picture,
-  householdId: row.household_id,
-});
-
-const toHousehold = (row: HouseholdRow): Household => ({
-  id: row.id,
-  name: row.name,
-  createdBy: row.created_by,
-  createdAt: row.created_at,
-  creatorName: row.creator_name ?? null,
 });
 
 export async function loadViewer(db: D1Database, id: string): Promise<Viewer | null> {
   const row = await db
-    .prepare("SELECT id, email, name, picture, household_id FROM users WHERE id = ?")
+    .prepare("SELECT id, email, name, picture FROM users WHERE id = ?")
     .bind(id)
     .first<UserRow>();
   return row ? toViewer(row) : null;
@@ -118,7 +96,7 @@ export async function upsertUser(
        ON CONFLICT(id) DO UPDATE SET
          email = excluded.email, name = excluded.name,
          picture = excluded.picture, seen_at = excluded.seen_at
-       RETURNING id, email, name, picture, household_id`,
+       RETURNING id, email, name, picture`,
     )
     .bind(user.id, user.email, user.name ?? null, user.picture ?? null, stamp)
     .first<UserRow>();
@@ -127,28 +105,32 @@ export async function upsertUser(
 }
 
 /**
+ * Every users row that is this person: the address compared by `ownerKey`
+ * (case, dots and +tags don't matter), the row spelled exactly as given
+ * first, then the oldest. There are only a handful of users, so comparing
+ * them all is cheaper than being clever. Never creates one.
+ */
+export async function usersForEmail(db: D1Database, email: string): Promise<Viewer[]> {
+  const wanted = ownerKey(email);
+  const exact = email.trim().toLowerCase();
+  const { results } = await db
+    .prepare("SELECT id, email, name, picture FROM users ORDER BY created_at, id")
+    .all<UserRow>();
+  return results
+    .filter((row) => ownerKey(row.email) === wanted)
+    .sort((a, b) => Number(b.email.toLowerCase() === exact) - Number(a.email.toLowerCase() === exact))
+    .map(toViewer);
+}
+
+/**
  * The person signed in through Cloudflare Access, by email. Everyone who
  * signed in before the switch to Access is keyed by their Google id, so the
- * match is on the address (compared the Gmail way), never on an id. Someone
- * new gets a row of their own; a later visit finds it the same way.
+ * match is on the address, never on an id. Someone new gets a row of their
+ * own; a later visit finds it the same way.
  */
 export async function userForEmail(db: D1Database, email: string): Promise<Viewer> {
-  const exact = await db
-    .prepare("SELECT id, email, name, picture, household_id FROM users WHERE lower(email) = ?")
-    .bind(email.trim().toLowerCase())
-    .first<UserRow>();
-  if (exact) return toViewer(exact);
-
-  // The same Gmail inbox spelled differently (dots, +tags). There are only a
-  // handful of users, so comparing them all is cheaper than being clever.
-  const wanted = canonicalEmail(email);
-  const { results } = await db
-    .prepare("SELECT id, email, name, picture, household_id FROM users")
-    .all<UserRow>();
-  const match = results.find((row) => canonicalEmail(row.email) === wanted);
-  if (match) return toViewer(match);
-
-  return upsertUser(db, { id: crypto.randomUUID(), email: email.trim() });
+  const [found] = await usersForEmail(db, email);
+  return found ?? upsertUser(db, { id: crypto.randomUUID(), email: email.trim() });
 }
 
 /**
@@ -169,82 +151,44 @@ export async function refreshProfile(
 }
 
 /**
- * "Josh's Kitchen", from the name Google gave us or, for someone who arrived
- * through Access (which sends only the address), the address's first word.
+ * "Josh's kitchen": the first name Google gave us or, for someone who
+ * arrived through Access (which sends only the address), the address's
+ * first word.
  */
-export function defaultHouseholdName(viewer: Pick<Viewer, "name" | "email">): string {
-  const first = viewer.name?.trim().split(/\s+/)[0] || viewer.email.split("@")[0].split(/[._+-]/)[0];
+export function kitchenName(person: Pick<Viewer, "name" | "email">): string {
+  const first = person.name?.trim().split(/\s+/)[0] || person.email.split("@")[0].split(/[._+-]/)[0] || "Your";
   const pretty = first.charAt(0).toUpperCase() + first.slice(1);
-  return `${pretty}'s Kitchen`;
-}
-
-export function cleanHouseholdName(name: string): string {
-  return name.replace(/\s+/g, " ").trim().slice(0, 60);
-}
-
-export async function listHouseholds(db: D1Database): Promise<Household[]> {
-  const { results } = await db
-    .prepare(
-      `SELECT h.id, h.name, h.created_by, h.created_at, u.name AS creator_name
-       FROM households h LEFT JOIN users u ON u.id = h.created_by
-       ORDER BY h.name COLLATE NOCASE`,
-    )
-    .all<HouseholdRow>();
-  return results.map(toHousehold);
-}
-
-export async function getHousehold(db: D1Database, id: string): Promise<Household | null> {
-  const row = await db
-    .prepare("SELECT id, name, created_by, created_at FROM households WHERE id = ?")
-    .bind(id)
-    .first<HouseholdRow>();
-  return row ? toHousehold(row) : null;
-}
-
-export async function createHousehold(db: D1Database, createdBy: string, name: string): Promise<Household> {
-  const household: Household = {
-    id: crypto.randomUUID(),
-    name: cleanHouseholdName(name) || "New household",
-    createdBy,
-    createdAt: now(),
-  };
-  await db
-    .prepare("INSERT INTO households (id, name, created_by, created_at) VALUES (?, ?, ?, ?)")
-    .bind(household.id, household.name, household.createdBy, household.createdAt)
-    .run();
-  return household;
-}
-
-export async function renameHousehold(db: D1Database, id: string, name: string): Promise<void> {
-  const clean = cleanHouseholdName(name);
-  if (!clean) throw new ConflictError("A household needs a name.");
-  await db.prepare("UPDATE households SET name = ? WHERE id = ?").bind(clean, id).run();
-}
-
-export async function setActiveHousehold(db: D1Database, userId: string, householdId: string): Promise<void> {
-  await db.prepare("UPDATE users SET household_id = ? WHERE id = ?").bind(householdId, userId).run();
+  return `${pretty}'s kitchen`;
 }
 
 /**
- * The household this person is working in, creating their own on first
- * visit. Any approved user may work in any household, so there is no
- * membership to check — only that the household still exists.
+ * Forget a person (Home's People page, when someone is removed): their week
+ * plans, shopping list, ticks and pantry, and their users row, for every row
+ * that is them by `ownerKey`. The library stays whole: the recipes, meals and
+ * ingredients they wrote are everyone's, so they are kept, and only the
+ * `updated_by` that names them is cleared (it is a plain note, not a foreign
+ * key, so nothing else changes). Counts what went, by table.
  */
-export async function ensureHousehold(db: D1Database, viewer: Viewer): Promise<Household> {
-  if (viewer.householdId) {
-    const current = await getHousehold(db, viewer.householdId);
-    if (current) return current;
-  }
-  const own = await db
-    .prepare(
-      "SELECT id, name, created_by, created_at FROM households WHERE created_by = ? ORDER BY created_at LIMIT 1",
-    )
-    .bind(viewer.id)
-    .first<HouseholdRow>();
-  const household = own ? toHousehold(own) : await createHousehold(db, viewer.id, defaultHouseholdName(viewer));
-  await setActiveHousehold(db, viewer.id, household.id);
-  viewer.householdId = household.id;
-  return household;
+export async function forgetPerson(db: D1Database, email: string): Promise<Record<string, number>> {
+  const ids = (await usersForEmail(db, email)).map((u) => u.id);
+  const removed: Record<string, number> = { plans: 0, shopping: 0, shopping_ticks: 0, pantry: 0, users: 0 };
+  if (ids.length === 0) return removed;
+  const marks = ids.map(() => "?").join(",");
+  const tables = Object.keys(removed);
+  const results = await db.batch([
+    // Their own rows first, so the counts are theirs (the users row would
+    // cascade to them anyway).
+    ...tables.map((table) =>
+      db.prepare(`DELETE FROM ${table} WHERE ${table === "users" ? "id" : "user_id"} IN (${marks})`).bind(...ids),
+    ),
+    // Whatever else still names them (the library, and lists from the
+    // household days that are someone else's now).
+    ...["ingredients", "recipes", "meals", "plans", "shopping"].map((table) =>
+      db.prepare(`UPDATE ${table} SET updated_by = NULL WHERE updated_by IN (${marks})`).bind(...ids),
+    ),
+  ]);
+  tables.forEach((table, i) => (removed[table] = results[i].meta.changes));
+  return removed;
 }
 
 // ---------------------------------------------------------------------------
@@ -333,7 +277,7 @@ export async function deleteRecipe(db: D1Database, id: string): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
-// Household planning
+// Each person's planning — every read and write names whose it is
 // ---------------------------------------------------------------------------
 
 export interface Planning {
@@ -343,12 +287,12 @@ export interface Planning {
   pantry: PantryItem[];
 }
 
-export async function loadPlanning(db: D1Database, householdId: string): Promise<Planning> {
+export async function loadPlanning(db: D1Database, userId: string): Promise<Planning> {
   const [plans, shopping, ticks, pantry] = await db.batch<Record<string, string>>([
-    db.prepare("SELECT data FROM plans WHERE household_id = ?").bind(householdId),
-    db.prepare("SELECT data FROM shopping WHERE household_id = ?").bind(householdId),
-    db.prepare("SELECT line_key FROM shopping_ticks WHERE household_id = ?").bind(householdId),
-    db.prepare("SELECT data FROM pantry WHERE household_id = ?").bind(householdId),
+    db.prepare("SELECT data FROM plans WHERE user_id = ?").bind(userId),
+    db.prepare("SELECT data FROM shopping WHERE user_id = ?").bind(userId),
+    db.prepare("SELECT line_key FROM shopping_ticks WHERE user_id = ?").bind(userId),
+    db.prepare("SELECT data FROM pantry WHERE user_id = ?").bind(userId),
   ]);
   const pantryRow = pantry.results[0] as { data: string } | undefined;
   return {
@@ -363,43 +307,46 @@ export async function loadPlanning(db: D1Database, householdId: string): Promise
   };
 }
 
-export async function savePlan(
-  db: D1Database,
-  householdId: string,
-  plan: MealPlan,
-  userId: string,
-): Promise<MealPlan> {
+export async function savePlan(db: D1Database, userId: string, plan: MealPlan): Promise<MealPlan> {
   const stamp = now();
   const doc = MealPlanSchema.parse({ ...plan, updatedAt: stamp });
   await db
     .prepare(
-      `INSERT INTO plans (household_id, id, data, updated_at, updated_by) VALUES (?, ?, ?, ?, ?)
-       ON CONFLICT(household_id, id) DO UPDATE SET
+      `INSERT INTO plans (user_id, id, data, updated_at, updated_by) VALUES (?, ?, ?, ?, ?)
+       ON CONFLICT(user_id, id) DO UPDATE SET
          data = excluded.data, updated_at = excluded.updated_at, updated_by = excluded.updated_by`,
     )
-    .bind(householdId, doc.id, JSON.stringify(doc), stamp, userId)
+    .bind(userId, doc.id, JSON.stringify(doc), stamp, userId)
     .run();
   return doc;
 }
 
+/** One of this person's week plans, or null: someone else's is not theirs to see. */
+export async function loadPlan(db: D1Database, userId: string, id: string): Promise<MealPlan | null> {
+  const row = await db
+    .prepare("SELECT data FROM plans WHERE user_id = ? AND id = ?")
+    .bind(userId, id)
+    .first<{ data: string }>();
+  return row ? (parseDocs([row], MealPlanSchema, "plan")[0] ?? null) : null;
+}
+
 /**
- * Apply an edit to the household's shopping list.
+ * Apply an edit to a person's shopping list.
  *
- * Two people can add to the same list at once, so this is optimistic
+ * Two tabs or phones can add to the same list at once, so this is optimistic
  * concurrency: read, apply the pure edit, and write back only if nobody else
  * wrote in between — otherwise re-read and apply again. Re-applying is safe
  * because every edit is a function of the current list, not a replacement.
  */
 export async function mutateShopping(
   db: D1Database,
-  householdId: string,
   userId: string,
   edit: (current: ShoppingExtras) => ShoppingExtras,
 ): Promise<ShoppingExtras> {
   for (let attempt = 0; attempt < 5; attempt++) {
     const row = await db
-      .prepare("SELECT data, updated_at FROM shopping WHERE household_id = ?")
-      .bind(householdId)
+      .prepare("SELECT data, updated_at FROM shopping WHERE user_id = ?")
+      .bind(userId)
       .first<{ data: string; updated_at: string }>();
     const current = row
       ? (parseDocs([row], ShoppingExtrasSchema, "shopping list")[0] ?? emptyExtras())
@@ -412,16 +359,16 @@ export async function mutateShopping(
     const result = row
       ? await db
           .prepare(
-            "UPDATE shopping SET data = ?, updated_at = ?, updated_by = ? WHERE household_id = ? AND updated_at = ?",
+            "UPDATE shopping SET data = ?, updated_at = ?, updated_by = ? WHERE user_id = ? AND updated_at = ?",
           )
-          .bind(data, stamp, userId, householdId, row.updated_at)
+          .bind(data, stamp, userId, userId, row.updated_at)
           .run()
       : await db
           .prepare(
-            `INSERT INTO shopping (household_id, data, updated_at, updated_by) VALUES (?, ?, ?, ?)
-             ON CONFLICT(household_id) DO NOTHING`,
+            `INSERT INTO shopping (user_id, data, updated_at, updated_by) VALUES (?, ?, ?, ?)
+             ON CONFLICT(user_id) DO NOTHING`,
           )
-          .bind(householdId, data, stamp, userId)
+          .bind(userId, data, stamp, userId)
           .run();
 
     if (result.meta.changes === 1) return next;
@@ -429,28 +376,28 @@ export async function mutateShopping(
   throw new ConflictError("The list is changing too quickly — try again.");
 }
 
-export async function setTick(db: D1Database, householdId: string, key: string, on: boolean): Promise<void> {
+export async function setTick(db: D1Database, userId: string, key: string, on: boolean): Promise<void> {
   if (on) {
     await db
-      .prepare("INSERT OR IGNORE INTO shopping_ticks (household_id, line_key, ticked_at) VALUES (?, ?, ?)")
-      .bind(householdId, key, now())
+      .prepare("INSERT OR IGNORE INTO shopping_ticks (user_id, line_key, ticked_at) VALUES (?, ?, ?)")
+      .bind(userId, key, now())
       .run();
   } else {
     await db
-      .prepare("DELETE FROM shopping_ticks WHERE household_id = ? AND line_key = ?")
-      .bind(householdId, key)
+      .prepare("DELETE FROM shopping_ticks WHERE user_id = ? AND line_key = ?")
+      .bind(userId, key)
       .run();
   }
 }
 
-export async function clearTicks(db: D1Database, householdId: string): Promise<void> {
-  await db.prepare("DELETE FROM shopping_ticks WHERE household_id = ?").bind(householdId).run();
+export async function clearTicks(db: D1Database, userId: string): Promise<void> {
+  await db.prepare("DELETE FROM shopping_ticks WHERE user_id = ?").bind(userId).run();
 }
 
-export async function loadTicks(db: D1Database, householdId: string): Promise<string[]> {
+export async function loadTicks(db: D1Database, userId: string): Promise<string[]> {
   const { results } = await db
-    .prepare("SELECT line_key FROM shopping_ticks WHERE household_id = ?")
-    .bind(householdId)
+    .prepare("SELECT line_key FROM shopping_ticks WHERE user_id = ?")
+    .bind(userId)
     .all<{ line_key: string }>();
   return results.map((r: { line_key: string }) => r.line_key);
 }
@@ -460,10 +407,10 @@ export interface ShoppingState {
   ticked: string[];
 }
 
-export async function loadShoppingState(db: D1Database, householdId: string): Promise<ShoppingState> {
+export async function loadShoppingState(db: D1Database, userId: string): Promise<ShoppingState> {
   const [shopping, ticks] = await db.batch<Record<string, string>>([
-    db.prepare("SELECT data FROM shopping WHERE household_id = ?").bind(householdId),
-    db.prepare("SELECT line_key FROM shopping_ticks WHERE household_id = ?").bind(householdId),
+    db.prepare("SELECT data FROM shopping WHERE user_id = ?").bind(userId),
+    db.prepare("SELECT line_key FROM shopping_ticks WHERE user_id = ?").bind(userId),
   ]);
   return {
     extras:
@@ -474,10 +421,10 @@ export async function loadShoppingState(db: D1Database, householdId: string): Pr
 }
 
 /** How many things are on the list beyond the plan — the nav badge. */
-export async function countList(db: D1Database, householdId: string): Promise<number> {
+export async function countList(db: D1Database, userId: string): Promise<number> {
   const row = await db
-    .prepare("SELECT data FROM shopping WHERE household_id = ?")
-    .bind(householdId)
+    .prepare("SELECT data FROM shopping WHERE user_id = ?")
+    .bind(userId)
     .first<{ data: string }>();
   const extras = row ? parseDocs([row], ShoppingExtrasSchema, "shopping list")[0] : undefined;
   return extras ? extras.dishes.length + extras.items.length : 0;

@@ -18,8 +18,7 @@ interface Props {
   /** id -> display names. Passed in so the island does not need the registry. */
   names: Record<string, IngredientName>;
   yieldNote?: string;
-  householdId: string;
-  householdName: string;
+  owner: string;
   extras: ShoppingExtras;
 }
 
@@ -45,11 +44,10 @@ export default function IngredientList({
   baseServings,
   names,
   yieldNote,
-  householdId,
-  householdName,
+  owner,
   extras,
 }: Props) {
-  const list = useList(householdId, extras);
+  const list = useList(owner, extras);
   const onList = list.has({ recipeId });
   const [servings, setServings] = useState(onList?.servings ?? baseServings);
 
@@ -173,7 +171,7 @@ export default function IngredientList({
           </div>
         )}
         <p className="small muted" style={{ textAlign: "center" }}>
-          Goes on the {householdName} list — no plan needed.
+          Goes on your list — no plan needed.
         </p>
       </div>
 

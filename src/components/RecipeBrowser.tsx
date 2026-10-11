@@ -7,7 +7,7 @@ import type { ShoppingExtras } from "../lib/schema";
 interface Props {
   recipes: RecipeCard[];
   tags?: string[];
-  householdId: string;
+  owner: string;
   extras: ShoppingExtras;
   /** Show the search box and tag filters. Off for the home page's short grid. */
   searchable?: boolean;
@@ -19,7 +19,7 @@ interface Props {
 export default function RecipeBrowser({
   recipes,
   tags = [],
-  householdId,
+  owner,
   extras,
   searchable = true,
   initialQuery = "",
@@ -27,7 +27,7 @@ export default function RecipeBrowser({
 }: Props) {
   const [query, setQuery] = useState(initialQuery);
   const [active, setActive] = useState<string[]>(initialTags);
-  const list = useList(householdId, extras);
+  const list = useList(owner, extras);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();

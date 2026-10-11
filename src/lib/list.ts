@@ -2,7 +2,7 @@
  * The shopping list's own contents: recipes, meals and loose items put on it
  * directly, with or without a plan.
  *
- * PURE. The server applies these to the household's list inside
+ * PURE. The server applies these to the person's list inside
  * mutateShopping (src/lib/server/db.ts); the browser uses the same functions
  * for its optimistic update, so both sides always agree on what an edit does.
  */

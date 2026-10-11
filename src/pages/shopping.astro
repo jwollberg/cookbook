@@ -3,26 +3,25 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 import ShoppingList from "../components/ShoppingList";
 import { loadKitchen, viewerToday } from "../lib/server/page";
 
-const { library, planning, household } = await loadKitchen(Astro.locals);
+const { library, planning, kitchen, owner } = await loadKitchen(Astro.locals);
 ---
 
-<SiteLayout title="Shopping list" description="One list for the household: the week's plan, anything added directly, grouped by aisle.">
+<SiteLayout title="Shopping list" description="Your one list: the week's plan, anything added directly, grouped by aisle.">
   <div class="wrap">
     <header class="page-head">
       <div>
-        <span class="eyebrow">{household.name}</span>
+        <span class="eyebrow">{kitchen}</span>
         <h1>Shopping list</h1>
         <p class="lede">
           The week's plan, plus any recipe, meal or item you add — merged and grouped by aisle.
-          Everyone working in {household.name} sees the same list and the same ticks.
+          The list and its ticks are yours alone, the same on every phone you sign in on.
         </p>
       </div>
     </header>
 
     <ShoppingList
       client:load
-      householdId={household.id}
-      householdName={household.name}
+      owner={owner}
       ingredients={library.ingredients}
       recipes={library.recipes}
       meals={library.meals}

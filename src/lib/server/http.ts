@@ -16,6 +16,15 @@ export function fail(status: number, error: string): Response {
   return json({ error }, status);
 }
 
+/**
+ * Someone else's plan or list, or a tab still showing the account the browser
+ * was signed in as before: the same answer as a thing that doesn't exist, so
+ * it says nothing about anyone else.
+ */
+export function notFound(): Response {
+  return fail(404, "Not found — reload the page.");
+}
+
 export class BadRequest extends Error {}
 
 /** Parse and validate a JSON body, or throw a BadRequest a person can read. */

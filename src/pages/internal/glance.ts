@@ -1,8 +1,9 @@
 /**
- * Home's Kitchen tile, asked by the Home container on Vault (POST { email, today }): the
- * household's meals tonight, planned days and shopping-list count. The middleware lets
- * /internal/ through only with INTERNAL_TOKEN, and the tunnel never routes it; it still
- * answers only for people Home's People list lets use Kitchen.
+ * Home's Kitchen tile, asked by the Home container on Vault (POST { email, today }): that
+ * person's own kitchen — its name, tonight's dishes, planned days and shopping-list count,
+ * never anyone else's. The middleware lets /internal/ through only with INTERNAL_TOKEN, and
+ * the tunnel never routes it; it still answers only for people Home's People list lets use
+ * Kitchen.
  */
 
 import type { APIRoute } from "astro";

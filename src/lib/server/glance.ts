@@ -1,16 +1,16 @@
 /**
- * Kitchen's tile on home.atheosstudios.com: what's for dinner tonight, how
- * much of the week is planned, and how long the list is. Home asks for it
- * over an RPC service binding (`Glance` in src/worker.ts); the shape must
- * match `KitchenGlance` in Website-Home/src/lib/glance.ts.
+ * Kitchen's tile on home.atheosstudios.com, for one person: their kitchen's
+ * name, what's for dinner tonight, how much of the week is planned, and how
+ * long the list is. Home asks for it (POST /internal/glance); the shape must
+ * match `KitchenGlance` in Website-Home.
  */
 
-import { MealPlanSchema } from "../schema";
 import { entryCount, mondayOf, planIdFor } from "../plans";
-import { countList, ensureHousehold, userForEmail } from "./db";
+import { countList, kitchenName, loadPlan, usersForEmail } from "./db";
 
 export interface KitchenGlance {
-  household: string;
+  /** "Josh's kitchen" */
+  kitchen: string;
   /** what's planned for today, dish names */
   tonight: string[];
   /** days this week with something planned */
@@ -19,24 +19,25 @@ export interface KitchenGlance {
   listCount: number;
 }
 
+/**
+ * Only the asker's own week and list. Someone who has never opened Kitchen
+ * has no users row yet: an empty week, never someone else's — and asking
+ * makes no row for them.
+ */
 export async function kitchenGlance(env: Env, email: string, today: string): Promise<KitchenGlance> {
   const db = env.DB;
-  const viewer = await userForEmail(db, email);
-  const household = await ensureHousehold(db, viewer);
+  const [person] = await usersForEmail(db, email);
+  const kitchen = kitchenName(person ?? { name: null, email: email.trim() });
+  if (!person) return { kitchen, tonight: [], plannedDays: 0, listCount: 0 };
 
-  const [planRow, listCount] = await Promise.all([
-    db
-      .prepare("SELECT data FROM plans WHERE household_id = ? AND id = ?")
-      .bind(household.id, planIdFor(mondayOf(today)))
-      .first<{ data: string }>(),
-    countList(db, household.id),
+  const [plan, listCount] = await Promise.all([
+    loadPlan(db, person.id, planIdFor(mondayOf(today))),
+    countList(db, person.id),
   ]);
 
   let plannedDays = 0;
   let tonight: string[] = [];
-  const parsed = planRow ? MealPlanSchema.safeParse(JSON.parse(planRow.data)) : null;
-  if (parsed?.success) {
-    const plan = parsed.data;
+  if (plan) {
     plannedDays = entryCount(plan) === 0 ? 0 : plan.days.filter((d) => d.entries.length > 0).length;
     const entries = plan.days.find((d) => d.date === today)?.entries ?? [];
     const recipeIds = entries.flatMap((e) => (e.recipeId && !e.mealId ? [e.recipeId] : []));
@@ -62,5 +63,5 @@ export async function kitchenGlance(env: Env, email: string, today: string): Pro
       .filter((n): n is string => Boolean(n));
   }
 
-  return { household: household.name, tonight, plannedDays, listCount };
+  return { kitchen, tonight, plannedDays, listCount };
 }

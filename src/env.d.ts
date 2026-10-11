@@ -16,9 +16,9 @@ interface Env {
   ALLOWED_EMAILS?: string;
   /** Comma-separated; the owners (Josh) until Home's People list first answers. */
   OWNER_EMAILS?: string;
-  /** The household's time zone, for "today" (America/Chicago). */
+  /** The kitchen's time zone, for "today" (America/Chicago). */
   TIME_ZONE?: string;
-  /** Shared by the Atheos containers on Vault; lets Home ask /internal/glance. */
+  /** Shared by the Atheos containers on Vault; lets Home ask /internal/glance and /internal/forget. */
   INTERNAL_TOKEN?: string;
 }
 
@@ -26,9 +26,8 @@ declare namespace App {
   interface Locals {
     /** Set first by the middleware on every request (src/lib/server/platform.ts). */
     runtime: import("./lib/server/platform").Runtime;
-    /** Set by the middleware on every request except robots.txt. */
+    /** Set by the middleware on every request except robots.txt: whose plans and list these are. */
     viewer: import("./lib/server/db").Viewer;
-    household: import("./lib/server/db").Household;
     /** Owns Home's People list (Josh), from that list. */
     owner: boolean;
     /** Every app this person may open, from Home's People list: the app switcher shows these. */

@@ -5,7 +5,7 @@ import { loadKitchen, viewerToday } from "../lib/server/page";
 import { mealImages } from "../lib/format";
 import { mondayOf } from "../lib/plans";
 
-const { library, planning, household, recipesById } = await loadKitchen(Astro.locals);
+const { library, planning, kitchen, owner, recipesById } = await loadKitchen(Astro.locals);
 const today = viewerToday(Astro.locals);
 const requested = Astro.url.searchParams.get("week");
 const monday = mondayOf(requested && /^\d{4}-\d{2}-\d{2}$/.test(requested) ? requested : today);
@@ -25,11 +25,11 @@ const meals: PlannerMeal[] = library.meals.map((m) => ({
 }));
 ---
 
-<SiteLayout title="Plan" description="Plan the household's week, then cook and shop from it.">
+<SiteLayout title="Plan" description="Plan your week, then cook and shop from it.">
   <div class="wrap">
     <header class="page-head">
       <div>
-        <span class="eyebrow">{household.name}</span>
+        <span class="eyebrow">{kitchen}</span>
         <h1>Plan the week</h1>
         <p class="lede">
           Drag meals and recipes onto a day. The cooking sheet and the shopping list follow whatever
@@ -40,8 +40,7 @@ const meals: PlannerMeal[] = library.meals.map((m) => ({
 
     <Planner
       client:load
-      householdId={household.id}
-      householdName={household.name}
+      owner={owner}
       plans={planning.plans}
       recipes={recipes}
       meals={meals}

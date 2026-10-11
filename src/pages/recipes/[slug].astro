@@ -6,7 +6,7 @@ import Icon from "../../components/Icon";
 import { loadKitchen } from "../../lib/server/page";
 import { formatMinutes } from "../../lib/format";
 
-const { library, planning, household, ingredientsById } = await loadKitchen(Astro.locals);
+const { library, planning, owner, ingredientsById } = await loadKitchen(Astro.locals);
 const recipe = library.recipes.find((r) => r.id === Astro.params.slug);
 if (!recipe) return Astro.rewrite("/404");
 
@@ -103,8 +103,7 @@ const stepGroups = recipe.steps.reduce(
             baseServings={recipe.servings}
             names={names}
             yieldNote={recipe.yieldNote}
-            householdId={household.id}
-            householdName={household.name}
+            owner={owner}
             extras={planning.shopping}
           />
 

@@ -19,7 +19,7 @@ import { isInternal, platform } from "./lib/server/platform";
 import { accessFor } from "./lib/server/people";
 import { DEV_USER } from "./lib/server/context";
 import registry from "./lib/apps.json";
-import { ensureHousehold, loadViewer, refreshProfile, upsertUser, userForEmail } from "./lib/server/db";
+import { loadViewer, refreshProfile, upsertUser, userForEmail } from "./lib/server/db";
 
 const PUBLIC = [/^\/robots\.txt$/];
 /** The old sign-in pages. Access signs people in now; send old bookmarks home. */
@@ -46,7 +46,7 @@ function refuse(path: string, message: string): Response {
 export const onRequest = defineMiddleware(async (context, next) => {
   const { url, request, locals } = context;
   locals.runtime = platform();
-  // Home's glance, from the Home container on Vault: the token, never a login.
+  // Home's calls (the glance, forget), from the Home container on Vault: the token, never a login.
   if (url.pathname.startsWith("/internal/")) {
     return isInternal(request, locals.runtime.env) ? next() : new Response("Not found", { status: 404 });
   }
@@ -88,7 +88,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
 
   locals.viewer = viewer;
-  locals.household = await ensureHousehold(env.DB, viewer);
 
   const response = await next();
   // Every page here is personal. Never let a shared cache keep one.

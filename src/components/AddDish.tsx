@@ -6,17 +6,15 @@ import type { ShoppingExtras } from "../lib/schema";
 export default function AddDish({
   mealId,
   title,
-  householdId,
-  householdName,
+  owner,
   extras,
 }: {
   mealId: string;
   title: string;
-  householdId: string;
-  householdName: string;
+  owner: string;
   extras: ShoppingExtras;
 }) {
-  const list = useList(householdId, extras);
+  const list = useList(owner, extras);
   const onList = Boolean(list.has({ mealId }));
 
   return (
@@ -24,7 +22,7 @@ export default function AddDish({
       {onList ? (
         <>
           <a className="btn" href="/shopping">
-            <Icon name="check" /> On the {householdName} list
+            <Icon name="check" /> On your list
           </a>
           <button className="btn btn-ghost btn-sm" disabled={list.busy} onClick={() => list.remove({ mealId }, title)}>
             Remove

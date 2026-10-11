@@ -9,11 +9,11 @@ export interface ToastMessage {
 }
 
 /**
- * The household's list, as seen by an island that adds to it (a recipe
+ * The viewer's list, as seen by an island that adds to it (a recipe
  * card, a recipe or meal page). Each edit is sent to the server, which
  * applies it to the latest copy; the response replaces the local state.
  */
-export function useList(householdId: string, initial: ShoppingExtras) {
+export function useList(owner: string, initial: ShoppingExtras) {
   const [extras, setExtras] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<ToastMessage | null>(null);
@@ -30,7 +30,7 @@ export function useList(householdId: string, initial: ShoppingExtras) {
     async (edit: ListEdit, success?: ToastMessage) => {
       setBusy(true);
       try {
-        const state = await editList(householdId, edit);
+        const state = await editList(owner, edit);
         setExtras(state.extras);
         if (success) show(success);
         return true;
@@ -41,7 +41,7 @@ export function useList(householdId: string, initial: ShoppingExtras) {
         setBusy(false);
       }
     },
-    [householdId, show],
+    [owner, show],
   );
 
   const toList = { href: "/shopping", label: "View list" };

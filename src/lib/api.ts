@@ -56,22 +56,23 @@ export const uploadPhoto = (id: string, photo: Blob) =>
 export const removePhoto = (id: string) =>
   send<{ recipe: Recipe }>("DELETE", `/api/recipes/${encodeURIComponent(id)}/photo`);
 
-export const savePlan = (householdId: string, plan: MealPlan) =>
-  send<{ plan: MealPlan }>("PUT", `/api/plans/${encodeURIComponent(plan.id)}`, { householdId, plan });
+/** `owner` is whose kitchen the page shows (their user id): the server refuses anyone else's. */
+export const savePlan = (owner: string, plan: MealPlan) =>
+  send<{ plan: MealPlan }>("PUT", `/api/plans/${encodeURIComponent(plan.id)}`, { owner, plan });
 
 export interface ListState {
   extras: ShoppingExtras;
   ticked: string[];
 }
 
-export async function editList(householdId: string, edit: ListEdit): Promise<ListState> {
-  const state = await send<ListState>("POST", "/api/shopping", { householdId, edit });
+export async function editList(owner: string, edit: ListEdit): Promise<ListState> {
+  const state = await send<ListState>("POST", "/api/shopping", { owner, edit });
   announceList(state.extras);
   return state;
 }
 
-export const fetchList = (householdId: string) =>
-  send<ListState>("GET", `/api/shopping?householdId=${encodeURIComponent(householdId)}`);
+export const fetchList = (owner: string) =>
+  send<ListState>("GET", `/api/shopping?owner=${encodeURIComponent(owner)}`);
 
 /** Tell the nav badge the list changed. */
 export function announceList(extras: ShoppingExtras): void {

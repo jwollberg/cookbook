@@ -8,7 +8,7 @@ import { mealImages, recipeCard } from "../lib/format";
 import { emptyPlan, entryCount, mondayOf, planIdFor } from "../lib/plans";
 import { WEEKDAYS, formatRange, fromIso } from "../lib/dates";
 
-const { library, planning, household, viewer, recipesById, mealsById } = await loadKitchen(Astro.locals);
+const { library, planning, kitchen, owner, viewer, recipesById, mealsById } = await loadKitchen(Astro.locals);
 const today = viewerToday(Astro.locals);
 const monday = mondayOf(today);
 const week = planning.plans.find((p) => p.id === planIdFor(monday)) ?? emptyPlan(monday);
@@ -44,7 +44,7 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
         <span class="eyebrow">{hello}</span>
         <h1>What are we cooking this week?</h1>
         <p class="lede">
-          Pick recipes, plan the week for {household.name}, and let the shopping list add itself up.
+          Pick recipes, plan the week for {kitchen}, and let the shopping list add itself up.
         </p>
         <form class="search" action="/recipes" method="get" role="search" style="max-width: 460px;">
           <Icon name="search" />
@@ -112,7 +112,7 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
       <RecipeBrowser
         client:load
         recipes={latest}
-        householdId={household.id}
+        owner={owner}
         extras={planning.shopping}
         searchable={false}
       />

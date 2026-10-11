@@ -1,7 +1,7 @@
 ---
 /**
  * Kitchen's frame — the shared Atheos app shell (canonical copy in
- * C:\Projects\Websites\Website-Home\app-shell): brand, nav, household,
+ * C:\Projects\Websites\Website-Home\app-shell): brand, nav,
  * app switcher, account, and the floating tab bar on phones.
  */
 import "../styles/shell.css";
@@ -9,7 +9,7 @@ import "../styles/global.css";
 import Icon from "../components/Icon";
 import registry from "../lib/apps.json";
 import { SIGN_OUT_URL } from "../lib/server/access";
-import { countList, listHouseholds } from "../lib/server/db";
+import { countList, kitchenName } from "../lib/server/db";
 
 interface Props {
   title: string;
@@ -18,17 +18,13 @@ interface Props {
 
 const { title, description = "Recipes, meal plans, and a shopping list that adds itself up." } = Astro.props;
 
-const { viewer, household } = Astro.locals;
-const signedIn = Boolean(viewer && household);
-const db = Astro.locals.runtime.env.DB;
-const [households, listCount] = signedIn
-  ? await Promise.all([listHouseholds(db), countList(db, household.id)])
-  : [[], 0];
+const { viewer } = Astro.locals;
+const signedIn = Boolean(viewer);
+const listCount = signedIn ? await countList(Astro.locals.runtime.env.DB, viewer.id) : 0;
 
 // Astro.url.pathname keeps a trailing slash on directory routes; strip it so
 // "/recipes/" still matches "/recipes" for aria-current.
 const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
-const here = path + Astro.url.search;
 const isActive = (href: string) => (href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`));
 
 const nav = [
@@ -94,33 +90,6 @@ const svg = (inner: string) =>
             </nav>
 
             <div class="as-end">
-              <details class="menu" data-menu>
-                <summary class="pill-button" aria-label={`Household: ${household.name}. Switch household`}>
-                  <Icon name="home" />
-                  <span class="name">{household.name}</span>
-                  <Icon name="chevronDown" />
-                </summary>
-                <div class="menu-panel">
-                  <p class="menu-head label">Working in</p>
-                  {households.map((h) => (
-                    <form method="post" action="/api/households">
-                      <input type="hidden" name="intent" value="switch" />
-                      <input type="hidden" name="id" value={h.id} />
-                      <input type="hidden" name="next" value={here} />
-                      <button class="menu-item" aria-current={h.id === household.id ? "true" : undefined}>
-                        <span class="grow">{h.name}</span>
-                        {h.id === household.id && <Icon name="check" />}
-                      </button>
-                    </form>
-                  ))}
-                  <div class="menu-sep" />
-                  <a class="menu-item" href="/household">
-                    <Icon name="settings" />
-                    <span class="grow">Manage households</span>
-                  </a>
-                </div>
-              </details>
-
               <details class="as-switch" data-menu>
                 <summary class="as-round" aria-label="Switch app" set:html={svg(registry.switcherIcon)} />
                 <nav class="as-menu" aria-label="Apps">
@@ -172,10 +141,6 @@ const svg = (inner: string) =>
                     <Icon name="pot" />
                     <span>Cooking sheet</span>
                   </a>
-                  <a class="as-item" href="/household">
-                    <Icon name="home" />
-                    <span>Households</span>
-                  </a>
                   <div class="as-sep" />
                   <a class="as-item" href={SIGN_OUT_URL}>
                     <Fragment set:html={svg(registry.accountIcons.switch)} />
@@ -205,11 +170,8 @@ const svg = (inner: string) =>
       signedIn && (
         <footer class="footer no-print">
           <div class="wrap footer-inner">
-            <span>Kitchen · {household.name}</span>
-            <span>
-              Recipes are shared by everyone; plans and lists belong to a household.{" "}
-              <a href="/household">Households</a>
-            </span>
+            <span>Kitchen · {kitchenName(viewer)}</span>
+            <span>Recipes are shared by everyone; your plans and your list are yours alone.</span>
           </div>
         </footer>
       )

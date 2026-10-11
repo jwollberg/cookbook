@@ -7,7 +7,7 @@ import { formatMinutes, mealImages, mealMinutes } from "../../lib/format";
 import { buildShoppingList, type ResolvedDish } from "../../lib/shopping";
 import type { Role } from "../../lib/schema";
 
-const { library, planning, household, recipesById, ingredientsById } = await loadKitchen(Astro.locals);
+const { library, planning, owner, recipesById, ingredientsById } = await loadKitchen(Astro.locals);
 const meal = library.meals.find((m) => m.id === Astro.params.slug);
 if (!meal) return Astro.rewrite("/404");
 
@@ -88,8 +88,7 @@ const images = mealImages(meal, recipesById).slice(0, 4);
           client:load
           mealId={meal.id}
           title={meal.name}
-          householdId={household.id}
-          householdName={household.name}
+          owner={owner}
           extras={planning.shopping}
         />
       </div>

@@ -1,27 +1,30 @@
 /**
- * What most pages load: the shared library plus the current household's
- * planning, fetched together. At this scale (dozens of recipes) loading the
+ * What most pages load: the shared library plus the viewer's own planning,
+ * fetched together. At this scale (dozens of recipes) loading the
  * whole library per request is a few milliseconds and keeps pages simple.
  */
 
 import { todayIn } from "../dates";
-import { loadLibrary, loadPlanning } from "./db";
+import { kitchenName, loadLibrary, loadPlanning } from "./db";
 
 export async function loadKitchen(locals: App.Locals) {
   const db = locals.runtime.env.DB;
-  const [library, planning] = await Promise.all([loadLibrary(db), loadPlanning(db, locals.household.id)]);
+  const [library, planning] = await Promise.all([loadLibrary(db), loadPlanning(db, locals.viewer.id)]);
   return {
     library,
     planning,
-    household: locals.household,
     viewer: locals.viewer,
+    /** Whose plans and list the page shows; the page names it back on every write. */
+    owner: locals.viewer.id,
+    /** "Josh's kitchen" */
+    kitchen: kitchenName(locals.viewer),
     recipesById: new Map(library.recipes.map((r) => [r.id, r])),
     mealsById: new Map(library.meals.map((m) => [m.id, m])),
     ingredientsById: new Map(library.ingredients.map((i) => [i.id, i])),
   };
 }
 
-/** The household's time zone (TIME_ZONE on Vault; the platform's `cf.timezone`). */
+/** The kitchen's time zone (TIME_ZONE on Vault; the platform's `cf.timezone`). */
 function timeZone(locals: App.Locals): string | undefined {
   const tz = (locals.runtime?.cf as { timezone?: string } | undefined)?.timezone;
   return typeof tz === "string" && tz ? tz : undefined;

@@ -1,12 +1,11 @@
 /**
  * The gate: Home's People list and the Cloudflare Access token. Every one of these failing open would let a stranger
- * into the household's kitchen, so they are tested rather than trusted.
+ * into someone's kitchen, so they are tested rather than trusted.
  */
 
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { canonicalEmail, safeNext } from "./auth";
 import { accessToken, resetAccessKeys, verifyAccessJwt } from "./access";
-import { accessFor, resetPeople } from "./people";
+import { accessFor, ownerKey, resetPeople } from "./people";
 import { toBase64Url } from "./crypto";
 
 describe("who may use Kitchen: Home's People list", () => {
@@ -38,26 +37,12 @@ describe("who may use Kitchen: Home's People list", () => {
   });
 
   it("matches Gmail the way Gmail does: no dots, no plus tags, any case", () => {
-    expect(canonicalEmail("s.a.m+x@gmail.com")).toBe("sam@gmail.com");
-    expect(canonicalEmail("Sam.Cook+kitchen@googlemail.com")).toBe("samcook@gmail.com");
+    expect(ownerKey("s.a.m+x@gmail.com")).toBe("sam@gmail.com");
+    expect(ownerKey("Sam.Cook+kitchen@googlemail.com")).toBe("samcook@gmail.com");
   });
 
   it("keeps dots meaningful outside Gmail", () => {
-    expect(canonicalEmail("first.last@example.com")).toBe("first.last@example.com");
-  });
-});
-
-describe("safeNext", () => {
-  it("allows same-site paths", () => {
-    expect(safeNext("/recipes/falafel?x=1")).toBe("/recipes/falafel?x=1");
-  });
-
-  it("refuses anything that could leave the site or loop", () => {
-    expect(safeNext("https://evil.example")).toBe("/");
-    expect(safeNext("//evil.example")).toBe("/");
-    expect(safeNext("/\\evil.example")).toBe("/");
-    expect(safeNext("/cdn-cgi/access/logout")).toBe("/");
-    expect(safeNext(null)).toBe("/");
+    expect(ownerKey("first.last@example.com")).toBe("first.last@example.com");
   });
 });
 

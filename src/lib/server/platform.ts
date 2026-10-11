@@ -2,7 +2,7 @@
  * What Cloudflare's Workers runtime used to hand every request as `locals.runtime`, built
  * once on Vault from the process's environment: the settings and secrets (the container's
  * app.env; on a dev computer, `.dev.vars` under `astro dev`), the database (a SQLite file,
- * `DB_PATH`), the photos (a folder, `PHOTOS_DIR`), `cf.timezone` (the household's,
+ * `DB_PATH`), the photos (a folder, `PHOTOS_DIR`), `cf.timezone` (the kitchen's,
  * `TIME_ZONE`, where Cloudflare used to guess the visitor's), and `ctx.waitUntil`, which here
  * just lets the promise finish after the response.
  *

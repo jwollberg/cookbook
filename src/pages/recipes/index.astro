@@ -5,7 +5,7 @@ import Icon from "../../components/Icon";
 import { loadKitchen } from "../../lib/server/page";
 import { collectTags, recipeCard } from "../../lib/format";
 
-const { library, planning, household } = await loadKitchen(Astro.locals);
+const { library, planning, owner } = await loadKitchen(Astro.locals);
 const tags = collectTags(library.recipes);
 const query = Astro.url.searchParams.get("q") ?? "";
 const tag = Astro.url.searchParams.get("tag");
@@ -26,7 +26,7 @@ const tag = Astro.url.searchParams.get("tag");
       client:load
       recipes={library.recipes.map(recipeCard)}
       tags={tags}
-      householdId={household.id}
+      owner={owner}
       extras={planning.shopping}
       initialQuery={query}
       initialTags={tag && tags.includes(tag) ? [tag] : []}

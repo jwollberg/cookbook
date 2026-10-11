@@ -1,27 +1,26 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
 import { MealPlanSchema } from "../../../lib/schema";
-import { getHousehold, savePlan } from "../../../lib/server/db";
-import { BadRequest, fail, handle, json, readBody } from "../../../lib/server/http";
+import { savePlan } from "../../../lib/server/db";
+import { BadRequest, handle, json, notFound, readBody } from "../../../lib/server/http";
 
 const Body = z.object({
   /**
-   * Named by the page rather than read from the session: after switching
-   * household in another tab, this tab's edits must still land in the
-   * household it is showing.
+   * Whose kitchen the page is showing (their users.id), named by the page
+   * rather than read from the session: a tab left open from before switching
+   * Google account must not save its week over the new account's.
    */
-  householdId: z.string().min(1),
+  owner: z.string().min(1),
   plan: MealPlanSchema,
 });
 
 export const PUT: APIRoute = ({ params, request, locals }) =>
   handle(async () => {
-    const { householdId, plan } = await readBody(request, Body);
+    const { owner, plan } = await readBody(request, Body);
     if (plan.id !== params.id || !/^week-\d{4}-\d{2}-\d{2}$/.test(plan.id)) {
       throw new BadRequest("That is not a week plan id.");
     }
-    const db = locals.runtime.env.DB;
-    if (!(await getHousehold(db, householdId))) return fail(404, "That household no longer exists.");
-    const saved = await savePlan(db, householdId, plan, locals.viewer.id);
+    if (owner !== locals.viewer.id) return notFound();
+    const saved = await savePlan(locals.runtime.env.DB, locals.viewer.id, plan);
     return json({ plan: saved });
   });

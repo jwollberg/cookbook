@@ -283,9 +283,9 @@ export const ShoppingExtrasSchema = z.object({
 export type ShoppingExtras = z.infer<typeof ShoppingExtrasSchema>;
 
 /**
- * One edit to a household's list. The server applies it to the latest copy
+ * One edit to a person's list. The server applies it to the latest copy
  * (see mutateShopping) rather than accepting a whole replacement list, so two
- * people adding things at the same moment both keep what they added.
+ * phones adding things at the same moment both keep what they added.
  */
 export const ListEditSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("addDish"), dish: ListDishSchema }),

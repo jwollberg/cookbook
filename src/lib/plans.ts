@@ -1,5 +1,5 @@
 /**
- * Week plans: one per household per week, keyed `week-<monday>`.
+ * Week plans: one per person per week, keyed `week-<monday>`.
  */
 
 import { formatDayLabel, fromIso, isoDate, startOfWeek, weekDates } from "./dates";

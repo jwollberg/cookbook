@@ -17,8 +17,8 @@ import type {
 } from "../lib/schema";
 
 interface Props {
-  householdId: string;
-  householdName: string;
+  /** Whose list this is (their user id), named on every edit. */
+  owner: string;
   ingredients: Ingredient[];
   recipes: Recipe[];
   meals: Meal[];
@@ -41,7 +41,7 @@ const planLabel = (plan: MealPlan) =>
   `${formatRange(plan.days[0].date, plan.days[plan.days.length - 1].date)} · ${entryCount(plan)} planned`;
 
 export default function ShoppingList(props: Props) {
-  const { householdId, householdName, ingredients, recipes, meals, plans, pantry, today } = props;
+  const { owner, ingredients, recipes, meals, plans, pantry, today } = props;
 
   const [extras, setExtras] = useState(props.extras);
   const [ticked, setTicked] = useState(() => new Set(props.ticked));
@@ -99,12 +99,12 @@ export default function ShoppingList(props: Props) {
     const mine = ++seq.current;
     pending.current++;
     try {
-      const state = await editList(householdId, edit);
+      const state = await editList(owner, edit);
       if (mine === seq.current) apply(state);
     } catch (error) {
       show({ text: error instanceof Error ? error.message : "Could not update the list." });
       // Resync rather than roll back: other edits may have landed meanwhile.
-      fetchList(householdId).then(apply, () => undefined);
+      fetchList(owner).then(apply, () => undefined);
     } finally {
       pending.current--;
     }
@@ -118,7 +118,7 @@ export default function ShoppingList(props: Props) {
     const onVisible = () => {
       if (document.visibilityState !== "visible" || pending.current > 0) return;
       const mine = ++seq.current;
-      fetchList(householdId).then(
+      fetchList(owner).then(
         (state) => {
           if (mine === seq.current) {
             apply(state);
@@ -130,7 +130,7 @@ export default function ShoppingList(props: Props) {
     };
     document.addEventListener("visibilitychange", onVisible);
     return () => document.removeEventListener("visibilitychange", onVisible);
-  }, [householdId]);
+  }, [owner]);
 
   function toggle(line: ShoppingLine) {
     const on = !ticked.has(line.key);
@@ -450,7 +450,7 @@ export default function ShoppingList(props: Props) {
               <button
                 className="btn btn-sm btn-ghost btn-danger"
                 onClick={() => {
-                  if (!window.confirm(`Clear everything added to the ${householdName} list? The plan stays as it is.`)) return;
+                  if (!window.confirm("Clear everything added to your list? The plan stays as it is.")) return;
                   send({ type: "clear" }, () => {
                     setExtras((x) => applyListEdit(x, { type: "clear" }));
                     setTicked(new Set());
@@ -465,7 +465,7 @@ export default function ShoppingList(props: Props) {
 
         {!hasAnything ? (
           <div className="empty" style={{ marginTop: 12 }}>
-            <strong style={{ fontSize: 17, color: "var(--ink)" }}>The {householdName} list is empty.</strong>
+            <strong style={{ fontSize: 17, color: "var(--ink)" }}>Your list is empty.</strong>
             <p>
               Add a recipe or a meal, type anything you need, or plan the week and it fills itself in.
             </p>
