@@ -45,7 +45,7 @@
       "id": "supercut",
       "name": "Supercut",
       "blurb": "Any line from our films and shows, as clips",
-      "url": "https://home.atheosstudios.com/supercut/",
+      "url": "https://supercut.atheosstudios.com/",
       "who": "household",
       "light": {
         "app": "#a3195b",
@@ -60,6 +60,26 @@
         "ink": "#1a0a11"
       },
       "icon": "<path d=\"M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12\"/><path d=\"M8 4l0 16\"/><path d=\"M16 4l0 16\"/><path d=\"M4 8l4 0\"/><path d=\"M4 16l4 0\"/><path d=\"M4 12l16 0\"/><path d=\"M16 8l4 0\"/><path d=\"M16 16l4 0\"/>"
+    },
+    {
+      "id": "chores",
+      "name": "Chores",
+      "blurb": "Checklists, photos, approvals",
+      "url": "https://chores.atheosstudios.com/",
+      "who": "household",
+      "light": {
+        "app": "#4d7c0f",
+        "hover": "#3f6212",
+        "soft": "#eef5e1",
+        "ink": "#ffffff"
+      },
+      "dark": {
+        "app": "#a3d65c",
+        "hover": "#b9e27e",
+        "soft": "#22301a",
+        "ink": "#0e1606"
+      },
+      "icon": "<path d=\"M4 12a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2l0 -7\"/><path d=\"M6 10v-4a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4\"/><path d=\"M15 7h.01\"/><path d=\"M18 9h.01\"/><path d=\"M18 5h.01\"/><path d=\"M21 3h.01\"/><path d=\"M21 7h.01\"/><path d=\"M21 11h.01\"/><path d=\"M10 7h1\"/>"
     },
     {
       "id": "budget",
