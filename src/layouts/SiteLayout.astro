@@ -57,6 +57,9 @@ const svg = (inner: string) =>
     <meta name="theme-color" content="#141210" media="(prefers-color-scheme: dark)" />
     <title>{pageTitle}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- The Home Screen icon (Home's app-shell/icons.mjs): an iPhone draws a letter without it. -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Kitchen" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
