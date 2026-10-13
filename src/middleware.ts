@@ -21,7 +21,8 @@ import { DEV_USER } from "./lib/server/context";
 import registry from "./lib/apps.json";
 import { loadViewer, refreshProfile, upsertUser, userForEmail } from "./lib/server/db";
 
-const PUBLIC = [/^\/robots\.txt$/];
+// The icons hold nothing private (Access still stands in front of them).
+const PUBLIC = [/^\/robots\.txt$/, /^\/(apple-touch-icon|icon-192|icon-512|icon-maskable-512)\.png$/, /^\/favicon\.svg$/];
 /** The old sign-in pages. Access signs people in now; send old bookmarks home. */
 const RETIRED = [/^\/login\/?$/, /^\/auth\//];
 
