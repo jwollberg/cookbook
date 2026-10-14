@@ -6,6 +6,7 @@
  */
 import "../styles/shell.css";
 import "../styles/global.css";
+import themeJs from "../lib/theme.js?raw";
 import Icon from "../components/Icon";
 import bundled from "../lib/apps.json";
 import { appRegistry } from "../lib/server/apps";
@@ -70,6 +71,8 @@ const svg = (inner: string) =>
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..750&family=Inter+Tight:wght@600..800&display=swap"
     />
+    <!-- Light or dark, as chosen in any Atheos app's account menu (app-shell/theme.js). -->
+    <script is:inline set:html={themeJs} />
   </head>
   <body class={signedIn ? "as-has-tabbar" : undefined}>
     <a class="skip" href="#main">Skip to content</a>
@@ -140,6 +143,7 @@ const svg = (inner: string) =>
                       {who !== viewer.email && <small>{viewer.email}</small>}
                     </span>
                   </div>
+                  <div class="as-theme" role="group" aria-label="Theme"><span>Theme</span><div><button type="button" data-as-theme="auto" aria-pressed="false">Auto</button><button type="button" data-as-theme="light" aria-pressed="false">Light</button><button type="button" data-as-theme="dark" aria-pressed="false">Dark</button></div></div>
                   <a class="as-item" href="/edit">
                     <Icon name="pencil" />
                     <span>Edit recipes</span>

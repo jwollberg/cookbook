@@ -1,8 +1,8 @@
 /* =====================================================================
    Atheos app shell — v1 (Oct 2026)
 
-   ONE look for every private app: Home, Kitchen, Budget, and the Elderdeep and
-   Grave Error trackers. Same frame, bar, switcher, tab bar, cards and type;
+   ONE look for every private app: Home, Kitchen, Supercut, Budget, Smarthome
+   and Planning. Same frame, bar, switcher, tab bar, cards and type;
    only the app's color (--app*) and icon change.
 
    Canonical copy: Website-Home/app-shell/shell.css. Apps carry a COPY — change
@@ -147,6 +147,11 @@
 .as-item svg { width: 18px; height: 18px; flex: none; color: var(--as-muted); }
 .as-item small { display: block; font: 500 12px/1.3 var(--as-font); color: var(--as-muted); }
 .as-sep { height: 1px; margin: 4px 6px; background: var(--as-line); }
+/* Light or dark for every app (theme.js): Auto follows the device. In the account menu, under its head. */
+.as-theme { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 4px 10px; font: 600 14px/1.25 var(--as-font); color: var(--as-ink); }
+.as-theme > div { margin-left: auto; display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: var(--as-sunk); border: 1px solid var(--as-line); }
+.as-theme button { border: 0; background: none; padding: 6px 10px; border-radius: 8px; font: 600 12.5px/1.1 var(--as-font); color: var(--as-ink-2); cursor: pointer; }
+.as-theme button[aria-pressed="true"] { background: var(--as-card); color: var(--as-ink); box-shadow: 0 1px 2px rgba(0, 0, 0, .08), 0 0 0 1px var(--as-line); }
 
 /* ---------- phone tab bar ---------- */
 .as-tabbar { display: none; }
