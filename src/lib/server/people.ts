@@ -1,5 +1,5 @@
 /**
- * Who may use this app: Home's People list (home.atheosstudios.com/people), the one place Josh
+ * Who may use this app: Oikos's People list (oikos.atheosstudios.com/people), the one place Josh
  * invites people and chooses their apps. Asked across Vault's Docker network
  * (GET http://atheos-home:8080/internal/people, with INTERNAL_TOKEN), kept for half a minute,
  * and the last good answer kept while Home is away (a restart, a deploy). Until Home has

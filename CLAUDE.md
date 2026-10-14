@@ -8,7 +8,7 @@ each person's own weekly plan → generated cooking sheet + one aggregated shopp
 - **Live at** `https://hestia.atheosstudios.com` — a Node server on **Vault** (Josh's Unraid
   server) behind a Cloudflare Tunnel and Cloudflare Access, repo `jwollberg/cookbook` (the repo
   name predates the renames to Kitchen and Hestia). Hosting, operations and secrets:
-  `../Home/vault/README.md`.
+  `../Oikos/vault/README.md`.
 - **Sibling property:** `jwollberg/atheosstudios` owns `atheosstudios.com`. Separate repo, separate
   hosting. Never edit one expecting the other to change.
 - Astro SSR on Node (`@astrojs/node`, standalone), SQLite through a D1-shaped API
@@ -53,19 +53,19 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
 
 - **Cloudflare Access does the sign-in** — Google, the one login shared by every Atheos app
   (Home, Budget, the trackers). Access app "Hestia" on `hestia.atheosstudios.com`, policy
-  "People · Hestia" (kept in step with Home's People list by Home), Google as the only identity provider, 30-day sessions. Team
+  "People · Hestia" (kept in step with Oikos's People list by Home), Google as the only identity provider, 30-day sessions. Team
   domain `atheosstudios.cloudflareaccess.com`. The Google OAuth client behind it lives in the
   Google project `atheos-access` (Testing mode, so a new person must also be a **test user**
   there).
 - **The server re-checks everything** (`src/middleware.ts`, `src/lib/server/access.ts`): the
   Access JWT's signature against the team's keys, its audience (`ACCESS_AUD`), issuer and expiry,
-  then the email against **Home's People list** (`src/lib/server/people.ts`, a copy of Home's
+  then the email against **Oikos's People list** (`src/lib/server/people.ts`, a copy of Oikos's
   `vault/app-platform/people.ts`: asks `atheos-home:8080/internal/people` with `INTERNAL_TOKEN`,
   keeps the answer 30 s and the last good one while Home is away). Anything missing or wrong
   fails closed (403), so a mistake in the Access policy still lets nobody in. It is checked on
   **every request**, so removing someone locks them out within half a minute. `ALLOWED_EMAILS` /
   `OWNER_EMAILS` in `app.env` only stand in until Home first answers (and on the dev server).
-- **Adding someone:** invite them on home.atheosstudios.com/people (Home keeps the Access policy
+- **Adding someone:** invite them on oikos.atheosstudios.com/people (Home keeps the Access policy
   in step), plus a test user in `atheos-access`.
 - People are matched **by email**, compared with `ownerKey` (`people.ts`: case, dots and +tags
   don't matter; `usersForEmail` / `userForEmail` in `db.ts`). Users from the old Google-OAuth days
@@ -78,7 +78,7 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
 - The dev server signs you in as "Dev Cook" (`import.meta.env.DEV`, compiled out of builds).
   Never add a bypass that is not behind that constant.
 - Writes must carry a same-origin `Origin` header (middleware).
-- **Home's calls.** Only the Home container on Vault reaches `/internal/`, with `INTERNAL_TOKEN`
+- **Oikos's calls.** Only the Home container on Vault reaches `/internal/`, with `INTERNAL_TOKEN`
   (the middleware); the tunnel never routes it.
   - `/internal/glance` (POST `{ email, today }` → `{ kitchen, tonight, plannedDays, listCount }`)
     feeds Hestia's tile on Home: the asker's own kitchen, never anyone else's. Someone who has
@@ -174,7 +174,7 @@ length while cooking, and one-handed on a phone in a supermarket aisle.
 - Soft radii, hairlines rather than boxes, generous space. Photos do the talking: recipe cards are
   image + title, with a one-tap "+" to put the recipe on the list.
 - **The frame is the shared Atheos app shell** (`src/styles/shell.css`, `src/lib/apps.json`; the
-  canonical copy is `../Home/app-shell`). Kitchen's colors: the
+  canonical copy is `../Oikos/app-shell`). Kitchen's colors: the
   orange as `--app`, and the shell's neutrals mapped to Kitchen's warm ones in `global.css`.
   Phones get the floating tab bar (thumb reach); desktop gets the nav in the top bar.
 - Quantities use tabular numerals in a **fixed-width** column (`.ing-qty`, `.shop-row`) so every
@@ -208,5 +208,5 @@ exercised. Other branches are never built.
   in `d1_migrations`), so a migration ships with the code that needs it, and must tolerate the
   code before it for the minute between.
 - Secrets and settings live in Hestia's `app.env` (`/mnt/cache/appdata/atheos/kitchen/`) on Vault (`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`,
-  `ALLOWED_EMAILS`, `OWNER_EMAILS`, `TIME_ZONE`, `INTERNAL_TOKEN`): Home's `vault/README.md`.
+  `ALLOWED_EMAILS`, `OWNER_EMAILS`, `TIME_ZONE`, `INTERNAL_TOKEN`): Oikos's `vault/README.md`.
 - DNS is Cloudflare: `hestia.atheosstudios.com` is a proxied CNAME to the tunnel `atheos-vault`.

@@ -3,9 +3,9 @@
   "apps": [
     {
       "id": "home",
-      "name": "Home",
+      "name": "Oikos",
       "blurb": "All your apps",
-      "url": "https://home.atheosstudios.com/",
+      "url": "https://oikos.atheosstudios.com/",
       "who": "household",
       "light": {
         "app": "#334155",
@@ -83,9 +83,9 @@
     },
     {
       "id": "track",
-      "name": "Track",
+      "name": "Argos",
       "blurb": "Where the kids are",
-      "url": "https://track.atheosstudios.com/",
+      "url": "https://argos.atheosstudios.com/",
       "who": "owner",
       "light": {
         "app": "#0369a1",
@@ -103,9 +103,9 @@
     },
     {
       "id": "budget",
-      "name": "Budget",
+      "name": "Tamias",
       "blurb": "Envelopes, bills, debt payoff",
-      "url": "https://budget.atheosstudios.com/",
+      "url": "https://tamias.atheosstudios.com/",
       "who": "owner",
       "light": {
         "app": "#4a3aa7",
