@@ -6,7 +6,7 @@ cooking sheet + one aggregated shopping list.
 - **Live at** `https://kitchen.atheosstudios.com` — a Node server on **Vault** (Josh's Unraid
   server) behind a Cloudflare Tunnel and Cloudflare Access, repo `jwollberg/cookbook` (the repo
   name predates the rename to Kitchen). Hosting, operations and secrets:
-  `../Websites/Website-Home/vault/README.md`.
+  `../Home/vault/README.md`.
 - **Sibling property:** `jwollberg/atheosstudios` owns `atheosstudios.com`. Separate repo, separate
   hosting. Never edit one expecting the other to change.
 - Astro SSR on Node (`@astrojs/node`, standalone), SQLite through a D1-shaped API
@@ -172,7 +172,7 @@ length while cooking, and one-handed on a phone in a supermarket aisle.
 - Soft radii, hairlines rather than boxes, generous space. Photos do the talking: recipe cards are
   image + title, with a one-tap "+" to put the recipe on the list.
 - **The frame is the shared Atheos app shell** (`src/styles/shell.css`, `src/lib/apps.json`; the
-  canonical copy is `C:ProjectsWebsitesWebsite-Homeapp-shell`). Kitchen's colors: the
+  canonical copy is `../Home/app-shell`). Kitchen's colors: the
   orange as `--app`, and the shell's neutrals mapped to Kitchen's warm ones in `global.css`.
   Phones get the floating tab bar (thumb reach); desktop gets the nav in the top bar.
 - Quantities use tabular numerals in a **fixed-width** column (`.ing-qty`, `.shop-row`) so every
