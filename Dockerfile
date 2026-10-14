@@ -1,4 +1,4 @@
-# Kitchen on Vault (Website-Home's vault/README.md). The tests, the type check and the build
+# Hestia (was Kitchen) on Vault (Website-Home's vault/README.md). The tests, the type check and the build
 # run in the first stage, so a failing test fails the deploy and the running app stays as it was.
 FROM node:24-alpine AS build
 WORKDIR /app

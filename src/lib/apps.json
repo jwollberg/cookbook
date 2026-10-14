@@ -23,9 +23,9 @@
     },
     {
       "id": "kitchen",
-      "name": "Kitchen",
+      "name": "Hestia",
       "blurb": "Recipes, meal plan, shopping list",
-      "url": "https://kitchen.atheosstudios.com/",
+      "url": "https://hestia.atheosstudios.com/",
       "who": "household",
       "light": {
         "app": "#c2410c",
@@ -43,9 +43,9 @@
     },
     {
       "id": "supercut",
-      "name": "Supercut",
+      "name": "Echo",
       "blurb": "Any line from our films and shows, as clips",
-      "url": "https://supercut.atheosstudios.com/",
+      "url": "https://echo.atheosstudios.com/",
       "who": "household",
       "light": {
         "app": "#a3195b",
@@ -80,6 +80,26 @@
         "ink": "#0e1606"
       },
       "icon": "<path d=\"M4 12a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2l0 -7\"/><path d=\"M6 10v-4a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4\"/><path d=\"M15 7h.01\"/><path d=\"M18 9h.01\"/><path d=\"M18 5h.01\"/><path d=\"M21 3h.01\"/><path d=\"M21 7h.01\"/><path d=\"M21 11h.01\"/><path d=\"M10 7h1\"/>"
+    },
+    {
+      "id": "track",
+      "name": "Track",
+      "blurb": "Where the kids are",
+      "url": "https://track.atheosstudios.com/",
+      "who": "owner",
+      "light": {
+        "app": "#0369a1",
+        "hover": "#075985",
+        "soft": "#e0f2fe",
+        "ink": "#ffffff"
+      },
+      "dark": {
+        "app": "#4fb8ea",
+        "hover": "#80cdf2",
+        "soft": "#0c2a3d",
+        "ink": "#04111c"
+      },
+      "icon": "<path d=\"M9 12a3 3 0 1 0 6 0a3 3 0 1 0 -6 0\"/><path d=\"M4 12a8 8 0 1 0 16 0a8 8 0 1 0 -16 0\"/><path d=\"M12 2l0 2\"/><path d=\"M12 20l0 2\"/><path d=\"M20 12l2 0\"/><path d=\"M2 12l2 0\"/>"
     },
     {
       "id": "budget",
@@ -123,9 +143,9 @@
     },
     {
       "id": "planning",
-      "name": "Planning",
+      "name": "Telos",
       "blurb": "Plans and issues, every project",
-      "url": "https://planning.atheosstudios.com/",
+      "url": "https://telos.atheosstudios.com/",
       "who": "owner",
       "light": {
         "app": "#2457d6",

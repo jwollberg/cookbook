@@ -126,5 +126,5 @@ export function accessToken(request: Request): string | null {
   return m ? decodeURIComponent(m[1]) : null;
 }
 
-/** Signing out of Kitchen means signing out of Access for this hostname. */
+/** Signing out of Hestia means signing out of Access for this hostname. */
 export const SIGN_OUT_URL = "/cdn-cgi/access/logout";

@@ -40,7 +40,7 @@ const nav = [
 
 const who = viewer?.name ?? viewer?.email ?? "Signed in";
 const initial = who.trim().charAt(0).toUpperCase();
-const pageTitle = title === "Kitchen" ? title : `${title} · Kitchen`;
+const pageTitle = title === "Hestia" ? title : `${title} · Hestia`;
 
 // The app switcher shows only the apps this person may open (Home's People list).
 const viewerApps = Astro.locals.apps ?? [];
@@ -63,7 +63,7 @@ const svg = (inner: string) =>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <!-- The Home Screen icon (Home's app-shell/icons.mjs): an iPhone draws a letter without it. -->
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="Kitchen" />
+    <meta name="apple-mobile-web-app-title" content="Hestia" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -80,7 +80,7 @@ const svg = (inner: string) =>
           <div class="as-top-in">
             <a class="as-brand" href="/">
               <span class="as-mark" set:html={svg(self.icon)} />
-              Kitchen
+              Hestia
             </a>
 
             <nav class="as-nav" aria-label="Primary">
@@ -173,7 +173,7 @@ const svg = (inner: string) =>
       signedIn && (
         <footer class="footer no-print">
           <div class="wrap footer-inner">
-            <span>Kitchen · {kitchenName(viewer)}</span>
+            <span>Hestia · {kitchenName(viewer)}</span>
           </div>
         </footer>
       )

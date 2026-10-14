@@ -7,7 +7,7 @@ import node from "@astrojs/node";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 
-const site = process.env.SITE_URL || "https://kitchen.atheosstudios.com";
+const site = process.env.SITE_URL || "https://hestia.atheosstudios.com";
 
 /**
  * Work around a React 19 + Vite dev-server interop bug.

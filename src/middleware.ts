@@ -38,7 +38,7 @@ function refuse(path: string, message: string): Response {
   return new Response(
     `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Not allowed</title>
 <body style="font:16px/1.5 system-ui;max-width:32rem;margin:15vh auto;padding:0 20px;color:#1c1917">
-<h1 style="font-size:22px">Kitchen is private</h1><p>${message}</p>
+<h1 style="font-size:22px">Hestia is private</h1><p>${message}</p>
 <p><a href="/cdn-cgi/access/logout">Sign in with a different account</a></p></body>`,
     { status: 403, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } },
   );

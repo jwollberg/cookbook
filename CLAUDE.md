@@ -1,11 +1,13 @@
-# Kitchen — working notes
+# Hestia — working notes
 
-Private household kitchen app: shared recipes → meals → each person's own weekly plan → generated
-cooking sheet + one aggregated shopping list.
+Hestia (Kitchen until 2026-10-14; the app id `kitchen`, the repo, the container `atheos-kitchen`,
+its data folder and `app.env` keep that name, and its old address is gone). The folder is
+`C:\Projects\Atheos Home Apps\Hestia`. Private household kitchen app: shared recipes → meals →
+each person's own weekly plan → generated cooking sheet + one aggregated shopping list.
 
-- **Live at** `https://kitchen.atheosstudios.com` — a Node server on **Vault** (Josh's Unraid
+- **Live at** `https://hestia.atheosstudios.com` — a Node server on **Vault** (Josh's Unraid
   server) behind a Cloudflare Tunnel and Cloudflare Access, repo `jwollberg/cookbook` (the repo
-  name predates the rename to Kitchen). Hosting, operations and secrets:
+  name predates the renames to Kitchen and Hestia). Hosting, operations and secrets:
   `../Home/vault/README.md`.
 - **Sibling property:** `jwollberg/atheosstudios` owns `atheosstudios.com`. Separate repo, separate
   hosting. Never edit one expecting the other to change.
@@ -50,8 +52,8 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
 ## Sign-in and access
 
 - **Cloudflare Access does the sign-in** — Google, the one login shared by every Atheos app
-  (Home, Budget, the trackers). Access app "Kitchen" on `kitchen.atheosstudios.com`, policy
-  "Household (Josh, Reagen, Gwen)", Google as the only identity provider, 30-day sessions. Team
+  (Home, Budget, the trackers). Access app "Hestia" on `hestia.atheosstudios.com`, policy
+  "People · Hestia" (kept in step with Home's People list by Home), Google as the only identity provider, 30-day sessions. Team
   domain `atheosstudios.cloudflareaccess.com`. The Google OAuth client behind it lives in the
   Google project `atheos-access` (Testing mode, so a new person must also be a **test user**
   there).
@@ -79,9 +81,9 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
 - **Home's calls.** Only the Home container on Vault reaches `/internal/`, with `INTERNAL_TOKEN`
   (the middleware); the tunnel never routes it.
   - `/internal/glance` (POST `{ email, today }` → `{ kitchen, tonight, plannedDays, listCount }`)
-    feeds Kitchen's tile on home.atheosstudios.com: the asker's own kitchen, never anyone
-    else's. Someone who has never opened Kitchen gets an empty week, and no users row. It still
-    answers only for people the People list lets use Kitchen.
+    feeds Hestia's tile on Home: the asker's own kitchen, never anyone else's. Someone who has
+    never opened Hestia gets an empty week, and no users row. It still answers only for people
+    the People list lets use Hestia (app id `kitchen`).
   - `/internal/forget` (POST `{ email }` → `{ ok, removed: { <table>: count } }`, 400 without an
     address) is Home removing someone: `forgetPerson` deletes their plans, list, ticks, pantry and
     users row (every row that is them by `ownerKey`). The recipes, meals and ingredients they
@@ -205,6 +207,6 @@ exercised. Other branches are never built.
 - **Migrations apply themselves** when the server opens the database (`migrations/*.sql`, recorded
   in `d1_migrations`), so a migration ships with the code that needs it, and must tolerate the
   code before it for the minute between.
-- Secrets and settings live in Kitchen's `app.env` on Vault (`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`,
+- Secrets and settings live in Hestia's `app.env` (`/mnt/cache/appdata/atheos/kitchen/`) on Vault (`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`,
   `ALLOWED_EMAILS`, `OWNER_EMAILS`, `TIME_ZONE`, `INTERNAL_TOKEN`): Home's `vault/README.md`.
-- DNS is Cloudflare: `kitchen.atheosstudios.com` is a proxied CNAME to the tunnel `atheos-vault`.
+- DNS is Cloudflare: `hestia.atheosstudios.com` is a proxied CNAME to the tunnel `atheos-vault`.
