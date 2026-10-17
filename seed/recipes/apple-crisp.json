@@ -8,13 +8,13 @@
   "cookMin": 50,
   "restMin": 0,
   "tags": ["dessert", "vegetarian", "baked", "fall"],
-  "image": "/images/recipes/apple-crisp.jpg",
+  "image": "/images/dishes/apple-crisp.jpg",
   "imageCredit": {
-    "author": "Douglas Perkins",
-    "license": "CC BY 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Apple_Crisp.jpg",
-    "title": "Apple Crisp"
+    "author": "jeffreyw",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=32022282",
+    "title": "01 Mmm... Apple Crisp with Whipped Cream"
   },
   "ingredients": [
     { "ingredientId": "apple", "quantity": 4, "unit": "lb", "note": "Granny Smith, peeled and sliced", "group": "Filling" },

@@ -8,13 +8,13 @@
   "cookMin": 55,
   "restMin": 0,
   "tags": ["greek", "side", "vegetarian", "oven"],
-  "image": "/images/recipes/greek-lemon-potatoes.jpg",
+  "image": "/images/dishes/greek-lemon-potatoes.jpg",
   "imageCredit": {
-    "author": "Shixart1985",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Crispy_golden_potato_wedges_on_a_baking_tray_ready_for_serving_at_home.jpg",
-    "title": "Crispy golden potato wedges on a baking tray"
+    "author": "avlxyz",
+    "license": "CC BY-NC 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
+    "sourceUrl": "https://www.flickr.com/photos/10559879@N00/40262586623",
+    "title": "Lemon potatoes AUD6 - Orexi, Oakleigh"
   },
   "ingredients": [
     { "ingredientId": "potato", "quantity": 2.5, "unit": "lb", "note": "peeled, sliced lengthwise into thick wedges" },

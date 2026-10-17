@@ -7,13 +7,13 @@
   "cookMin": 25,
   "restMin": 0,
   "tags": ["side", "vegetarian", "gluten-free"],
-  "image": "/images/recipes/lemon-butter-parslied-potatoes.jpg",
+  "image": "/images/dishes/lemon-butter-parslied-potatoes.jpg",
   "imageCredit": {
-    "author": "Benreis",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pommes_de_Terre_Grenailles_Persill%C3%A9es.jpg",
-    "title": "Pommes de Terre Grenailles Persillées"
+    "author": "chrisfreeland2002",
+    "license": "CC BY-NC-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
+    "sourceUrl": "https://www.flickr.com/photos/54169140@N00/2729543751",
+    "title": "Parsley Potatoes with Lemon"
   },
   "ingredients": [
     { "ingredientId": "red-potato", "quantity": 1, "unit": "lb" },

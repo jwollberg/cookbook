@@ -8,13 +8,13 @@
   "restMin": 0,
   "tags": ["main", "pasta", "pork"],
   "sourceUrl": "http://www.kitchendaily.com/recipe/spaghettini-with-bacon-and-basil-142674",
-  "image": "/images/recipes/spaghettini-with-bacon-and-basil.jpg",
+  "image": "/images/dishes/spaghettini-with-bacon-and-basil.jpg",
   "imageCredit": {
-    "author": "Luca Nebuloni from Milan, Italy",
+    "author": "jeffreyw",
     "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Spaghetti_with_cherry_tomatoes_and_cashew_nuts_(20142599775).jpg",
-    "title": "Spaghetti with cherry tomatoes and cashew nuts (20142599775)"
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "sourceUrl": "https://www.flickr.com/photos/7927684@N03/14620878743",
+    "title": "Mmm... sauteed cherry tomatoes on angel hair pasta"
   },
   "ingredients": [
     { "ingredientId": "spaghettini", "quantity": 12, "unit": "oz", "note": "or angel hair" },

@@ -7,13 +7,13 @@
   "cookMin": 10,
   "restMin": 0,
   "tags": ["main", "vegetarian", "skillet", "pasta"],
-  "image": "/images/recipes/fried-gnocchi-with-tomatoes-and-olives.jpg",
+  "image": "/images/dishes/fried-gnocchi-with-tomatoes-and-olives.jpg",
   "imageCredit": {
-    "author": "Ewan Munro from London, UK",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:North_London_Tavern,_Kilburn,_London_(3661279696).jpg",
-    "title": "North London Tavern, Kilburn, London (3661279696)"
+    "author": "Dana McMahan",
+    "license": "CC BY-NC 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
+    "sourceUrl": "https://www.flickr.com/photos/21161002@N00/3825136372",
+    "title": "'Faux' gnocchi with beautiful tiny tomatoes, zucchini, squash, sweet onions and olives in a brown butter sauce with sage"
   },
   "ingredients": [
     { "ingredientId": "olive-oil", "quantity": 1, "unit": "tbsp" },

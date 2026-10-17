@@ -8,7 +8,7 @@
   "cookMin": 8,
   "restMin": 30,
   "tags": ["greek", "main", "vegetarian", "fried", "gluten-free"],
-  "image": "/images/recipes/falafel.jpg",
+  "image": "/images/dishes/falafel.jpg",
   "imageCredit": {
     "author": "Popo le Chien",
     "license": "CC BY-SA 3.0",

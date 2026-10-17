@@ -7,13 +7,13 @@
   "cookMin": 390,
   "restMin": 0,
   "tags": ["soup", "slow-cooker"],
-  "image": "/images/recipes/potato-soup.jpg",
+  "image": "/images/dishes/potato-soup.jpg",
   "imageCredit": {
-    "author": "jeffreyw",
+    "author": "krossbow",
     "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Potato_cheese_soup.jpg",
-    "title": "Potato cheese soup"
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "sourceUrl": "https://www.flickr.com/photos/13194817@N00/12075509523",
+    "title": "Baked Potato Soup that wasn't served at my school's yearly Souper Bowl luncheon due to the snow day."
   },
   "ingredients": [
     { "ingredientId": "potato", "quantity": 1.5, "unit": "lb", "note": "peeled and cubed (about 4 cups)" },

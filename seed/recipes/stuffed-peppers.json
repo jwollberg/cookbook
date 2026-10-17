@@ -8,13 +8,13 @@
   "cookMin": 60,
   "restMin": 5,
   "tags": ["american", "main", "baked", "gluten-free"],
-  "image": "/images/recipes/stuffed-peppers.jpg",
+  "image": "/images/dishes/stuffed-peppers.jpg",
   "imageCredit": {
-    "author": "Roundhere44",
-    "license": "CC0",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stuffed_Peppers_Florentine.jpg",
-    "title": "Stuffed peppers florentine"
+    "author": "jeffreyw",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "sourceUrl": "https://www.flickr.com/photos/7927684@N03/15301994655",
+    "title": "Mmm... stuffed peppers"
   },
   "ingredients": [
     { "ingredientId": "bell-pepper", "quantity": 4, "unit": "each", "note": "tops cut off, seeds and ribs removed" },

@@ -7,13 +7,13 @@
   "cookMin": 18,
   "restMin": 0,
   "tags": ["dessert", "vegetarian", "baked", "fall"],
-  "image": "/images/recipes/chai-spice-muffins.jpg",
+  "image": "/images/dishes/chai-spice-muffins.jpg",
   "imageCredit": {
-    "author": "Veganbaking.net from USA",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vegan_Date_Spice_Muffins_(4277555192).jpg",
-    "title": "Vegan Date Spice Muffins (4277555192)"
+    "author": "moonlightbulb",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "sourceUrl": "https://www.flickr.com/photos/24532534@N02/8065460539",
+    "title": "Pumpkin muffin and Chai tea latte"
   },
   "ingredients": [
     { "ingredientId": "all-purpose-flour", "quantity": 1.75, "unit": "cup", "group": "Muffins" },

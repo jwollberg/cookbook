@@ -7,12 +7,12 @@
   "cookMin": 0,
   "restMin": 0,
   "tags": ["greek", "sauce", "vegetarian", "no-cook"],
-  "image": "/images/recipes/fresh-tzatziki-sauce.jpg",
+  "image": "/images/dishes/fresh-tzatziki-sauce.jpg",
   "imageCredit": {
-    "author": "Nikodem Nijaki",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tzatziki_IMGP1444.jpg",
+    "author": "stadtbrautphoto",
+    "license": "CC BY-NC-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
+    "sourceUrl": "https://www.flickr.com/photos/109175117@N03/11890818293",
     "title": "Tzatziki"
   },
   "ingredients": [
