@@ -51,7 +51,7 @@ export default function RecipeBrowser({
   return (
     <div>
       {searchable && (
-        <div style={{ display: "grid", gap: 14, marginBottom: 28 }}>
+        <div style={{ display: "grid", gap: 12, marginBottom: 16 }}>
           <div className="search" style={{ maxWidth: 520 }}>
             <Icon name="search" />
             <input
@@ -90,12 +90,12 @@ export default function RecipeBrowser({
           <p>Nothing matches that.</p>
         </div>
       ) : (
-        <div className="card-grid">
+        <div className="as-tiles">
           {filtered.map((r) => {
             const onList = Boolean(list.has({ recipeId: r.id }));
             return (
-              <article key={r.id} className="rcard">
-                <div className="rcard-media">
+              <article key={r.id} className="as-tile rcard">
+                <div className="as-tile-media rcard-media">
                   {r.image ? (
                     <img src={r.image} alt="" loading="lazy" />
                   ) : (
@@ -116,11 +116,11 @@ export default function RecipeBrowser({
                     <Icon name={onList ? "check" : "plus"} />
                   </button>
                 </div>
-                <div>
+                <div className="as-tile-body">
                   <a className="rcard-link" href={`/recipes/${r.id}`}>
-                    <h3 className="rcard-title">{r.title}</h3>
+                    <h3>{r.title}</h3>
                   </a>
-                  {r.subtitle && <p className="rcard-sub">{r.subtitle}</p>}
+                  {r.subtitle && <p>{r.subtitle}</p>}
                   <div className="rcard-meta">
                     {r.timeLabel && (
                       <span>

@@ -1,11 +1,11 @@
 /* =====================================================================
-   Atheos app shell — v1 (Oct 2026)
+   Atheos app shell — v2 (Oct 2026)
 
-   ONE look for every private app: Home, Kitchen, Supercut, Budget, Smarthome
-   and Planning. Same frame, bar, switcher, tab bar, cards and type;
-   only the app's color (--app*) and icon change.
+   ONE look for every private app: Oikos, Hestia, Echo, Argos, Tamias, Emporos
+   and Telos. Same frame, bar, switcher, tab bar, cards, type and page
+   layouts; only the app's color (--app*) and icon change.
 
-   Canonical copy: Website-Home/app-shell/shell.css. Apps carry a COPY — change
+   Canonical copy: Oikos/app-shell/shell.css. Apps carry a COPY — change
    it here, then copy it into each app (see README.md beside this file).
 
    Every class is prefixed `as-` so it can't collide with an app's own styles.
@@ -184,3 +184,71 @@
 .as-btn.primary { background: var(--app); border-color: var(--app); color: var(--app-ink); }
 .as-btn.primary:hover { background: var(--app-hover); }
 :where(.as-body) :focus-visible { outline: 2px solid var(--as-focus); outline-offset: 2px; border-radius: 6px; }
+
+/* ---------- page layouts (README "Page layouts"): one set for every app ----------
+   Overview (start page)  .as-head, then .as-grid of .as-card.as-pad
+   Collection (browse)    .as-head, .as-tools, then .as-tiles of .as-tile
+   List (scan and act)    .as-head, .as-tools, then one .as-card of .as-rows
+   Detail (one thing)     .as-back, .as-head, then .as-split: main + side card
+   Workbench (a tool)     .as-head, then .as-split.as-aside-first: the picker beside the work
+   Settings               .as-head, then .as-stack of .as-card.as-pad
+   Map                    the map under the bar; .as-card panels over it */
+.as-head-end { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.as-back { display: inline-flex; align-items: center; gap: 4px; min-height: 32px; margin-bottom: 4px; color: var(--as-muted); font: 600 14px/1.2 var(--as-font); text-decoration: none; }
+.as-back:hover { color: var(--as-ink); }
+.as-back svg { width: 17px; height: 17px; }
+
+/* a section's heading between cards: its name, then a link or button at the end */
+.as-sec-h { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 28px 0 12px; }
+.as-sec-h:first-child { margin-top: 0; }
+.as-sec-h h2 { margin: 0; font: 700 17px/1.3 var(--as-font); letter-spacing: -0.01em; }
+.as-sec-h > :last-child:not(:first-child) { margin-left: auto; }
+.as-sec-h a { display: inline-flex; align-items: center; gap: 4px; color: var(--app); font: 600 14px/1.2 var(--as-font); text-decoration: none; white-space: nowrap; }
+.as-sec-h a svg { width: 16px; height: 16px; }
+
+/* a card with room inside: its h2 is the card's title, .as-sub under it the one-line why */
+.as-pad { padding: 20px 22px; }
+@media (max-width: 760px) { .as-pad { padding: 16px; } }
+.as-pad > h2:first-child, .as-card-h h2 { margin: 0 0 12px; font: 700 17px/1.3 var(--as-font); letter-spacing: -0.01em; }
+.as-card-h h2 { margin: 0; }
+.as-card-h { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.as-card-h > :last-child:not(:first-child) { margin-left: auto; }
+.as-card-h a { display: inline-flex; align-items: center; gap: 4px; color: var(--app); font: 600 14px/1.2 var(--as-font); text-decoration: none; white-space: nowrap; }
+.as-card-h a svg { width: 16px; height: 16px; }
+.as-sub { margin: 0 0 12px; color: var(--as-muted); font-size: 13.5px; line-height: 1.45; }
+.as-pad > h2:first-child + .as-sub, .as-card-h + .as-sub { margin-top: -10px; }
+
+/* Overview and Settings: cards in a grid, or one above the other */
+.as-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); align-items: start; }
+.as-stack { display: grid; gap: 16px; }
+
+/* Collection: things browsed by picture or name, each a tile (photo 4:3 on top if it has one) */
+.as-tiles { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+.as-tile { position: relative; display: flex; flex-direction: column; min-width: 0; overflow: hidden; background: var(--as-card); border: 1px solid var(--as-line); border-radius: var(--as-r); box-shadow: var(--as-shadow); color: var(--as-ink); text-decoration: none; }
+.as-tile:hover { border-color: var(--as-line-strong); }
+.as-tile-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--as-sunk); }
+.as-tile-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.as-tile-body { display: grid; gap: 4px; padding: 12px 14px 14px; min-width: 0; }
+.as-tile-body b, .as-tile-body h3 { margin: 0; font: 650 15px/1.3 var(--as-font); letter-spacing: -0.01em; }
+.as-tile-body small, .as-tile-body p { margin: 0; font: 500 13px/1.4 var(--as-font); color: var(--as-muted); }
+
+/* List: rows to scan and act on, in one card */
+.as-rows { display: grid; }
+.as-row { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 10px 18px; border-top: 1px solid var(--as-line); color: var(--as-ink); text-decoration: none; }
+.as-row:first-child { border-top: 0; }
+a.as-row:hover { background: var(--as-raise); }
+
+/* the bar above a list or collection: search, filters, a segmented control */
+.as-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+
+/* Detail and Workbench: the main column beside a 340px side column; one column on a phone */
+.as-split { display: grid; gap: 16px; align-items: start; }
+.as-split > * { min-width: 0; }
+@media (min-width: 1000px) {
+  .as-split { grid-template-columns: minmax(0, 1fr) 340px; }
+  .as-split.as-aside-first { grid-template-columns: 340px minmax(0, 1fr); }
+  .as-split > .as-sticky { position: sticky; top: calc(var(--as-bar-h) + 16px); }
+}
+
+/* an empty card: what is missing, and the one button that fixes it */
+.as-empty { display: grid; justify-items: center; gap: 12px; padding: 32px 20px; text-align: center; color: var(--as-ink-2); }

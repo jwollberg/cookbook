@@ -135,9 +135,14 @@ wrong day's shopping list.
   sauce) and an optional timeline that interleaves them.
 - `plans` — per person (`user_id`): days → entries (meal or recipe, slot, servings).
 - `shopping` + `shopping_ticks`, `pantry` — per person (`user_id`).
-- Photos: starter photos are openly licensed Wikimedia images in `public/images/recipes/` and
-  **must** carry `imageCredit` (CC BY / BY-SA require visible attribution; the data test enforces
-  it). Uploaded photos live in the photos folder at `/photos/recipes/<id>/<key>` and need no credit.
+- Photos: starter photos are openly licensed photos (Flickr and Wikimedia, found through
+  Openverse) in `public/images/dishes/`, 4:3 at up to 1600×1200, and **must** carry
+  `imageCredit` (CC BY / BY-SA require attribution; the data test enforces it). The credits are
+  listed on **Photo credits** (`/credits`, in the account menu), not on the recipe page (Josh,
+  2026-10-17: credits subtle and out of view). Never an ND (no-derivatives) license. Uploaded
+  photos live in the photos folder at `/photos/recipes/<id>/<key>` and need no credit.
+  Migration 0003 moved the live recipes from the old `/images/recipes/` photos to these, only
+  where a recipe still had its starter photo.
 
 ## Units and aggregation — read before touching `src/lib/units.ts`
 
@@ -164,19 +169,22 @@ Conversion bugs are invisible in the UI but corrupt every shopping list, so `uni
 
 ## Design
 
-Modern and clean, photo-first. Driven by where this is actually read: propped on a counter at arm's
-length while cooking, and one-handed on a phone in a supermarket aisle.
+**Hestia looks like every other Atheos app** (Josh, 2026-10-17: it had drifted into a magazine
+look of its own). The frame, page, cards, type, buttons and page layouts are the shared Atheos
+app shell's (`src/styles/shell.css`, a copy of `../Oikos/app-shell`; its README's "Page layouts"
+says which kind each page is): Today is an Overview, Recipes and Meals are Collections of
+`.as-tile`s, a recipe or meal is a Detail, Plan and Shopping list are Workbenches, Edit recipes
+is a List. Every page is `.as-main` with an `.as-head` (24px title, one muted line under it); no
+hero headlines, eyebrows, display fonts or footer. Use the shell's classes first and add a
+Hestia piece to `global.css` only for what only a kitchen has.
 
-- One sans family: **Inter** for UI/body, **Inter Tight** for headings. Tokens in
-  `src/styles/global.css`, light and dark.
-- Warm off-white page, warm near-black ink `#1c1917` — **not** blue-black, which reads cold next to
-  food. One accent, burnt orange `#c2410c`. Every text colour clears AA on every surface it sits on.
-- Soft radii, hairlines rather than boxes, generous space. Photos do the talking: recipe cards are
-  image + title, with a one-tap "+" to put the recipe on the list.
-- **The frame is the shared Atheos app shell** (`src/styles/shell.css`, `src/lib/apps.json`; the
-  canonical copy is `../Oikos/app-shell`). Kitchen's colors: the
-  orange as `--app`, and the shell's neutrals mapped to Kitchen's warm ones in `global.css`.
-  Phones get the floating tab bar (thumb reach); desktop gets the nav in the top bar.
+- **Inter** only. `global.css` keeps Hestia's own token names (`--bg`, `--surface`, `--ink`,
+  `--hairline`…), but they are the shell's shared neutrals (`--as-*`); never tint them.
+  One accent, Hestia's burnt orange `#c2410c` (`--app`). Every text colour clears AA.
+- Photos do the talking inside the tiles: photo 4:3, title, one muted line, and a one-tap "+" to
+  put the recipe on the list.
+- Phones get the floating tab bar (thumb reach); desktop gets the nav in the top bar.
+- Buttons (`.btn`) are the shell's: 12px corners, 40px tall, 44px on a phone.
 - Quantities use tabular numerals in a **fixed-width** column (`.ing-qty`, `.shop-row`) so every
   name starts at the same x. A list that doesn't align has to be read line by line.
 - Min 44px tap targets: this gets used one-handed with wet hands.

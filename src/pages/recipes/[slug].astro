@@ -1,6 +1,5 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import ImageCredit from "../../components/ImageCredit.astro";
 import IngredientList, { type IngredientName } from "../../components/IngredientList";
 import Icon from "../../components/Icon";
 import { loadKitchen } from "../../lib/server/page";
@@ -40,23 +39,26 @@ const stepGroups = recipe.steps.reduce(
 ---
 
 <SiteLayout title={recipe.title} description={recipe.description}>
-  <div class="wrap">
-    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 20px;">
-      <a class="back" href="/recipes"><Icon name="chevronLeft" /> Recipes</a>
-      <a class="btn btn-sm" href={`/edit/recipe?id=${encodeURIComponent(recipe.id)}`}>
-        <Icon name="pencil" /> Edit
-      </a>
-    </div>
+  <div class="as-main">
+    <a class="as-back" href="/recipes"><Icon name="chevronLeft" /> Recipes</a>
+    <header class="as-head">
+      <div>
+        <h1>{recipe.title}</h1>
+        {recipe.subtitle && <p>{recipe.subtitle}</p>}
+      </div>
+      <div class="as-head-end">
+        <a class="btn" href={`/edit/recipe?id=${encodeURIComponent(recipe.id)}`}>
+          <Icon name="pencil" /> Edit
+        </a>
+      </div>
+    </header>
 
     <article>
-      <div class="recipe-top">
-        <figure class="recipe-photo" style="margin-block: 0;">
+      <div class="recipe-top as-card">
+        <figure class="recipe-photo">
           {
             recipe.image ? (
-              <>
-                <img src={recipe.image} alt={recipe.title} />
-                <ImageCredit credit={recipe.imageCredit} />
-              </>
+              <img src={recipe.image} alt={recipe.title} />
             ) : (
               <div class="no-photo">
                 <Icon name="camera" />
@@ -66,8 +68,6 @@ const stepGroups = recipe.steps.reduce(
         </figure>
 
         <div class="recipe-intro">
-          <h1>{recipe.title}</h1>
-          {recipe.subtitle && <p class="subtitle">{recipe.subtitle}</p>}
           {recipe.description && <p class="lede">{recipe.description}</p>}
           <div class="stats">
             {
@@ -93,8 +93,8 @@ const stepGroups = recipe.steps.reduce(
         </div>
       </div>
 
-      <div class="recipe-body">
-        <aside class="recipe-aside">
+      <div class="as-split as-aside-first">
+        <aside class="as-sticky">
           <IngredientList
             client:load
             recipeId={recipe.id}
@@ -124,8 +124,8 @@ const stepGroups = recipe.steps.reduce(
           }
         </aside>
 
-        <section>
-          <h2 style="font-size: 1.25rem; margin-bottom: 6px;">Method</h2>
+        <section class="as-card as-pad">
+          <h2>Method</h2>
           {
             stepGroups.map((group) => (
               <div>

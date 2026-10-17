@@ -81,8 +81,8 @@ export type RecipeStep = z.infer<typeof RecipeStepSchema>;
  * Attribution for a photo.
  *
  * Not decorative metadata — the CC BY and CC BY-SA images this site uses
- * REQUIRE visible credit as a condition of the licence. Anything carrying an
- * `image` must carry this too, and the recipe page must render it.
+ * REQUIRE credit as a condition of the licence. Anything carrying a starter
+ * `image` must carry this too; the Photo credits page (/credits) lists it.
  */
 export const ImageCreditSchema = z.object({
   author: z.string().min(1),
@@ -110,7 +110,7 @@ export const RecipeSchema = z.object({
   tags: z.array(z.string()).default([]),
   sourceUrl: z.string().url().optional(),
   /**
-   * /images/recipes/* for the starter photos (static, openly licensed), or
+   * /images/dishes/* for the starter photos (static, openly licensed), or
    * /photos/* for one uploaded in the editor (R2, behind sign-in).
    */
   image: z.string().optional(),

@@ -7,11 +7,11 @@ const { library, planning, kitchen, owner } = await loadKitchen(Astro.locals);
 ---
 
 <SiteLayout title="Shopping list" description="Your one list: the week's plan, anything added directly, grouped by aisle.">
-  <div class="wrap">
-    <header class="page-head">
+  <div class="as-main">
+    <header class="as-head">
       <div>
-        <span class="eyebrow">{kitchen}</span>
         <h1>Shopping list</h1>
+        <p>{kitchen}: the week's plan and anything you add, grouped by aisle.</p>
       </div>
     </header>
 

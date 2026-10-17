@@ -8,12 +8,15 @@ const deleted = Astro.url.searchParams.has("deleted");
 ---
 
 <SiteLayout title="Edit recipes" description="Add and edit the shared recipes.">
-  <div class="wrap" style="max-width: 900px;">
-    <header class="page-head">
+  <div class="as-main">
+    <header class="as-head">
       <div>
         <h1>Edit recipes</h1>
+        <p>The shared recipe book: anything changed here changes for everyone.</p>
       </div>
-      <a class="btn btn-primary" href="/edit/recipe"><Icon name="plus" /> New recipe</a>
+      <div class="as-head-end">
+        <a class="btn btn-primary" href="/edit/recipe"><Icon name="plus" /> New recipe</a>
+      </div>
     </header>
 
     {deleted && <p class="callout" role="status" style="margin-bottom: 18px;">Recipe deleted.</p>}
@@ -42,8 +45,8 @@ const deleted = Astro.url.searchParams.has("deleted");
 
     {
       library.meals.length > 0 && (
-        <section class="section">
-          <div class="section-head">
+        <section>
+          <div class="as-sec-h">
             <h2>Meals</h2>
           </div>
           <div class="panel" style="padding: 6px 18px;">

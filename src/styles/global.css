@@ -1,10 +1,11 @@
 /* =====================================================================
-   Kitchen — design system
+   Hestia — its own pieces, inside the shared Atheos shell
 
-   Modern and clean: photographs do the talking, the chrome gets out of the
-   way. One sans family (Inter, with Inter Tight for headings), a warm
-   off-white page, a single burnt-orange accent, generous space, soft
-   radii, and hairlines instead of boxes.
+   The page, cards, type, buttons and layouts are the shell's (shell.css,
+   Oikos's app-shell README, "Page layouts"), so Hestia feels like every
+   other Atheos app; this file keeps only what a kitchen needs on top:
+   photo tiles, quantity columns, aisle colors, the planner and the
+   cooking steps. Hestia's color, burnt orange, is its one accent.
 
    Every choice is still driven by where this is read: propped on a counter
    at arm's length while cooking, and one-handed on a phone in a supermarket
@@ -12,8 +13,6 @@
    quantities in tabular figures so a list can be scanned, and a tab bar on
    phones where a thumb can reach it.
 
-   - Warm near-black ink (#1c1917), never blue-black: blue-blacks read cold
-     and clinical next to photographs of food.
    - Every text colour below clears WCAG AA (4.5:1) on every surface it is
      used on, in both themes.
    - Aisle colours are DATA, not decoration. A shopping list is only usable
@@ -24,23 +23,25 @@
 
 @theme {
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Inter Tight", "Inter", system-ui, sans-serif;
+  --font-display: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 :root {
   color-scheme: light;
 
-  --bg: #faf9f7;
-  --surface: #ffffff;
-  --surface-2: #f3f1ed;
-  --surface-3: #e9e6e0;
-  --scrim: rgba(28, 25, 23, 0.4);
+  /* Hestia's names for the shell's shared neutrals (shell.css): the page,
+     cards and ink are the same in every Atheos app. */
+  --bg: var(--as-page);
+  --surface: var(--as-card);
+  --surface-2: var(--as-sunk);
+  --surface-3: #e3e6ec;
+  --scrim: rgba(17, 24, 39, 0.4);
 
-  --ink: #1c1917;
-  --ink-2: #4a4540;
-  --muted: #716a63;
+  --ink: var(--as-ink);
+  --ink-2: var(--as-ink-2);
+  --muted: var(--as-muted);
 
-  /* Kitchen's color in the shared Atheos shell (apps.json); the accent IS it. */
+  /* Hestia's color in the shared Atheos shell (apps.json); the accent IS it. */
   --app: #c2410c;
   --app-hover: #a8380b;
   --app-soft: #fdf1ea;
@@ -52,43 +53,29 @@
   --green: #3d7a36;
   --green-wash: #eef6ec;
 
-  --hairline: #ebe7e1;
-  --hairline-strong: #d9d3ca;
-  --focus: #2563eb;
+  --hairline: var(--as-line);
+  --hairline-strong: var(--as-line-strong);
+  --focus: var(--as-focus);
 
   --display: var(--font-display);
   --sans: var(--font-sans);
 
   --radius-lg: 22px;
-  --radius: 16px;
+  --radius: 18px;
   --radius-sm: 12px;
   --pill: 999px;
 
-  --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.05);
-  --shadow: 0 1px 2px rgba(28, 25, 23, 0.04), 0 6px 20px rgba(28, 25, 23, 0.06);
-  --shadow-lg: 0 18px 50px rgba(28, 25, 23, 0.16);
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.05);
+  --shadow: var(--as-shadow);
+  --shadow-lg: var(--as-shadow-lg);
 
-  --maxw: 1200px;
-  --gutter: 20px;
+  /* The shell's page (.as-main): 1240px at most, 22px gutters, 14px on a phone. */
+  --maxw: var(--as-maxw);
+  --gutter: 22px;
   /* The shell's bar (shell.css) and, on phones, its floating tab bar plus the
      gap under it. Sticky things sit clear of both. */
   --header-h: 62px;
   --tabbar-h: 0px;
-
-  /* The shell's neutrals, in Kitchen's warm ones: food photos look wrong on
-     blue-grey. Everything else about the shell is shared as-is. */
-  --as-page: var(--bg);
-  --as-card: var(--surface);
-  --as-sunk: var(--surface-2);
-  --as-raise: var(--bg);
-  --as-ink: var(--ink);
-  --as-ink-2: var(--ink-2);
-  --as-muted: var(--muted);
-  --as-line: var(--hairline);
-  --as-line-strong: var(--hairline-strong);
-  --as-shadow: var(--shadow);
-  --as-shadow-lg: var(--shadow-lg);
-  --as-focus: var(--focus);
 
   --aisle-produce: #3f7a34;
   --aisle-dairy: #2f6aa3;
@@ -98,22 +85,15 @@
   --aisle-spices: #b8561a;
   --aisle-frozen: #4f78a8;
   --aisle-bakery: #8a5a2b;
-  --aisle-other: #716a63;
+  --aisle-other: #6b7280;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
 
-    --bg: #141210;
-    --surface: #1d1a17;
-    --surface-2: #27231f;
-    --surface-3: #332e29;
+    --surface-3: #283040;
     --scrim: rgba(0, 0, 0, 0.6);
-
-    --ink: #f5f0ea;
-    --ink-2: #d4ccc2;
-    --muted: #a0968b;
 
     --app: #f08a4b;
     --app-hover: #f6a26e;
@@ -122,13 +102,7 @@
     --green: #8cc27f;
     --green-wash: #1d2a1a;
 
-    --hairline: #2e2a25;
-    --hairline-strong: #433d36;
-    --focus: #7aa7ff;
-
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 6px 20px rgba(0, 0, 0, 0.35);
-    --shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.55);
+    --shadow-sm: none;
 
     --aisle-produce: #86b977;
     --aisle-dairy: #7eb0e0;
@@ -138,27 +112,16 @@
     --aisle-spices: #e89a5f;
     --aisle-frozen: #93b5da;
     --aisle-bakery: #cf9a68;
-    --aisle-other: #a0968b;
+    --aisle-other: #959cab;
   }
 }
 
-@media (min-width: 768px) {
-  :root {
-    --gutter: 32px;
-  }
-}
 @media (max-width: 760px) {
   :root {
+    --gutter: 14px;
     --header-h: 56px;
     --tabbar-h: 80px;
   }
-}
-
-/* The shell's bar lines up with Kitchen's content column. Unlayered, like
-   shell.css, so it wins over the shell's own widths. */
-.as-top-in {
-  max-width: var(--maxw);
-  padding-inline: var(--gutter);
 }
 
 /* ---------------------------------------------------------------------
@@ -183,8 +146,8 @@
     background: var(--bg);
     color: var(--ink);
     font-family: var(--sans);
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: 15px;
+    line-height: 1.5;
     font-feature-settings: "cv11", "ss01";
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -196,23 +159,25 @@
   h4 {
     font-family: var(--display);
     font-weight: 700;
-    line-height: 1.12;
-    letter-spacing: -0.022em;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
     margin: 0;
     color: var(--ink);
     text-wrap: balance;
   }
 
+  /* The shell's scale: page titles 24px, card and section titles 17px. */
   h1 {
-    font-size: clamp(2rem, 5.2vw, 3.1rem);
-    letter-spacing: -0.03em;
+    font-size: 24px;
+    font-weight: 750;
+    letter-spacing: -0.02em;
   }
   h2 {
-    font-size: clamp(1.35rem, 2.6vw, 1.7rem);
+    font-size: 17px;
   }
   h3 {
-    font-size: 1.1rem;
-    letter-spacing: -0.012em;
+    font-size: 15px;
+    font-weight: 650;
   }
 
   p {
@@ -256,13 +221,6 @@
    --------------------------------------------------------------------- */
 
 @layer components {
-  .wrap {
-    width: 100%;
-    max-width: var(--maxw);
-    margin-inline: auto;
-    padding-inline: var(--gutter);
-  }
-
   .skip {
     position: absolute;
     left: -999px;
@@ -302,16 +260,6 @@
 
   /* ---- Type helpers -------------------------------------------------- */
 
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--accent);
-    letter-spacing: 0.01em;
-  }
-
   .label {
     font-size: 12px;
     font-weight: 600;
@@ -321,9 +269,9 @@
   }
 
   .lede {
-    font-size: clamp(1.02rem, 1.8vw, 1.15rem);
+    font-size: 15px;
     color: var(--ink-2);
-    max-width: 62ch;
+    max-width: 70ch;
   }
 
   .muted {
@@ -433,15 +381,15 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-height: 44px;
-    padding: 0 20px;
+    min-height: 40px;
+    padding: 0 16px;
     border: 1px solid var(--hairline-strong);
-    border-radius: var(--pill);
+    border-radius: var(--radius-sm);
     background: var(--surface);
     color: var(--ink);
     font: inherit;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 650;
     line-height: 1.2;
     text-decoration: none;
     white-space: nowrap;
@@ -453,7 +401,7 @@
       transform 0.08s;
   }
   .btn:hover {
-    border-color: var(--muted);
+    background: var(--surface-2);
   }
   .btn:active {
     transform: scale(0.98);
@@ -492,16 +440,26 @@
     color: #b42318;
   }
   .btn-sm {
-    min-height: 36px;
-    padding: 0 14px;
-    font-size: 14px;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 10px;
+    font-size: 13.5px;
   }
   .btn-icon {
-    width: 44px;
+    width: 40px;
     padding: 0;
   }
   .btn-icon.btn-sm {
-    width: 36px;
+    width: 34px;
+  }
+  /* Wet hands, one thumb: a phone gets 44px. */
+  @media (max-width: 760px) {
+    .btn {
+      min-height: 44px;
+    }
+    .btn-icon {
+      width: 44px;
+    }
   }
   .btn:disabled,
   .btn[aria-disabled="true"] {
@@ -522,18 +480,19 @@
 
   /* ---- Surfaces ------------------------------------------------------ */
 
+  /* The shell's card (.as-card, .as-pad). */
   .panel {
     background: var(--surface);
     border: 1px solid var(--hairline);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow);
   }
   .panel-pad {
-    padding: 20px;
+    padding: 20px 22px;
   }
-  @media (min-width: 768px) {
+  @media (max-width: 760px) {
     .panel-pad {
-      padding: 24px;
+      padding: 16px;
     }
   }
 
@@ -555,13 +514,17 @@
     background: var(--accent-wash);
   }
 
+  /* The shell's empty card (.as-empty): what is missing, and the button that fixes it. */
   .empty {
     display: grid;
-    justify-items: start;
-    gap: 14px;
-    padding: 28px;
-    border: 1.5px dashed var(--hairline-strong);
+    justify-items: center;
+    gap: 12px;
+    padding: 32px 20px;
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
     border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
     color: var(--ink-2);
   }
 
@@ -680,7 +643,6 @@
   }
   .search .input {
     padding-left: 44px;
-    border-radius: var(--pill);
   }
 
   .check {
@@ -691,77 +653,10 @@
 
   /* ---- Page header ---------------------------------------------------- */
 
-  .page-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 16px 24px;
-    padding-block: clamp(28px, 5vw, 48px) clamp(20px, 3vw, 28px);
-  }
-  .page-head > div {
-    display: grid;
-    gap: 10px;
-    min-width: 0;
-  }
-
-  .back {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--muted);
-    text-decoration: none;
-  }
-  .back:hover {
-    color: var(--ink);
-  }
-  .back .icon {
-    width: 17px;
-    height: 17px;
-  }
-
-  .section {
-    margin-top: clamp(40px, 6vw, 64px);
-  }
-  .section-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 18px;
-  }
-  .section-head a {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--accent);
-    text-decoration: none;
-    white-space: nowrap;
-  }
-
   /* ---- Photo cards --------------------------------------------------- */
 
-  .card-grid {
-    display: grid;
-    gap: 28px 20px;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
-  }
-  .card-grid-tight {
-    gap: 22px 16px;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
-  }
-
-  .rcard {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    min-width: 0;
-  }
+  /* A recipe or meal is a shell tile (.as-tile); the whole tile is its link,
+     with the quick-add button above it. */
   .rcard-link {
     text-decoration: none;
     color: inherit;
@@ -773,42 +668,20 @@
     inset: 0;
     z-index: 1;
   }
-  .rcard-media {
-    position: relative;
-    aspect-ratio: 4 / 3;
-    border-radius: var(--radius);
-    overflow: hidden;
-    background: var(--surface-2);
-  }
   .rcard-media img {
-    width: 100%;
-    height: 100%;
     /* Photos arrive in whatever crop the photographer shot. Cover keeps the
        grid even. */
-    object-fit: cover;
     transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
   .rcard:hover .rcard-media img {
     transform: scale(1.04);
   }
-  .rcard-title {
-    font-family: var(--display);
-    font-size: 1.08rem;
-    font-weight: 700;
-    letter-spacing: -0.015em;
-    line-height: 1.25;
-  }
-  .rcard-sub {
-    margin-top: 2px;
-    font-size: 14px;
-    color: var(--muted);
-  }
   .rcard-meta {
     display: flex;
     flex-wrap: wrap;
     gap: 4px 14px;
-    margin-top: 6px;
-    font-size: 13.5px;
+    margin-top: 2px;
+    font-size: 13px;
     color: var(--muted);
   }
   .rcard-meta span {
@@ -912,83 +785,6 @@
 
   /* ---- Home ---------------------------------------------------------- */
 
-  .hero {
-    display: grid;
-    gap: 32px;
-    align-items: center;
-    padding-block: clamp(28px, 6vw, 64px) 8px;
-  }
-  .hero-copy {
-    display: grid;
-    gap: 16px;
-  }
-  .hero-mosaic {
-    display: none;
-  }
-  @media (min-width: 900px) {
-    .hero {
-      grid-template-columns: 1.05fr 1fr;
-      gap: 48px;
-    }
-    .hero-mosaic {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 12px;
-      height: 400px;
-    }
-    .hero-mosaic img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: var(--radius-lg);
-      min-height: 0;
-    }
-    .hero-mosaic img:first-child {
-      grid-row: span 2;
-    }
-  }
-
-  .tiles {
-    display: grid;
-    gap: 12px;
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @media (min-width: 768px) {
-    .tiles {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-  .tile {
-    display: grid;
-    gap: 6px;
-    padding: 16px 18px;
-    border-radius: var(--radius);
-    background: var(--surface);
-    border: 1px solid var(--hairline);
-    text-decoration: none;
-    transition:
-      border-color 0.15s,
-      box-shadow 0.15s;
-  }
-  .tile:hover {
-    border-color: var(--hairline-strong);
-    box-shadow: var(--shadow);
-  }
-  .tile .icon {
-    width: 22px;
-    height: 22px;
-    color: var(--accent);
-  }
-  .tile-title {
-    font-weight: 700;
-    font-size: 15.5px;
-  }
-  .tile-sub {
-    font-size: 13px;
-    color: var(--muted);
-  }
-
   .week-strip {
     display: grid;
     gap: 10px;
@@ -1003,8 +799,8 @@
     gap: 8px;
     min-height: 120px;
     padding: 12px;
-    border-radius: var(--radius);
-    background: var(--surface);
+    border-radius: 14px;
+    background: var(--as-raise);
     border: 1px solid var(--hairline);
     scroll-snap-align: start;
   }
@@ -1043,12 +839,12 @@
 
   .recipe-top {
     display: grid;
-    gap: 24px;
-    padding-block: 16px 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
   }
   .recipe-photo {
     position: relative;
-    margin: 0 calc(-1 * var(--gutter));
+    margin: 0;
     aspect-ratio: 4 / 3;
     overflow: hidden;
     background: var(--surface-2);
@@ -1058,32 +854,29 @@
     height: 100%;
     object-fit: cover;
   }
-  @media (min-width: 600px) {
-    .recipe-photo {
-      margin: 0;
-      border-radius: var(--radius-lg);
-    }
-  }
-  @media (min-width: 960px) {
-    .recipe-top {
-      grid-template-columns: 1fr 1.05fr;
-      gap: 48px;
-      align-items: center;
-      padding-top: 28px;
-    }
-    .recipe-top .recipe-photo {
-      order: 2;
-    }
-  }
   .recipe-intro {
     display: grid;
     gap: 14px;
     align-content: start;
+    padding: 20px 22px;
   }
-  .subtitle {
-    font-size: 1.1rem;
-    color: var(--muted);
-    font-style: italic;
+  @media (max-width: 760px) {
+    .recipe-intro {
+      padding: 16px;
+    }
+  }
+  @media (min-width: 900px) {
+    .recipe-top {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+    .recipe-photo {
+      aspect-ratio: auto;
+      min-height: 320px;
+    }
+    .recipe-intro {
+      align-content: center;
+      padding: 24px 28px;
+    }
   }
 
   .stats {
@@ -1114,44 +907,18 @@
     white-space: nowrap;
   }
 
-  .image-credit {
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .image-credit a {
-    color: inherit;
-  }
-  .recipe-photo .image-credit {
-    position: absolute;
-    left: 10px;
-    bottom: 10px;
-    max-width: calc(100% - 20px);
-    padding: 3px 9px;
-    border-radius: var(--pill);
-    background: rgba(0, 0, 0, 0.5);
-    color: rgba(255, 255, 255, 0.92);
-    font-size: 11px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  /* Ingredients follow you down the steps (.as-sticky) — you refer back
+     constantly while cooking, and scrolling up with messy hands is grim. */
 
+  /* The cooking sheet's dish: its ingredients beside its steps. */
   .recipe-body {
     display: grid;
-    gap: 40px;
-    margin-top: clamp(28px, 5vw, 48px);
+    gap: 28px;
   }
   @media (min-width: 960px) {
     .recipe-body {
-      grid-template-columns: minmax(300px, 380px) 1fr;
-      gap: 56px;
+      grid-template-columns: minmax(260px, 340px) 1fr;
       align-items: start;
-    }
-    /* Ingredients follow you down the steps — you refer back constantly
-       while cooking, and scrolling up with messy hands is grim. */
-    .recipe-aside {
-      position: sticky;
-      top: calc(var(--header-h) + 20px);
     }
   }
 
@@ -1681,24 +1448,6 @@
     }
   }
 
-  /* ---- Footer ---------------------------------------------------------- */
-
-  .footer {
-    margin-top: 80px;
-    border-top: 1px solid var(--hairline);
-  }
-  .footer-inner {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 12px;
-    padding-block: 24px;
-    font-size: 13px;
-    color: var(--muted);
-  }
-  .footer a {
-    color: inherit;
-  }
 }
 
 /* ---------------------------------------------------------------------
@@ -1708,7 +1457,6 @@
 @media print {
   .as-top,
   .as-tabbar,
-  .footer,
   .no-print {
     display: none !important;
   }

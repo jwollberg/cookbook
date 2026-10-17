@@ -17,8 +17,8 @@ const titles = meal.components
 const time = formatMinutes(mealMinutes(meal, recipesById));
 ---
 
-<article class="rcard">
-  <div class="rcard-media">
+<article class="as-tile rcard">
+  <div class="as-tile-media rcard-media">
     {
       images.length === 0 ? (
         <div class="no-photo">
@@ -35,11 +35,11 @@ const time = formatMinutes(mealMinutes(meal, recipesById));
       )
     }
   </div>
-  <div>
+  <div class="as-tile-body">
     <a class="rcard-link" href={`/meals/${meal.id}`}>
-      <h3 class="rcard-title">{meal.name}</h3>
+      <h3>{meal.name}</h3>
     </a>
-    <p class="rcard-sub">{titles}</p>
+    <p>{titles}</p>
     <div class="rcard-meta">
       <span><Icon name="cloche" />{meal.components.length} dishes</span>
       {time && <span><Icon name="clock" />About {time}</span>}

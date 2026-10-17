@@ -7,10 +7,11 @@ const { library, recipesById } = await loadKitchen(Astro.locals);
 ---
 
 <SiteLayout title="Meals" description="Recipes grouped into meals: a main, its sides, and everything else on the table.">
-  <div class="wrap">
-    <header class="page-head">
+  <div class="as-main">
+    <header class="as-head">
       <div>
         <h1>Meals</h1>
+        <p>Recipes that go together: a main, its sides and everything else on the table.</p>
       </div>
     </header>
 
@@ -20,7 +21,7 @@ const { library, recipesById } = await loadKitchen(Astro.locals);
           <p>No meals yet.</p>
         </div>
       ) : (
-        <div class="card-grid">
+        <div class="as-tiles">
           {library.meals.map((meal) => (
             <MealCard meal={meal} recipesById={recipesById} />
           ))}

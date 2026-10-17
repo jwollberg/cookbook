@@ -11,7 +11,7 @@ import Icon from "../components/Icon";
 import bundled from "../lib/apps.json";
 import { appRegistry } from "../lib/server/apps";
 import { SIGN_OUT_URL } from "../lib/server/access";
-import { countList, kitchenName } from "../lib/server/db";
+import { countList } from "../lib/server/db";
 
 // The app list is Home's (apps.ts): a change there reaches this switcher within a minute.
 const registry = await appRegistry(Astro.locals.runtime.env, bundled);
@@ -58,8 +58,8 @@ const svg = (inner: string) =>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content={description} />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content="#FAF9F7" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#141210" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f4f5f8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)" />
     <title>{pageTitle}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <!-- The Home Screen icon (Home's app-shell/icons.mjs): an iPhone draws a letter without it. -->
@@ -69,12 +69,12 @@ const svg = (inner: string) =>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..750&family=Inter+Tight:wght@600..800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..750&display=swap"
     />
     <!-- Light or dark, as chosen in any Atheos app's account menu (app-shell/theme.js). -->
     <script is:inline set:html={themeJs} />
   </head>
-  <body class={signedIn ? "as-has-tabbar" : undefined}>
+  <body class={signedIn ? "as-body as-has-tabbar" : "as-body"}>
     <a class="skip" href="#main">Skip to content</a>
 
     {
@@ -152,6 +152,10 @@ const svg = (inner: string) =>
                     <Icon name="pot" />
                     <span>Cooking sheet</span>
                   </a>
+                  <a class="as-item" href="/credits">
+                    <Icon name="camera" />
+                    <span>Photo credits</span>
+                  </a>
                   <div class="as-sep" />
                   <a class="as-item" href={SIGN_OUT_URL}>
                     <Fragment set:html={svg(registry.accountIcons.switch)} />
@@ -172,16 +176,6 @@ const svg = (inner: string) =>
     <main id="main">
       <slot />
     </main>
-
-    {
-      signedIn && (
-        <footer class="footer no-print">
-          <div class="wrap footer-inner">
-            <span>Hestia · {kitchenName(viewer)}</span>
-          </div>
-        </footer>
-      )
-    }
 
     {
       signedIn && (

@@ -12,12 +12,15 @@ const tag = Astro.url.searchParams.get("tag");
 ---
 
 <SiteLayout title="Recipes" description="Every recipe in the kitchen, searchable and filterable by tag.">
-  <div class="wrap">
-    <header class="page-head">
+  <div class="as-main">
+    <header class="as-head">
       <div>
         <h1>Recipes</h1>
+        <p>Every recipe in the house. Tap + to put one on your shopping list.</p>
       </div>
-      <a class="btn" href="/edit/recipe"><Icon name="plus" /> New recipe</a>
+      <div class="as-head-end">
+        <a class="btn" href="/edit/recipe"><Icon name="plus" /> New recipe</a>
+      </div>
     </header>
 
     <RecipeBrowser

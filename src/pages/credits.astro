@@ -1,0 +1,109 @@
+---
+/**
+ * Photo credits: who took each starter photo, and under what license. Out of the way on
+ * purpose (the account menu links it), but always there: the CC BY and BY-SA licenses ask for
+ * this credit as a condition of using the photo. A photo someone uploads needs none.
+ */
+import SiteLayout from "../layouts/SiteLayout.astro";
+import Icon from "../components/Icon";
+import { loadKitchen } from "../lib/server/page";
+
+const { library } = await loadKitchen(Astro.locals);
+const credited = library.recipes
+  .filter((r) => r.image && r.imageCredit)
+  .sort((a, b) => a.title.localeCompare(b.title));
+---
+
+<SiteLayout title="Photo credits" description="Who took the starter recipes' photos, and their licenses.">
+  <div class="as-main">
+    <header class="as-head">
+      <div>
+        <h1>Photo credits</h1>
+        <p>The starter recipes' photos, used under their licenses. Thank you to everyone who shared them.</p>
+      </div>
+    </header>
+
+    {
+      credited.length === 0 ? (
+        <div class="empty">
+          <p>No credited photos right now.</p>
+        </div>
+      ) : (
+        <div class="as-card as-rows credits">
+          {credited.map((r) => {
+            const c = r.imageCredit!;
+            return (
+              <div class="as-row">
+                <img class="credit-thumb" src={r.image} alt="" loading="lazy" width="48" height="36" />
+                <div class="credit-text">
+                  <a href={`/recipes/${r.id}`}>{r.title}</a>
+                  <small>
+                    {c.title ? `“${c.title}” by ` : "By "}
+                    {c.sourceUrl ? (
+                      <a href={c.sourceUrl} rel="noopener noreferrer nofollow" target="_blank">
+                        {c.author}
+                      </a>
+                    ) : (
+                      c.author
+                    )}
+                    {" · "}
+                    {c.licenseUrl ? (
+                      <a href={c.licenseUrl} rel="noopener noreferrer nofollow license" target="_blank">
+                        {c.license}
+                      </a>
+                    ) : (
+                      c.license
+                    )}
+                  </small>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )
+    }
+
+    <p class="small muted credits-foot">
+      <Icon name="camera" /> A photo you upload to a recipe replaces its starter photo and needs no credit. Icons: Tabler
+      Icons (MIT).
+    </p>
+  </div>
+</SiteLayout>
+
+<style>
+  .credit-thumb {
+    width: 48px;
+    height: 36px;
+    flex: none;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--surface-2);
+  }
+  .credit-text {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+  }
+  .credit-text > a {
+    font-weight: 650;
+    text-decoration: none;
+  }
+  .credit-text small {
+    color: var(--muted);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+  .credit-text small a {
+    color: inherit;
+  }
+  .credits-foot {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+  }
+  .credits-foot :global(.icon) {
+    width: 16px;
+    height: 16px;
+  }
+</style>

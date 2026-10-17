@@ -12,11 +12,9 @@ if (id && !recipe) return Astro.rewrite("/404");
 ---
 
 <SiteLayout title={recipe ? `Edit ${recipe.title}` : "New recipe"} description="Add or edit a recipe.">
-  <div class="wrap">
-    <div style="padding-top: 20px;">
-      <a class="back" href="/edit"><Icon name="chevronLeft" /> Edit recipes</a>
-    </div>
-    <header class="page-head" style="padding-top: 16px;">
+  <div class="as-main">
+    <a class="as-back" href="/edit"><Icon name="chevronLeft" /> Edit recipes</a>
+    <header class="as-head">
       <div>
         <h1>{recipe ? recipe.title : "New recipe"}</h1>
       </div>

@@ -35,13 +35,17 @@ const images = mealImages(meal, recipesById).slice(0, 4);
 ---
 
 <SiteLayout title={meal.name} description={meal.description}>
-  <div class="wrap">
-    <div style="padding-top: 20px;">
-      <a class="back" href="/meals"><Icon name="chevronLeft" /> Meals</a>
-    </div>
+  <div class="as-main">
+    <a class="as-back" href="/meals"><Icon name="chevronLeft" /> Meals</a>
+    <header class="as-head">
+      <div>
+        <h1>{meal.name}</h1>
+        <p>{ordered.map(({ recipe }) => recipe.title).join(" · ")}</p>
+      </div>
+    </header>
 
-    <div class="recipe-top">
-      <figure class="recipe-photo" style="margin-block: 0;">
+    <div class="recipe-top as-card">
+      <figure class="recipe-photo">
         {
           images.length > 1 ? (
             <div class={`collage collage-${images.length}`}>
@@ -60,7 +64,6 @@ const images = mealImages(meal, recipesById).slice(0, 4);
       </figure>
 
       <div class="recipe-intro">
-        <h1>{meal.name}</h1>
         {meal.description && <p class="lede">{meal.description}</p>}
         <div class="stats">
           <div class="stat">
@@ -94,13 +97,13 @@ const images = mealImages(meal, recipesById).slice(0, 4);
       </div>
     </div>
 
-    <section class="section">
-      <div class="section-head"><h2>On the table</h2></div>
-      <div class="card-grid card-grid-tight">
+    <section>
+      <div class="as-sec-h"><h2>On the table</h2></div>
+      <div class="as-tiles">
         {
           ordered.map(({ component, recipe }) => (
-            <article class="rcard">
-              <div class="rcard-media">
+            <article class="as-tile rcard">
+              <div class="as-tile-media rcard-media">
                 {recipe.image ? (
                   <img src={recipe.image} alt="" loading="lazy" />
                 ) : (
@@ -110,9 +113,9 @@ const images = mealImages(meal, recipesById).slice(0, 4);
                 )}
                 <span class="rcard-tag">{component.role}</span>
               </div>
-              <div>
+              <div class="as-tile-body">
                 <a class="rcard-link" href={`/recipes/${recipe.id}`}>
-                  <h3 class="rcard-title">{recipe.title}</h3>
+                  <h3>{recipe.title}</h3>
                 </a>
                 <div class="rcard-meta">
                   <span>
@@ -129,9 +132,9 @@ const images = mealImages(meal, recipesById).slice(0, 4);
 
     {
       meal.timeline.length > 0 && (
-        <section class="section" style="max-width: 760px;">
-          <div class="section-head"><h2>Game plan</h2></div>
-          <ol class="timeline">
+        <section>
+          <div class="as-sec-h"><h2>Game plan</h2></div>
+          <ol class="timeline as-card as-pad">
             {meal.timeline.map((step, i) => {
               const recipe = step.recipeId ? recipesById.get(step.recipeId) : undefined;
               return (
@@ -156,8 +159,8 @@ const images = mealImages(meal, recipesById).slice(0, 4);
       )
     }
 
-    <section class="section">
-      <div class="section-head"><h2>Everything you need</h2></div>
+    <section>
+      <div class="as-sec-h"><h2>Everything you need</h2></div>
       <div class="panel panel-pad" style="columns: 300px 2; column-gap: 40px;">
         {
           shopping.groups.map((group) => (

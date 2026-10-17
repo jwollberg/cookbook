@@ -14,16 +14,24 @@ const monday = mondayOf(today);
 const week = planning.plans.find((p) => p.id === planIdFor(monday)) ?? emptyPlan(monday);
 const planned = entryCount(week);
 const onList = planning.shopping.dishes.length + planning.shopping.items.length;
+const range = formatRange(week.days[0].date, week.days[6].date);
 
 const firstName = viewer.name?.trim().split(/\s+/)[0];
 const hello = `${greeting(Astro.locals)}${firstName ? `, ${firstName}` : ""}`;
+// The shell's Overview: the day, then one line of what matters.
+const summary = [
+  fromIso(today).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }),
+  planned > 0 ? `${planned} ${planned === 1 ? "dish" : "dishes"} planned this week` : null,
+  onList > 0 ? `${onList} on your shopping list` : null,
+]
+  .filter(Boolean)
+  .join(" · ");
 
 // Newest first, so something just added shows up on the home page.
 const latest = [...library.recipes]
   .sort((a, b) => (b.updatedAt ?? "").localeCompare(a.updatedAt ?? ""))
   .slice(0, 8)
   .map(recipeCard);
-const mosaic = library.recipes.filter((r) => r.image).slice(0, 3);
 
 const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
   if (entry.mealId) {
@@ -38,37 +46,35 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
 ---
 
 <SiteLayout title="Hestia">
-  <div class="wrap">
-    <section class="hero">
-      <div class="hero-copy">
-        <span class="eyebrow">{hello}</span>
-        <h1>What are we cooking this week?</h1>
-        <form class="search" action="/recipes" method="get" role="search" style="max-width: 460px;">
-          <Icon name="search" />
-          <input class="input" type="search" name="q" placeholder="Search recipes…" aria-label="Search recipes" />
-        </form>
-        <div class="actions">
-          <a class="btn btn-primary" href="/plan"><Icon name="calendar" /> Plan the week</a>
-          <a class="btn" href="/shopping">
-            <Icon name="bag" /> Shopping list
-            {onList > 0 && <span class="count-badge">{onList}</span>}
-          </a>
-        </div>
+  <div class="as-main">
+    <header class="as-head">
+      <div>
+        <h1>{hello}</h1>
+        <p>{summary}</p>
       </div>
-      <div class="hero-mosaic" aria-hidden="true">
-        {mosaic.map((r) => <img src={r.image} alt="" />)}
+      <div class="as-head-end">
+        <a class="btn" href="/shopping">
+          <Icon name="bag" /> Shopping list
+          {onList > 0 && <span class="count-badge">{onList}</span>}
+        </a>
+        <a class="btn btn-primary" href="/plan"><Icon name="calendar" /> Plan the week</a>
       </div>
-    </section>
+    </header>
 
-    <section class="section">
-      <div class="section-head">
+    <form class="search as-tools" action="/recipes" method="get" role="search" style="max-width: 520px;">
+      <Icon name="search" />
+      <input class="input" type="search" name="q" placeholder="Search recipes…" aria-label="Search recipes" />
+    </form>
+
+    <section class="as-card as-pad">
+      <div class="as-card-h">
         <h2>This week</h2>
         <a href="/plan">Open the planner <Icon name="arrowRight" /></a>
       </div>
       {
         planned === 0 ? (
-          <div class="empty">
-            <p>Nothing planned for {formatRange(week.days[0].date, week.days[6].date)} yet.</p>
+          <div class="as-empty">
+            <p>Nothing planned for {range} yet.</p>
             <a class="btn btn-primary" href="/plan">
               <Icon name="calendar" /> Plan the week
             </a>
@@ -98,35 +104,27 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
       }
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>Recipes</h2>
-        <a href="/recipes">All {library.recipes.length} recipes <Icon name="arrowRight" /></a>
-      </div>
-      <RecipeBrowser
-        client:load
-        recipes={latest}
-        owner={owner}
-        extras={planning.shopping}
-        searchable={false}
-      />
-    </section>
+    <div class="as-sec-h">
+      <h2>Recipes</h2>
+      <a href="/recipes">All {library.recipes.length} recipes <Icon name="arrowRight" /></a>
+    </div>
+    <RecipeBrowser client:load recipes={latest} owner={owner} extras={planning.shopping} searchable={false} />
 
     {
       library.meals.length > 0 && (
-        <section class="section">
-          <div class="section-head">
+        <>
+          <div class="as-sec-h">
             <h2>Meals</h2>
             <a href="/meals">
               All meals <Icon name="arrowRight" />
             </a>
           </div>
-          <div class="card-grid">
+          <div class="as-tiles">
             {library.meals.slice(0, 4).map((meal) => (
               <MealCard meal={meal} recipesById={recipesById} />
             ))}
           </div>
-        </section>
+        </>
       )
     }
   </div>

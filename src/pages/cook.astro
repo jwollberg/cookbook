@@ -13,13 +13,13 @@ const others = planning.plans.filter((p) => entryCount(p) > 0 && p.id !== plan?.
 ---
 
 <SiteLayout title="Cooking sheet" description="Every dish in the plan, in order, with quantities at the servings you planned.">
-  <div class="wrap">
-    <header class="page-head">
+  <div class="as-main">
+    <header class="as-head">
       <div>
-        <span class="eyebrow">{kitchen}</span>
         <h1>Cooking sheet</h1>
+        <p>{kitchen}: every dish in the plan, in order, at the servings you planned.</p>
       </div>
-      <div class="actions no-print">
+      <div class="as-head-end no-print">
         <a class="btn btn-sm" href={plan ? `/plan?week=${plan.days[0].date}` : "/plan"}>
           <Icon name="calendar" /> Plan
         </a>
@@ -32,7 +32,7 @@ const others = planning.plans.filter((p) => entryCount(p) > 0 && p.id !== plan?.
 
     {
       others.length > 0 && (
-        <div class="chips no-print" style="margin-bottom: 28px;">
+        <div class="chips as-tools no-print">
           <span class="small muted" style="align-self: center;">
             Other weeks:
           </span>
