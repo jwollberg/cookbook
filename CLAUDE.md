@@ -80,8 +80,9 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
 - Writes must carry a same-origin `Origin` header (middleware).
 - **Oikos's calls.** Only the Home container on Vault reaches `/internal/`, with `INTERNAL_TOKEN`
   (the middleware); the tunnel never routes it.
-  - `/internal/glance` (POST `{ email, today }` → `{ kitchen, tonight, plannedDays, listCount }`)
-    feeds Hestia's tile on Home: the asker's own kitchen, never anyone else's. Someone who has
+  - `/internal/glance` (POST `{ email, today }` → `{ kitchen, tonight, plannedDays, listCount, aiCents }`)
+    feeds Hestia's tile on Home: the asker's own kitchen, never anyone else's; `aiCents` is their
+    own Claude spend this month (every app's glance uses that name, for Oikos's front page). Someone who has
     never opened Hestia gets an empty week, and no users row. It still answers only for people
     the People list lets use Hestia (app id `kitchen`).
   - `/internal/forget` (POST `{ email }` → `{ ok, removed: { <table>: count } }`, 400 without an

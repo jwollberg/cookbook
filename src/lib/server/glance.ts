@@ -1,11 +1,12 @@
 /**
  * Kitchen's tile on home.atheosstudios.com, for one person: their kitchen's
  * name, what's for dinner tonight, how much of the week is planned, and how
- * long the list is. Home asks for it (POST /internal/glance); the shape must
- * match `KitchenGlance` in Website-Home.
+ * long the list is, and what their asking Claude cost this month. Home asks for
+ * it (POST /internal/glance); the shape must match `KitchenGlance` in Oikos.
  */
 
 import { entryCount, sundayOf, planIdFor } from "../plans";
+import { aiUsage } from "./claude";
 import { countList, kitchenName, loadPlan, usersForEmail } from "./db";
 
 export interface KitchenGlance {
@@ -17,6 +18,8 @@ export interface KitchenGlance {
   plannedDays: number;
   /** extra items and dishes on the shopping list */
   listCount: number;
+  /** their own AI spend this month, in cents (every app's glance names it aiCents) */
+  aiCents: number;
 }
 
 /**
@@ -28,11 +31,12 @@ export async function kitchenGlance(env: Env, email: string, today: string): Pro
   const db = env.DB;
   const [person] = await usersForEmail(db, email);
   const kitchen = kitchenName(person ?? { name: null, email: email.trim() });
-  if (!person) return { kitchen, tonight: [], plannedDays: 0, listCount: 0 };
+  if (!person) return { kitchen, tonight: [], plannedDays: 0, listCount: 0, aiCents: 0 };
 
-  const [plan, listCount] = await Promise.all([
+  const [plan, listCount, aiCents] = await Promise.all([
     loadPlan(db, person.id, planIdFor(sundayOf(today))),
     countList(db, person.id),
+    spentCents(db, email),
   ]);
 
   let plannedDays = 0;
@@ -63,5 +67,11 @@ export async function kitchenGlance(env: Env, email: string, today: string): Pro
       .filter((n): n is string => Boolean(n));
   }
 
-  return { kitchen, tonight, plannedDays, listCount };
+  return { kitchen, tonight, plannedDays, listCount, aiCents };
+}
+
+/** Claude's use is counted per users.id, and one inbox can have more than one (old and new ids). */
+async function spentCents(db: D1Database, email: string): Promise<number> {
+  const usage = await Promise.all((await usersForEmail(db, email)).map((u) => aiUsage(db, u.id)));
+  return Math.round(usage.reduce((sum, u) => sum + u.cents, 0) * 100) / 100;
 }

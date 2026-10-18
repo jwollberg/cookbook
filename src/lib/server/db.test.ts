@@ -220,12 +220,14 @@ describe("Home's glance", () => {
       tonight: ["Greek Dinner"],
       plannedDays: 2,
       listCount: 1,
+      aiCents: 0,
     });
     expect(await kitchenGlance({ DB: db } as Env, "reagenbrase@gmail.com", "2026-10-12")).toEqual({
       kitchen: "Reagenbrase's kitchen",
       tonight: [],
       plannedDays: 0,
       listCount: 0,
+      aiCents: 0,
     });
   });
 
@@ -236,8 +238,21 @@ describe("Home's glance", () => {
       tonight: [],
       plannedDays: 0,
       listCount: 0,
+      aiCents: 0,
     });
     expect((await db.prepare("SELECT COUNT(*) AS n FROM users").first<{ n: number }>())?.n).toBe(before);
+  });
+
+  it("tells Home the asker's own AI spend this month, across every id their inbox has had", async () => {
+    await upsertUser(db, { id: "r-old", email: "reagen.brase@gmail.com", name: null });
+    const month = new Date().toISOString().slice(0, 7);
+    const spend = db.sqlite.prepare("INSERT INTO ai_usage (owner, month, model, calls, input_tokens, output_tokens) VALUES (?, ?, ?, 1, ?, ?)");
+    spend.run("r-1", month, "claude-haiku-5-5", 1_000_000, 0); // 10 cents
+    spend.run("r-old", month, "claude-haiku-5-5", 0, 100_000); // 5 cents
+    spend.run("r-1", "2026-01", "claude-haiku-5-5", 9_000_000, 0); // another month
+    spend.run("google-sub-josh", month, "claude-sonnet-5-5", 1_000_000, 0); // someone else
+    expect((await kitchenGlance({ DB: db } as Env, "reagenbrase@gmail.com", "2026-10-12")).aiCents).toBe(15);
+    expect((await kitchenGlance({ DB: db } as Env, "josh.wollberg@gmail.com", "2026-10-12")).aiCents).toBe(200);
   });
 
   it("still asks the People list first", async () => {
