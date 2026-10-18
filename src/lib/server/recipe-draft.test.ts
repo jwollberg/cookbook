@@ -286,7 +286,7 @@ describe("the draft routes", () => {
     const response = await call(
       photoRoute,
       viewer,
-      new Request("https://kitchen.test/api/drafts/photo", { method: "POST", body: photo, headers: { "Content-Type": "image/png" } }),
+      new Request("https://kitchen.test/api/drafts/photo", { method: "POST", body: new Uint8Array(photo), headers: { "Content-Type": "image/png" } }),
       signedIn(),
     );
     expect(response.status).toBe(200);

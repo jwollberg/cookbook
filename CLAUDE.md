@@ -86,7 +86,7 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
     the People list lets use Hestia (app id `kitchen`).
   - `/internal/forget` (POST `{ email }` → `{ ok, removed: { <table>: count } }`, 400 without an
     address) is Home removing someone: `forgetPerson` deletes their plans, list, ticks, pantry and
-    users row (every row that is them by `ownerKey`). The recipes, meals and ingredients they
+    users row (every row that is them by `ownerKey`), and `forgetAiUsage` their `ai_usage` rows. The recipes, meals and ingredients they
     wrote stay in the library; only the `updated_by` naming them is cleared.
 
 ## Whose data is whose
@@ -143,6 +143,23 @@ wrong day's shopping list.
   photos live in the photos folder at `/photos/recipes/<id>/<key>` and need no credit.
   Migration 0003 moved the live recipes from the old `/images/recipes/` photos to these, only
   where a recipe still had its starter photo.
+
+## Claude's recipe drafts
+
+The new-recipe page offers **Start from a link or a photo** (`plan-claude-in-the-atheos-apps`
+steps 6–7) when Claude's sign-in is set up (`claudeReady`). `src/lib/server/claude.ts` is a copy
+of Oikos's `vault/app-platform/claude.ts` (change it there first); Hestia signs in as issuer
+`kitchen`, and Claude's use is counted per `users.id` in `ai_usage` (migration 0004).
+`src/lib/server/recipe-draft.ts` does the rest:
+
+- **A link:** the server fetches the page itself, **public addresses only** (`fetchPage` checks
+  every redirect too, so a link can never reach Vault's own network), and sends the page's
+  schema.org Recipe JSON-LD, or its text when it has none. **A photo** of a cookbook page or
+  card is shrunk to 900 px with sharp and never stored.
+- Haiku 5.5 fills one draft schema (`DraftSchema`); `draftToRecipe` links its ingredients with
+  `matchIngredient` and makes new ingredients for the rest. The editor shows it unsaved: nothing
+  is written until the person presses Create recipe, which saves the new ingredients with it.
+- `AI_FAKE=1` in `.dev.vars` gives the dev server canned drafts (the page is still fetched).
 
 ## Units and aggregation — read before touching `src/lib/units.ts`
 
@@ -216,5 +233,6 @@ exercised. Other branches are never built.
   in `d1_migrations`), so a migration ships with the code that needs it, and must tolerate the
   code before it for the minute between.
 - Secrets and settings live in Hestia's `app.env` (`/mnt/cache/appdata/atheos/kitchen/`) on Vault (`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`,
-  `ALLOWED_EMAILS`, `OWNER_EMAILS`, `TIME_ZONE`, `INTERNAL_TOKEN`): Oikos's `vault/README.md`.
+  `ALLOWED_EMAILS`, `OWNER_EMAILS`, `TIME_ZONE`, `INTERNAL_TOKEN`, and Claude's sign-in:
+  `ANTHROPIC_*`, `CLAUDE_WIF_KEY_FILE`, `AI_MONTHLY_CAP_CENTS`): Oikos's `vault/README.md`.
 - DNS is Cloudflare: `hestia.atheosstudios.com` is a proxied CNAME to the tunnel `atheos-vault`.
