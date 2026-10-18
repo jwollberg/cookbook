@@ -53,6 +53,13 @@ export const deleteRecipe = (id: string) =>
 export const uploadPhoto = (id: string, photo: Blob) =>
   send<{ recipe: Recipe }>("POST", `/api/recipes/${encodeURIComponent(id)}/photo`, photo, photo.type);
 
+/** A recipe draft Claude filled: unsaved, with the new ingredients it needs. */
+export type RecipeDraft = { recipe: Recipe; created: Ingredient[] };
+
+export const draftFromLink = (url: string) => send<RecipeDraft>("POST", "/api/drafts/link", { url });
+
+export const draftFromPhoto = (photo: Blob) => send<RecipeDraft>("POST", "/api/drafts/photo", photo, photo.type);
+
 export const removePhoto = (id: string) =>
   send<{ recipe: Recipe }>("DELETE", `/api/recipes/${encodeURIComponent(id)}/photo`);
 

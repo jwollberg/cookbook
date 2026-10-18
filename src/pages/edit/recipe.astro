@@ -2,6 +2,7 @@
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import RecipeEditor from "../../components/RecipeEditor";
 import Icon from "../../components/Icon";
+import { claudeReady } from "../../lib/server/claude";
 import { loadLibrary } from "../../lib/server/db";
 
 // One page serves every recipe, reading ?id=. With no id it creates one.
@@ -25,6 +26,7 @@ if (id && !recipe) return Astro.rewrite("/404");
       initial={recipe}
       ingredients={library.ingredients}
       takenIds={library.recipes.map((r) => r.id)}
+      aiReady={!recipe && claudeReady(Astro.locals.runtime.env)}
     />
   </div>
 </SiteLayout>

@@ -4,7 +4,7 @@ import { UNIT_IDS, UNITS } from "../lib/units";
 import { AISLES, type Aisle } from "../lib/constants";
 import type { Ingredient, Recipe } from "../lib/schema";
 import { slugify, uniqueSlug } from "../lib/slug";
-import { deleteRecipe, downsizePhoto, removePhoto, saveRecipe, uploadPhoto } from "../lib/api";
+import { deleteRecipe, downsizePhoto, draftFromLink, draftFromPhoto, removePhoto, saveRecipe, uploadPhoto, type RecipeDraft } from "../lib/api";
 
 const NEW = "__new__";
 
@@ -29,9 +29,11 @@ interface Props {
   ingredients: Ingredient[];
   /** Every recipe id already taken, so a new slug never collides. */
   takenIds: string[];
+  /** Show "Start from a link or a photo": a new recipe, with Claude set up on the server. */
+  aiReady?: boolean;
 }
 
-export default function RecipeEditor({ initial, ingredients: registry, takenIds }: Props) {
+export default function RecipeEditor({ initial, ingredients: registry, takenIds, aiReady = false }: Props) {
   const [ingredients, setIngredients] = useState<Ingredient[]>(registry);
   const [created, setCreated] = useState<Ingredient[]>([]);
   const [recipe, setRecipe] = useState<Recipe>(() => (initial ? structuredClone(initial) : blankRecipe()));
@@ -44,6 +46,19 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds 
 
   const byId = useMemo(() => new Map(ingredients.map((i) => [i.id, i])), [ingredients]);
   const sorted = useMemo(() => [...ingredients].sort((a, b) => a.name.localeCompare(b.name)), [ingredients]);
+
+  /** Claude's draft replaces the form; nothing is saved until Create recipe. */
+  function useDraft({ recipe: draft, created: needed }: RecipeDraft) {
+    setIngredients([...registry, ...needed]);
+    setCreated(needed);
+    setRecipe(draft);
+    setResult({
+      tone: "ok",
+      text: needed.length
+        ? `Draft filled in, with ${needed.length} new ingredient${needed.length === 1 ? "" : "s"}. Check it, then create the recipe.`
+        : "Draft filled in. Check it, then create the recipe.",
+    });
+  }
 
   const set = <K extends keyof Recipe>(key: K, value: Recipe[K]) => setRecipe((r) => ({ ...r, [key]: value }));
 
@@ -202,6 +217,8 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds 
 
   return (
     <div style={{ display: "grid", gap: 20, maxWidth: 880 }}>
+      {aiReady && isNew && <StartFrom onDraft={useDraft} />}
+
       {/* --- photo --- */}
       <section className="panel panel-pad" style={{ display: "grid", gap: 14 }}>
         <h2 style={{ fontSize: "1.15rem" }}>Photo</h2>
@@ -405,6 +422,84 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds 
 }
 
 // ---------------------------------------------------------------------------
+
+/** Claude reads a recipe page or a photo of a cookbook page and fills the form below. */
+function StartFrom({ onDraft }: { onDraft: (draft: RecipeDraft) => void }) {
+  const [link, setLink] = useState("");
+  const [busy, setBusy] = useState<"link" | "photo" | null>(null);
+  const [error, setError] = useState<string>();
+  const cardInput = useRef<HTMLInputElement>(null);
+
+  async function run(kind: "link" | "photo", get: () => Promise<RecipeDraft>) {
+    setBusy(kind);
+    setError(undefined);
+    try {
+      onDraft(await get());
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Couldn't fill a draft.");
+    } finally {
+      setBusy(null);
+      if (cardInput.current) cardInput.current.value = "";
+    }
+  }
+
+  const fromLink = () => void run("link", () => draftFromLink(link.trim()));
+  const fromPhoto = (file: File | undefined) => {
+    if (file) void run("photo", async () => draftFromPhoto(await downsizePhoto(file)));
+  };
+
+  return (
+    <section className="panel panel-pad" style={{ display: "grid", gap: 14 }} aria-busy={busy !== null}>
+      <div style={{ display: "grid", gap: 4 }}>
+        <h2 style={{ fontSize: "1.15rem" }}>Start from a link or a photo</h2>
+        <p className="small muted">Claude reads the recipe and fills in the form below. Nothing is saved until you create it.</p>
+      </div>
+      <form
+        className="draft-link"
+        onSubmit={(e) => {
+          e.preventDefault();
+          fromLink();
+        }}
+      >
+        <input
+          className="input"
+          type="url"
+          inputMode="url"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          placeholder="https://… a recipe page"
+          aria-label="Recipe page address"
+          disabled={busy !== null}
+        />
+        <button type="submit" className="btn" disabled={busy !== null || !link.trim()}>
+          <Icon name="link" />
+          {busy === "link" ? "Reading…" : "From a link"}
+        </button>
+      </form>
+      <div className="actions">
+        <input
+          ref={cardInput}
+          type="file"
+          accept="image/*"
+          className="sr-only"
+          id="draft-photo-input"
+          onChange={(e) => fromPhoto(e.target.files?.[0])}
+          disabled={busy !== null}
+        />
+        <label htmlFor="draft-photo-input" className="btn" aria-disabled={busy !== null}>
+          <Icon name="camera" />
+          {busy === "photo" ? "Reading…" : "From a photo"}
+        </label>
+        <span className="small muted">A cookbook page or a recipe card.</span>
+      </div>
+      {error && (
+        <p role="alert" className="small" style={{ color: "var(--accent)", fontWeight: 600 }}>
+          {error}
+        </p>
+      )}
+    </section>
+  );
+}
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
