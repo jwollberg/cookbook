@@ -62,26 +62,6 @@
       "icon": "<path d=\"M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12\"/><path d=\"M8 4l0 16\"/><path d=\"M16 4l0 16\"/><path d=\"M4 8l4 0\"/><path d=\"M4 16l4 0\"/><path d=\"M4 12l16 0\"/><path d=\"M16 8l4 0\"/><path d=\"M16 16l4 0\"/>"
     },
     {
-      "id": "chores",
-      "name": "Chores",
-      "blurb": "Checklists, photos, approvals",
-      "url": "https://chores.atheosstudios.com/",
-      "who": "household",
-      "light": {
-        "app": "#4d7c0f",
-        "hover": "#3f6212",
-        "soft": "#eef5e1",
-        "ink": "#ffffff"
-      },
-      "dark": {
-        "app": "#a3d65c",
-        "hover": "#b9e27e",
-        "soft": "#22301a",
-        "ink": "#0e1606"
-      },
-      "icon": "<path d=\"M4 12a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2l0 -7\"/><path d=\"M6 10v-4a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4\"/><path d=\"M15 7h.01\"/><path d=\"M18 9h.01\"/><path d=\"M18 5h.01\"/><path d=\"M21 3h.01\"/><path d=\"M21 7h.01\"/><path d=\"M21 11h.01\"/><path d=\"M10 7h1\"/>"
-    },
-    {
       "id": "track",
       "name": "Argos",
       "blurb": "Where the kids are",
@@ -123,9 +103,9 @@
     },
     {
       "id": "smarthome",
-      "name": "Smarthome",
+      "name": "Devices",
       "blurb": "Every device in the house",
-      "url": "https://smarthome.atheosstudios.com/",
+      "url": "https://oikos.atheosstudios.com/devices",
       "who": "owner",
       "light": {
         "app": "#0f766e",
@@ -160,6 +140,26 @@
         "ink": "#0a1020"
       },
       "icon": "<path d=\"M3.5 5.5l1.5 1.5l2.5 -2.5\"/><path d=\"M3.5 11.5l1.5 1.5l2.5 -2.5\"/><path d=\"M3.5 17.5l1.5 1.5l2.5 -2.5\"/><path d=\"M11 6l9 0\"/><path d=\"M11 12l9 0\"/><path d=\"M11 18l9 0\"/>"
+    },
+    {
+      "id": "trading",
+      "name": "Emporos",
+      "blurb": "Paper trades, signals, journal",
+      "url": "https://emporos.atheosstudios.com/",
+      "who": "owner",
+      "light": {
+        "app": "#9a5b13",
+        "hover": "#7f4a0f",
+        "soft": "#f8eedf",
+        "ink": "#ffffff"
+      },
+      "dark": {
+        "app": "#e3a857",
+        "hover": "#ecbd7a",
+        "soft": "#352614",
+        "ink": "#170f05"
+      },
+      "icon": "<path d=\"M4 7a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1l0 -3\"/><path d=\"M6 4l0 2\"/><path d=\"M6 11l0 9\"/><path d=\"M10 15a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1l0 -3\"/><path d=\"M12 4l0 10\"/><path d=\"M12 19l0 1\"/><path d=\"M16 6a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1l0 -4\"/><path d=\"M18 4l0 1\"/><path d=\"M18 11l0 9\"/>"
     }
   ],
   "switcherIcon": "<path d=\"M4 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4\"/><path d=\"M14 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4\"/><path d=\"M4 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4\"/><path d=\"M14 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4\"/>",
