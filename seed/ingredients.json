@@ -4,36 +4,57 @@
     "name": "English cucumber",
     "plural": "English cucumbers",
     "aisle": "produce",
-    "aliases": ["cucumber", "hothouse cucumber"],
+    "aliases": [
+      "cucumber",
+      "hothouse cucumber"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 300 }
+    "countWeights": {
+      "each": 300
+    }
   },
   {
     "id": "tomato",
     "name": "large ripe tomato",
     "plural": "large ripe tomatoes",
     "aisle": "produce",
-    "aliases": ["tomatoes"],
+    "aliases": [
+      "tomatoes"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 180 }
+    "countWeights": {
+      "each": 180
+    }
   },
   {
     "id": "green-bell-pepper",
     "name": "green bell pepper",
     "plural": "green bell peppers",
     "aisle": "produce",
-    "aliases": ["green pepper", "capsicum"],
+    "aliases": [
+      "green pepper",
+      "capsicum"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 120 }
+    "countWeights": {
+      "each": 120
+    }
   },
   {
     "id": "bell-pepper",
     "name": "large bell pepper",
     "plural": "large bell peppers",
     "aisle": "produce",
-    "aliases": ["red bell pepper", "yellow bell pepper", "orange bell pepper", "sweet pepper"],
+    "aliases": [
+      "red bell pepper",
+      "yellow bell pepper",
+      "orange bell pepper",
+      "sweet pepper"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 200 },
+    "countWeights": {
+      "each": 200
+    },
     "notes": "Any colour. For stuffing, pick squat, blocky peppers with flat bottoms that stand up on their own."
   },
   {
@@ -43,25 +64,38 @@
     "aisle": "produce",
     "aliases": [],
     "defaultUnit": "each",
-    "countWeights": { "each": 150 }
+    "countWeights": {
+      "each": 150
+    }
   },
   {
     "id": "yellow-onion",
     "name": "yellow onion",
     "plural": "yellow onions",
     "aisle": "produce",
-    "aliases": ["brown onion", "onion"],
+    "aliases": [
+      "brown onion",
+      "onion"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 150 }
+    "countWeights": {
+      "each": 150
+    }
   },
   {
     "id": "garlic",
     "name": "garlic",
     "plural": "garlic",
     "aisle": "produce",
-    "aliases": ["garlic clove", "garlic cloves"],
+    "aliases": [
+      "garlic clove",
+      "garlic cloves"
+    ],
     "defaultUnit": "clove",
-    "countWeights": { "clove": 5, "head": 45 },
+    "countWeights": {
+      "clove": 5,
+      "head": 45
+    },
     "notes": "About 9-10 cloves per head."
   },
   {
@@ -69,15 +103,21 @@
     "name": "large lemon",
     "plural": "large lemons",
     "aisle": "produce",
-    "aliases": ["lemons"],
+    "aliases": [
+      "lemons"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 100 }
+    "countWeights": {
+      "each": 100
+    }
   },
   {
     "id": "lemon-juice",
     "name": "fresh lemon juice",
     "aisle": "produce",
-    "aliases": ["juice of lemon"],
+    "aliases": [
+      "juice of lemon"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 1.02,
     "notes": "About 3 tbsp of juice per large lemon — buy lemons accordingly."
@@ -87,28 +127,47 @@
     "name": "Russet or Yukon Gold potato",
     "plural": "Russet or Yukon Gold potatoes",
     "aisle": "produce",
-    "aliases": ["potatoes", "russet", "yukon gold"],
+    "aliases": [
+      "potatoes",
+      "russet",
+      "yukon gold"
+    ],
     "defaultUnit": "lb",
-    "countWeights": { "each": 200 }
+    "countWeights": {
+      "each": 200
+    }
   },
   {
     "id": "fresh-parsley",
     "name": "fresh parsley",
     "aisle": "produce",
-    "aliases": ["parsley", "flat-leaf parsley", "cilantro", "coriander leaves"],
+    "aliases": [
+      "parsley",
+      "flat-leaf parsley",
+      "cilantro",
+      "coriander leaves"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.25,
-    "countWeights": { "bunch": 60 },
+    "countWeights": {
+      "bunch": 60
+    },
     "notes": "Cilantro works equally well here, or a mix of both."
   },
   {
     "id": "fresh-dill",
     "name": "fresh dill",
     "aisle": "produce",
-    "aliases": ["dill", "mint", "fresh mint"],
+    "aliases": [
+      "dill",
+      "mint",
+      "fresh mint"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 0.2,
-    "countWeights": { "bunch": 30 },
+    "countWeights": {
+      "bunch": 30
+    },
     "notes": "Mint is the traditional alternative — use either, or a mix."
   },
   {
@@ -116,9 +175,15 @@
     "name": "small pie pumpkin",
     "plural": "small pie pumpkins",
     "aisle": "produce",
-    "aliases": ["sugar pumpkin", "small pumpkin", "baking pumpkin"],
+    "aliases": [
+      "sugar pumpkin",
+      "small pumpkin",
+      "baking pumpkin"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 1400 },
+    "countWeights": {
+      "each": 1400
+    },
     "notes": "A sugar or pie pumpkin, not a carving pumpkin — those are watery and stringy. About 3 lb."
   },
   {
@@ -126,9 +191,16 @@
     "name": "apple",
     "plural": "apples",
     "aisle": "produce",
-    "aliases": ["apples", "granny smith apple", "granny smith apples", "baking apple"],
+    "aliases": [
+      "apples",
+      "granny smith apple",
+      "granny smith apples",
+      "baking apple"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 180 },
+    "countWeights": {
+      "each": 180
+    },
     "notes": "Granny Smith for baking unless a recipe says otherwise. About 2½ apples to the pound."
   },
   {
@@ -136,10 +208,16 @@
     "name": "sweet potato",
     "plural": "sweet potatoes",
     "aisle": "produce",
-    "aliases": ["sweet potatoes", "yam", "yams"],
+    "aliases": [
+      "sweet potatoes",
+      "yam",
+      "yams"
+    ],
     "defaultUnit": "each",
     "gramsPerMl": 1.05,
-    "countWeights": { "each": 250 },
+    "countWeights": {
+      "each": 250
+    },
     "notes": "Density is for mashed: 1 cup mashed is about one medium sweet potato."
   },
   {
@@ -147,32 +225,48 @@
     "name": "red potato",
     "plural": "red potatoes",
     "aisle": "produce",
-    "aliases": ["red potatoes", "red-skinned potatoes"],
+    "aliases": [
+      "red potatoes",
+      "red-skinned potatoes"
+    ],
     "defaultUnit": "lb",
-    "countWeights": { "each": 150 }
+    "countWeights": {
+      "each": 150
+    }
   },
   {
     "id": "butternut-squash",
     "name": "butternut squash",
     "plural": "butternut squashes",
     "aisle": "produce",
-    "aliases": ["butternut"],
+    "aliases": [
+      "butternut"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 1100 }
+    "countWeights": {
+      "each": 1100
+    }
   },
   {
     "id": "asparagus",
     "name": "asparagus",
     "aisle": "produce",
-    "aliases": ["asparagus spears"],
+    "aliases": [
+      "asparagus spears"
+    ],
     "defaultUnit": "lb",
-    "countWeights": { "bunch": 450 }
+    "countWeights": {
+      "bunch": 450
+    }
   },
   {
     "id": "cherry-tomatoes",
     "name": "cherry or grape tomatoes",
     "aisle": "produce",
-    "aliases": ["cherry tomatoes", "grape tomatoes"],
+    "aliases": [
+      "cherry tomatoes",
+      "grape tomatoes"
+    ],
     "defaultUnit": "pt",
     "gramsPerMl": 0.66,
     "notes": "Sold by the pint basket, about 10 oz (300 g)."
@@ -182,15 +276,27 @@
     "name": "green onion",
     "plural": "green onions",
     "aisle": "produce",
-    "aliases": ["green onions", "scallion", "scallions", "spring onion", "spring onions"],
+    "aliases": [
+      "green onions",
+      "scallion",
+      "scallions",
+      "spring onion",
+      "spring onions"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 15, "bunch": 100 }
+    "countWeights": {
+      "each": 15,
+      "bunch": 100
+    }
   },
   {
     "id": "fresh-ginger",
     "name": "fresh ginger",
     "aisle": "produce",
-    "aliases": ["ginger root", "gingerroot"],
+    "aliases": [
+      "ginger root",
+      "gingerroot"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.45
   },
@@ -199,73 +305,110 @@
     "name": "zucchini",
     "plural": "zucchini",
     "aisle": "produce",
-    "aliases": ["zucchinis", "courgette", "courgettes"],
+    "aliases": [
+      "zucchinis",
+      "courgette",
+      "courgettes"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 225 },
+    "countWeights": {
+      "each": 225
+    },
     "notes": "A medium zucchini is about ½ lb."
   },
   {
     "id": "fresh-basil",
     "name": "fresh basil",
     "aisle": "produce",
-    "aliases": ["basil", "basil leaves"],
+    "aliases": [
+      "basil",
+      "basil leaves"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.09,
-    "countWeights": { "bunch": 60 }
+    "countWeights": {
+      "bunch": 60
+    }
   },
   {
     "id": "fresh-sage",
     "name": "fresh sage",
     "aisle": "produce",
-    "aliases": ["sage leaves"],
+    "aliases": [
+      "sage leaves"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 0.12,
-    "countWeights": { "bunch": 20 }
+    "countWeights": {
+      "bunch": 20
+    }
   },
   {
     "id": "fresh-chives",
     "name": "fresh chives",
     "aisle": "produce",
-    "aliases": ["chives"],
+    "aliases": [
+      "chives"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 0.2,
-    "countWeights": { "bunch": 25 }
+    "countWeights": {
+      "bunch": 25
+    }
   },
   {
     "id": "fresh-rosemary",
     "name": "fresh rosemary",
     "aisle": "produce",
-    "aliases": ["rosemary"],
+    "aliases": [
+      "rosemary"
+    ],
     "defaultUnit": "sprig",
-    "countWeights": { "sprig": 1 }
+    "countWeights": {
+      "sprig": 1
+    }
   },
   {
     "id": "mushrooms",
     "name": "white mushrooms",
     "aisle": "produce",
-    "aliases": ["mushrooms", "button mushrooms", "cremini mushrooms"],
+    "aliases": [
+      "mushrooms",
+      "button mushrooms",
+      "cremini mushrooms"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.3,
-    "countWeights": { "package": 227 },
+    "countWeights": {
+      "package": 227
+    },
     "notes": "Sold in 8 oz packages, about 3 cups diced."
   },
   {
     "id": "broccoli",
     "name": "broccoli",
     "aisle": "produce",
-    "aliases": ["broccoli florets"],
+    "aliases": [
+      "broccoli florets"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.38,
-    "countWeights": { "head": 350 }
+    "countWeights": {
+      "head": 350
+    }
   },
   {
     "id": "baby-spinach",
     "name": "baby spinach",
     "aisle": "produce",
-    "aliases": ["spinach"],
+    "aliases": [
+      "spinach"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.13,
-    "countWeights": { "package": 142 },
+    "countWeights": {
+      "package": 142
+    },
     "notes": "Sold in 5 oz clamshells, about 5 cups loosely packed."
   },
   {
@@ -273,25 +416,39 @@
     "name": "lime",
     "plural": "limes",
     "aisle": "produce",
-    "aliases": ["limes"],
+    "aliases": [
+      "limes"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 67 }
+    "countWeights": {
+      "each": 67
+    }
   },
   {
     "id": "lettuce",
     "name": "iceberg lettuce",
     "aisle": "produce",
-    "aliases": ["lettuce", "shredded lettuce"],
+    "aliases": [
+      "lettuce",
+      "shredded lettuce"
+    ],
     "defaultUnit": "head",
     "gramsPerMl": 0.23,
-    "countWeights": { "head": 550 }
+    "countWeights": {
+      "head": 550
+    }
   },
-
   {
     "id": "ground-beef",
     "name": "ground beef",
     "aisle": "meat",
-    "aliases": ["hamburger", "hamburger meat", "ground chuck", "minced beef", "beef mince"],
+    "aliases": [
+      "hamburger",
+      "hamburger meat",
+      "ground chuck",
+      "minced beef",
+      "beef mince"
+    ],
     "defaultUnit": "lb",
     "notes": "85/15 is the sweet spot — lean enough not to swim in fat, fatty enough to stay juicy."
   },
@@ -299,9 +456,16 @@
     "id": "bacon",
     "name": "bacon",
     "aisle": "meat",
-    "aliases": ["bacon strips", "maple bacon", "streaky bacon"],
+    "aliases": [
+      "bacon strips",
+      "maple bacon",
+      "streaky bacon"
+    ],
     "defaultUnit": "slice",
-    "countWeights": { "slice": 28, "package": 454 },
+    "countWeights": {
+      "slice": 28,
+      "package": 454
+    },
     "notes": "Regular-cut, about 16 slices to a 1 lb package."
   },
   {
@@ -309,27 +473,43 @@
     "name": "boneless skinless chicken breast",
     "plural": "boneless skinless chicken breasts",
     "aisle": "meat",
-    "aliases": ["chicken breast", "chicken breasts", "boneless chicken breast"],
+    "aliases": [
+      "chicken breast",
+      "chicken breasts",
+      "boneless chicken breast"
+    ],
     "defaultUnit": "lb",
-    "countWeights": { "each": 250 },
+    "countWeights": {
+      "each": 250
+    },
     "notes": "A typical breast from the store is 8-10 oz."
   },
   {
     "id": "chicken-thighs",
     "name": "boneless skinless chicken thighs",
     "aisle": "meat",
-    "aliases": ["chicken thighs", "chicken thigh", "boneless chicken thighs"],
+    "aliases": [
+      "chicken thighs",
+      "chicken thigh",
+      "boneless chicken thighs"
+    ],
     "defaultUnit": "lb",
-    "countWeights": { "each": 115 }
+    "countWeights": {
+      "each": 115
+    }
   },
   {
     "id": "pork-tenderloin",
     "name": "pork tenderloin",
     "plural": "pork tenderloins",
     "aisle": "meat",
-    "aliases": ["pork tenderloins"],
+    "aliases": [
+      "pork tenderloins"
+    ],
     "defaultUnit": "lb",
-    "countWeights": { "each": 570 },
+    "countWeights": {
+      "each": 570
+    },
     "notes": "Usually 1 to 1½ lb each; often sold as a twin pack."
   },
   {
@@ -337,32 +517,48 @@
     "name": "rack of St. Louis-style pork ribs",
     "plural": "racks of St. Louis-style pork ribs",
     "aisle": "meat",
-    "aliases": ["pork ribs", "st louis ribs", "spare ribs", "ribs"],
+    "aliases": [
+      "pork ribs",
+      "st louis ribs",
+      "spare ribs",
+      "ribs"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 1400 }
+    "countWeights": {
+      "each": 1400
+    }
   },
   {
     "id": "ground-sausage",
     "name": "ground sausage",
     "aisle": "meat",
-    "aliases": ["sausage", "bulk sausage", "italian sausage", "breakfast sausage"],
+    "aliases": [
+      "sausage",
+      "bulk sausage",
+      "italian sausage",
+      "breakfast sausage"
+    ],
     "defaultUnit": "lb"
   },
-
   {
     "id": "salmon",
     "name": "salmon fillet",
     "plural": "salmon fillets",
     "aisle": "seafood",
-    "aliases": ["salmon", "salmon fillets"],
+    "aliases": [
+      "salmon",
+      "salmon fillets"
+    ],
     "defaultUnit": "lb"
   },
-
   {
     "id": "greek-yogurt",
     "name": "plain Greek yogurt",
     "aisle": "dairy",
-    "aliases": ["yogurt", "yoghurt"],
+    "aliases": [
+      "yogurt",
+      "yoghurt"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 1.03,
     "notes": "Full-fat or 2%. Low-fat will make a watery tzatziki."
@@ -371,7 +567,9 @@
     "id": "feta-cheese",
     "name": "Greek sheep's milk feta",
     "aisle": "dairy",
-    "aliases": ["feta"],
+    "aliases": [
+      "feta"
+    ],
     "defaultUnit": "oz",
     "notes": "Buy the block in brine, not pre-crumbled — it is sold in 7 oz blocks."
   },
@@ -380,25 +578,39 @@
     "name": "large egg",
     "plural": "large eggs",
     "aisle": "dairy",
-    "aliases": ["eggs"],
+    "aliases": [
+      "eggs"
+    ],
     "defaultUnit": "each",
-    "countWeights": { "each": 50 }
+    "countWeights": {
+      "each": 50
+    }
   },
   {
     "id": "mozzarella",
     "name": "shredded low-moisture mozzarella",
     "aisle": "dairy",
-    "aliases": ["mozzarella", "mozzarella cheese", "shredded mozzarella"],
+    "aliases": [
+      "mozzarella",
+      "mozzarella cheese",
+      "shredded mozzarella"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.48,
-    "countWeights": { "package": 227 },
+    "countWeights": {
+      "package": 227
+    },
     "notes": "Low-moisture, not fresh — fresh mozzarella weeps water as it bakes. An 8 oz bag is about 2 cups."
   },
   {
     "id": "butter",
     "name": "butter",
     "aisle": "dairy",
-    "aliases": ["unsalted butter", "salted butter", "margarine"],
+    "aliases": [
+      "unsalted butter",
+      "salted butter",
+      "margarine"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 0.96,
     "notes": "Unsalted unless a recipe says otherwise. 1 stick = ½ cup = 113 g."
@@ -407,7 +619,11 @@
     "id": "milk",
     "name": "milk",
     "aisle": "dairy",
-    "aliases": ["whole milk", "2% milk", "low-fat milk"],
+    "aliases": [
+      "whole milk",
+      "2% milk",
+      "low-fat milk"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 1.03
   },
@@ -415,9 +631,13 @@
     "id": "heavy-cream",
     "name": "heavy cream",
     "aisle": "dairy",
-    "aliases": ["heavy whipping cream", "whipping cream", "double cream"],
+    "aliases": [
+      "heavy whipping cream",
+      "whipping cream",
+      "double cream"
+    ],
     "defaultUnit": "cup",
-    "gramsPerMl": 1.0
+    "gramsPerMl": 1
   },
   {
     "id": "sour-cream",
@@ -426,33 +646,53 @@
     "aliases": [],
     "defaultUnit": "cup",
     "gramsPerMl": 0.97,
-    "countWeights": { "package": 227 },
+    "countWeights": {
+      "package": 227
+    },
     "notes": "A small container is 8 oz (about 1 cup)."
   },
   {
     "id": "cream-cheese",
     "name": "cream cheese",
     "aisle": "dairy",
-    "aliases": ["philadelphia"],
+    "aliases": [
+      "philadelphia"
+    ],
     "defaultUnit": "oz",
-    "countWeights": { "block": 227, "package": 227 },
+    "countWeights": {
+      "block": 227,
+      "package": 227
+    },
     "notes": "Sold in 8 oz blocks."
   },
   {
     "id": "cheddar",
     "name": "shredded cheddar",
     "aisle": "dairy",
-    "aliases": ["cheddar", "cheddar cheese", "sharp cheddar", "white cheddar", "shredded cheddar cheese"],
+    "aliases": [
+      "cheddar",
+      "cheddar cheese",
+      "sharp cheddar",
+      "white cheddar",
+      "shredded cheddar cheese"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.48,
-    "countWeights": { "package": 227 },
+    "countWeights": {
+      "package": 227
+    },
     "notes": "An 8 oz bag or block is about 2 cups shredded."
   },
   {
     "id": "parmesan",
     "name": "Parmesan",
     "aisle": "dairy",
-    "aliases": ["parmesan cheese", "parmigiano reggiano", "grated parmesan", "shredded parmesan"],
+    "aliases": [
+      "parmesan cheese",
+      "parmigiano reggiano",
+      "grated parmesan",
+      "shredded parmesan"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.42,
     "notes": "Buy a wedge and grate it — the pre-grated shaker kind won't melt smoothly."
@@ -461,7 +701,11 @@
     "id": "monterey-jack",
     "name": "shredded Monterey Jack",
     "aisle": "dairy",
-    "aliases": ["monterey jack", "monterey jack cheese", "jack cheese"],
+    "aliases": [
+      "monterey jack",
+      "monterey jack cheese",
+      "jack cheese"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.48
   },
@@ -469,7 +713,11 @@
     "id": "pepper-jack",
     "name": "shredded habanero or pepper jack cheese",
     "aisle": "dairy",
-    "aliases": ["pepper jack", "pepper jack cheese", "habanero cheese"],
+    "aliases": [
+      "pepper jack",
+      "pepper jack cheese",
+      "habanero cheese"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.48
   },
@@ -478,34 +726,51 @@
     "name": "refrigerated pie crust",
     "plural": "refrigerated pie crusts",
     "aisle": "dairy",
-    "aliases": ["pie crust", "pie dough", "pie crusts"],
+    "aliases": [
+      "pie crust",
+      "pie dough",
+      "pie crusts"
+    ],
     "defaultUnit": "each",
     "notes": "The rolled, ready-to-use kind. Usually sold two to a box."
   },
-
   {
     "id": "flour-tortillas",
     "name": "6-inch flour tortilla",
     "plural": "6-inch flour tortillas",
     "aisle": "bakery",
-    "aliases": ["flour tortillas", "flour tortilla", "tortillas"],
+    "aliases": [
+      "flour tortillas",
+      "flour tortilla",
+      "tortillas"
+    ],
     "defaultUnit": "each"
   },
-
   {
     "id": "chickpeas-canned",
     "name": "canned chickpeas",
     "aisle": "pantry",
-    "aliases": ["garbanzo beans", "garbanzos", "chickpeas"],
+    "aliases": [
+      "garbanzo beans",
+      "garbanzos",
+      "chickpeas"
+    ],
     "defaultUnit": "can",
-    "countWeights": { "can": 425 },
+    "countWeights": {
+      "can": 425
+    },
     "notes": "15 oz cans. Drained weight is roughly 250 g per can."
   },
   {
     "id": "chickpea-flour",
     "name": "chickpea flour",
     "aisle": "pantry",
-    "aliases": ["besan", "gram flour", "garbanzo bean flour", "chana flour"],
+    "aliases": [
+      "besan",
+      "gram flour",
+      "garbanzo bean flour",
+      "chana flour"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.39,
     "notes": "Sold as besan or gram flour in Indian groceries, chickpea or garbanzo bean flour elsewhere. Naturally gluten-free."
@@ -514,16 +779,23 @@
     "id": "kalamata-olives",
     "name": "Kalamata olives",
     "aisle": "pantry",
-    "aliases": ["olives"],
+    "aliases": [
+      "olives"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.6,
-    "countWeights": { "jar": 300 }
+    "countWeights": {
+      "jar": 300
+    }
   },
   {
     "id": "olive-oil",
     "name": "extra virgin olive oil",
     "aisle": "pantry",
-    "aliases": ["evoo", "olive oil"],
+    "aliases": [
+      "evoo",
+      "olive oil"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 0.918
   },
@@ -531,7 +803,13 @@
     "id": "neutral-oil",
     "name": "high-heat neutral oil",
     "aisle": "pantry",
-    "aliases": ["avocado oil", "canola oil", "grapeseed oil", "vegetable oil", "frying oil"],
+    "aliases": [
+      "avocado oil",
+      "canola oil",
+      "grapeseed oil",
+      "vegetable oil",
+      "frying oil"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 0.92,
     "notes": "Avocado, canola or grapeseed — needs a high smoke point for frying."
@@ -540,7 +818,9 @@
     "id": "red-wine-vinegar",
     "name": "red wine vinegar",
     "aisle": "pantry",
-    "aliases": ["vinegar"],
+    "aliases": [
+      "vinegar"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 1.01
   },
@@ -548,15 +828,23 @@
     "id": "broth",
     "name": "vegetable or chicken broth",
     "aisle": "pantry",
-    "aliases": ["stock", "vegetable stock", "chicken stock"],
+    "aliases": [
+      "stock",
+      "vegetable stock",
+      "chicken stock"
+    ],
     "defaultUnit": "cup",
-    "gramsPerMl": 1.0
+    "gramsPerMl": 1
   },
   {
     "id": "white-rice",
     "name": "long-grain white rice",
     "aisle": "pantry",
-    "aliases": ["rice", "white rice", "long grain rice"],
+    "aliases": [
+      "rice",
+      "white rice",
+      "long grain rice"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.78,
     "notes": "Quantities are uncooked. 1 cup raw cooks to about 3 cups."
@@ -565,17 +853,24 @@
     "id": "tomato-sauce",
     "name": "canned tomato sauce",
     "aisle": "pantry",
-    "aliases": ["tomato sauce", "passata"],
+    "aliases": [
+      "tomato sauce",
+      "passata"
+    ],
     "defaultUnit": "can",
     "gramsPerMl": 1.03,
-    "countWeights": { "can": 425 },
+    "countWeights": {
+      "can": 425
+    },
     "notes": "Plain tomato sauce, not marinara or pasta sauce. 15 oz cans hold a little under 2 cups."
   },
   {
     "id": "mayonnaise",
     "name": "mayonnaise",
     "aisle": "pantry",
-    "aliases": ["mayo"],
+    "aliases": [
+      "mayo"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 0.93
   },
@@ -583,7 +878,10 @@
     "id": "white-vinegar",
     "name": "distilled white vinegar",
     "aisle": "pantry",
-    "aliases": ["white vinegar", "distilled vinegar"],
+    "aliases": [
+      "white vinegar",
+      "distilled vinegar"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 1.01
   },
@@ -591,7 +889,11 @@
     "id": "yellow-mustard",
     "name": "yellow mustard",
     "aisle": "pantry",
-    "aliases": ["mustard", "American mustard", "prepared mustard"],
+    "aliases": [
+      "mustard",
+      "American mustard",
+      "prepared mustard"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 1.05
   },
@@ -599,7 +901,10 @@
     "id": "all-purpose-flour",
     "name": "all-purpose flour",
     "aisle": "pantry",
-    "aliases": ["flour", "plain flour"],
+    "aliases": [
+      "flour",
+      "plain flour"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.53,
     "notes": "Spooned and levelled, 1 cup is about 125 g."
@@ -608,7 +913,10 @@
     "id": "sugar",
     "name": "granulated sugar",
     "aisle": "pantry",
-    "aliases": ["sugar", "white sugar"],
+    "aliases": [
+      "sugar",
+      "white sugar"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.85
   },
@@ -616,7 +924,10 @@
     "id": "brown-sugar",
     "name": "light brown sugar",
     "aisle": "pantry",
-    "aliases": ["brown sugar", "dark brown sugar"],
+    "aliases": [
+      "brown sugar",
+      "dark brown sugar"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.93,
     "notes": "Measure firmly packed."
@@ -625,7 +936,11 @@
     "id": "powdered-sugar",
     "name": "powdered sugar",
     "aisle": "pantry",
-    "aliases": ["confectioners' sugar", "confectioners sugar", "icing sugar"],
+    "aliases": [
+      "confectioners' sugar",
+      "confectioners sugar",
+      "icing sugar"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.51
   },
@@ -633,7 +948,10 @@
     "id": "turbinado-sugar",
     "name": "turbinado sugar",
     "aisle": "pantry",
-    "aliases": ["raw sugar", "demerara sugar"],
+    "aliases": [
+      "raw sugar",
+      "demerara sugar"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.9
   },
@@ -641,7 +959,13 @@
     "id": "rolled-oats",
     "name": "rolled oats",
     "aisle": "pantry",
-    "aliases": ["oats", "old fashioned oats", "old-fashioned oats", "quick oats", "quick-cooking oats"],
+    "aliases": [
+      "oats",
+      "old fashioned oats",
+      "old-fashioned oats",
+      "quick oats",
+      "quick-cooking oats"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.38,
     "notes": "Old-fashioned unless the recipe says quick-cooking."
@@ -650,7 +974,9 @@
     "id": "baking-soda",
     "name": "baking soda",
     "aisle": "pantry",
-    "aliases": ["bicarbonate of soda"],
+    "aliases": [
+      "bicarbonate of soda"
+    ],
     "isStaple": true,
     "defaultUnit": "tsp",
     "gramsPerMl": 0.97
@@ -668,7 +994,10 @@
     "id": "vanilla-extract",
     "name": "pure vanilla extract",
     "aisle": "pantry",
-    "aliases": ["vanilla", "vanilla extract"],
+    "aliases": [
+      "vanilla",
+      "vanilla extract"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.88
   },
@@ -676,7 +1005,10 @@
     "id": "cornstarch",
     "name": "cornstarch",
     "aisle": "pantry",
-    "aliases": ["corn starch", "cornflour"],
+    "aliases": [
+      "corn starch",
+      "cornflour"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 0.54
   },
@@ -692,7 +1024,9 @@
     "id": "maple-syrup",
     "name": "pure maple syrup",
     "aisle": "pantry",
-    "aliases": ["maple syrup"],
+    "aliases": [
+      "maple syrup"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 1.32
   },
@@ -708,7 +1042,9 @@
     "id": "peanut-butter",
     "name": "creamy peanut butter",
     "aisle": "pantry",
-    "aliases": ["peanut butter"],
+    "aliases": [
+      "peanut butter"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 1.08
   },
@@ -716,17 +1052,26 @@
     "id": "pumpkin-puree",
     "name": "pumpkin purée",
     "aisle": "pantry",
-    "aliases": ["pumpkin puree", "canned pumpkin", "pure pumpkin"],
+    "aliases": [
+      "pumpkin puree",
+      "canned pumpkin",
+      "pure pumpkin"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 1.04,
-    "countWeights": { "can": 425 },
+    "countWeights": {
+      "can": 425
+    },
     "notes": "Plain pumpkin, not pumpkin pie filling. A 15 oz can holds about 1¾ cups."
   },
   {
     "id": "applesauce",
     "name": "unsweetened applesauce",
     "aisle": "pantry",
-    "aliases": ["applesauce", "apple sauce"],
+    "aliases": [
+      "applesauce",
+      "apple sauce"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 1.05
   },
@@ -734,7 +1079,11 @@
     "id": "soy-sauce",
     "name": "reduced-sodium soy sauce",
     "aisle": "pantry",
-    "aliases": ["soy sauce", "low sodium soy sauce", "reduced sodium soy sauce"],
+    "aliases": [
+      "soy sauce",
+      "low sodium soy sauce",
+      "reduced sodium soy sauce"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 1.15
   },
@@ -742,7 +1091,10 @@
     "id": "dijon-mustard",
     "name": "Dijon mustard",
     "aisle": "pantry",
-    "aliases": ["dijon", "smooth dijon mustard"],
+    "aliases": [
+      "dijon",
+      "smooth dijon mustard"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 1.05
   },
@@ -750,7 +1102,11 @@
     "id": "whole-grain-mustard",
     "name": "whole-grain mustard",
     "aisle": "pantry",
-    "aliases": ["grainy mustard", "coarse mustard", "stone-ground mustard"],
+    "aliases": [
+      "grainy mustard",
+      "coarse mustard",
+      "stone-ground mustard"
+    ],
     "defaultUnit": "tbsp",
     "gramsPerMl": 1.05
   },
@@ -758,7 +1114,12 @@
     "id": "bread-crumbs",
     "name": "plain dry bread crumbs",
     "aisle": "pantry",
-    "aliases": ["bread crumbs", "breadcrumbs", "panko", "panko bread crumbs"],
+    "aliases": [
+      "bread crumbs",
+      "breadcrumbs",
+      "panko",
+      "panko bread crumbs"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.45
   },
@@ -766,14 +1127,21 @@
     "id": "stuffing-mix",
     "name": "herb-seasoned stuffing mix",
     "aisle": "pantry",
-    "aliases": ["stuffing mix", "stuffing"],
+    "aliases": [
+      "stuffing mix",
+      "stuffing"
+    ],
     "defaultUnit": "cup"
   },
   {
     "id": "pimientos",
     "name": "diced pimientos",
     "aisle": "pantry",
-    "aliases": ["pimientos", "pimento", "pimentos"],
+    "aliases": [
+      "pimientos",
+      "pimento",
+      "pimentos"
+    ],
     "defaultUnit": "jar",
     "notes": "Sold in 2 oz jars."
   },
@@ -781,14 +1149,18 @@
     "id": "orange-marmalade",
     "name": "orange marmalade",
     "aisle": "pantry",
-    "aliases": ["marmalade"],
+    "aliases": [
+      "marmalade"
+    ],
     "defaultUnit": "jar"
   },
   {
     "id": "sesame-ginger-dressing",
     "name": "sesame ginger salad dressing",
     "aisle": "pantry",
-    "aliases": ["sesame ginger dressing"],
+    "aliases": [
+      "sesame ginger dressing"
+    ],
     "defaultUnit": "floz",
     "notes": "Sold in 16 oz bottles."
   },
@@ -796,7 +1168,9 @@
     "id": "bbq-sauce",
     "name": "barbecue sauce",
     "aisle": "pantry",
-    "aliases": ["bbq sauce"],
+    "aliases": [
+      "bbq sauce"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 1.1
   },
@@ -812,35 +1186,52 @@
     "id": "semi-dried-tomatoes",
     "name": "semi-dried tomatoes",
     "aisle": "pantry",
-    "aliases": ["sun-dried tomatoes", "sundried tomatoes", "sun dried tomatoes"],
+    "aliases": [
+      "sun-dried tomatoes",
+      "sundried tomatoes",
+      "sun dried tomatoes"
+    ],
     "defaultUnit": "g"
   },
   {
     "id": "elbow-macaroni",
     "name": "elbow macaroni",
     "aisle": "pantry",
-    "aliases": ["macaroni", "elbows"],
+    "aliases": [
+      "macaroni",
+      "elbows"
+    ],
     "defaultUnit": "oz"
   },
   {
     "id": "fettuccine",
     "name": "fettuccine",
     "aisle": "pantry",
-    "aliases": ["fettuccine noodles", "fettucine"],
+    "aliases": [
+      "fettuccine noodles",
+      "fettucine"
+    ],
     "defaultUnit": "lb"
   },
   {
     "id": "spaghettini",
     "name": "spaghettini",
     "aisle": "pantry",
-    "aliases": ["angel hair", "angel hair pasta", "capellini", "thin spaghetti"],
+    "aliases": [
+      "angel hair",
+      "angel hair pasta",
+      "capellini",
+      "thin spaghetti"
+    ],
     "defaultUnit": "oz"
   },
   {
     "id": "gnocchi",
     "name": "potato gnocchi",
     "aisle": "pantry",
-    "aliases": ["gnocchi"],
+    "aliases": [
+      "gnocchi"
+    ],
     "defaultUnit": "g",
     "notes": "The shelf-stable vacuum packs are fine for frying."
   },
@@ -856,7 +1247,10 @@
     "id": "canned-peaches",
     "name": "canned sliced peaches",
     "aisle": "pantry",
-    "aliases": ["sliced peaches", "canned peaches"],
+    "aliases": [
+      "sliced peaches",
+      "canned peaches"
+    ],
     "defaultUnit": "can",
     "notes": "15 oz cans."
   },
@@ -865,7 +1259,10 @@
     "name": "graham cracker sheet",
     "plural": "graham cracker sheets",
     "aisle": "pantry",
-    "aliases": ["graham crackers", "graham cracker"],
+    "aliases": [
+      "graham crackers",
+      "graham cracker"
+    ],
     "defaultUnit": "each",
     "notes": "About 9 sheets to a sleeve."
   },
@@ -873,7 +1270,10 @@
     "id": "cocoa-powder",
     "name": "unsweetened cocoa powder",
     "aisle": "pantry",
-    "aliases": ["cocoa powder", "cocoa"],
+    "aliases": [
+      "cocoa powder",
+      "cocoa"
+    ],
     "defaultUnit": "cup",
     "gramsPerMl": 0.36
   },
@@ -881,7 +1281,10 @@
     "id": "cream-of-chicken-soup",
     "name": "condensed cream of chicken soup",
     "aisle": "pantry",
-    "aliases": ["cream of chicken soup", "cream of chicken"],
+    "aliases": [
+      "cream of chicken soup",
+      "cream of chicken"
+    ],
     "defaultUnit": "can",
     "notes": "10.5 oz cans."
   },
@@ -889,16 +1292,19 @@
     "id": "salsa",
     "name": "salsa",
     "aisle": "pantry",
-    "aliases": ["jarred salsa"],
+    "aliases": [
+      "jarred salsa"
+    ],
     "defaultUnit": "cup",
-    "gramsPerMl": 1.0
+    "gramsPerMl": 1
   },
-
   {
     "id": "ground-cumin",
     "name": "ground cumin",
     "aisle": "spices",
-    "aliases": ["cumin"],
+    "aliases": [
+      "cumin"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.45
   },
@@ -906,7 +1312,9 @@
     "id": "ground-coriander",
     "name": "ground coriander",
     "aisle": "spices",
-    "aliases": ["coriander"],
+    "aliases": [
+      "coriander"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.42
   },
@@ -914,7 +1322,10 @@
     "id": "dried-oregano",
     "name": "dried oregano",
     "aisle": "spices",
-    "aliases": ["oregano", "Greek oregano"],
+    "aliases": [
+      "oregano",
+      "Greek oregano"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.15
   },
@@ -922,7 +1333,10 @@
     "id": "paprika",
     "name": "paprika",
     "aisle": "spices",
-    "aliases": ["sweet paprika", "smoked paprika"],
+    "aliases": [
+      "sweet paprika",
+      "smoked paprika"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.46
   },
@@ -930,18 +1344,26 @@
     "id": "sea-salt",
     "name": "sea salt",
     "aisle": "spices",
-    "aliases": ["salt", "kosher salt"],
+    "aliases": [
+      "salt",
+      "kosher salt"
+    ],
     "isStaple": true,
     "defaultUnit": "tsp",
     "gramsPerMl": 1.2,
-    "countWeights": { "pinch": 0.36 },
+    "countWeights": {
+      "pinch": 0.36
+    },
     "notes": "A pinch is about 1/16 tsp. Weighted so recipes mixing pinches and teaspoons still total to one line."
   },
   {
     "id": "black-pepper",
     "name": "black pepper",
     "aisle": "spices",
-    "aliases": ["pepper", "ground black pepper"],
+    "aliases": [
+      "pepper",
+      "ground black pepper"
+    ],
     "isStaple": true,
     "defaultUnit": "tsp",
     "gramsPerMl": 0.45
@@ -958,7 +1380,9 @@
     "id": "ground-cinnamon",
     "name": "ground cinnamon",
     "aisle": "spices",
-    "aliases": ["cinnamon"],
+    "aliases": [
+      "cinnamon"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.53
   },
@@ -966,7 +1390,9 @@
     "id": "ground-nutmeg",
     "name": "ground nutmeg",
     "aisle": "spices",
-    "aliases": ["nutmeg"],
+    "aliases": [
+      "nutmeg"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.47
   },
@@ -990,7 +1416,9 @@
     "id": "ground-cardamom",
     "name": "ground cardamom",
     "aisle": "spices",
-    "aliases": ["cardamom"],
+    "aliases": [
+      "cardamom"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.4
   },
@@ -998,7 +1426,9 @@
     "id": "pumpkin-pie-spice",
     "name": "pumpkin pie spice",
     "aisle": "spices",
-    "aliases": ["pumpkin spice"],
+    "aliases": [
+      "pumpkin spice"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.4
   },
@@ -1006,7 +1436,9 @@
     "id": "ground-allspice",
     "name": "ground allspice",
     "aisle": "spices",
-    "aliases": ["allspice"],
+    "aliases": [
+      "allspice"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.4
   },
@@ -1014,7 +1446,10 @@
     "id": "cayenne",
     "name": "cayenne pepper",
     "aisle": "spices",
-    "aliases": ["cayenne", "ground cayenne"],
+    "aliases": [
+      "cayenne",
+      "ground cayenne"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.36
   },
@@ -1022,7 +1457,10 @@
     "id": "dry-mustard",
     "name": "dry mustard",
     "aisle": "spices",
-    "aliases": ["mustard powder", "ground mustard"],
+    "aliases": [
+      "mustard powder",
+      "ground mustard"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.52
   },
@@ -1030,7 +1468,10 @@
     "id": "dried-sage",
     "name": "dried sage",
     "aisle": "spices",
-    "aliases": ["rubbed sage", "ground sage"],
+    "aliases": [
+      "rubbed sage",
+      "ground sage"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.14
   },
@@ -1046,7 +1487,9 @@
     "id": "dried-thyme",
     "name": "dried thyme",
     "aisle": "spices",
-    "aliases": ["thyme"],
+    "aliases": [
+      "thyme"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.2
   },
@@ -1054,10 +1497,17 @@
     "id": "red-pepper-flakes",
     "name": "crushed red pepper flakes",
     "aisle": "spices",
-    "aliases": ["red pepper flakes", "crushed red pepper", "chilli flakes", "chili flakes"],
+    "aliases": [
+      "red pepper flakes",
+      "crushed red pepper",
+      "chilli flakes",
+      "chili flakes"
+    ],
     "defaultUnit": "tsp",
     "gramsPerMl": 0.37,
-    "countWeights": { "pinch": 0.12 }
+    "countWeights": {
+      "pinch": 0.12
+    }
   },
   {
     "id": "sesame-seeds",
@@ -1071,7 +1521,10 @@
     "id": "flaky-sea-salt",
     "name": "flaky sea salt",
     "aisle": "spices",
-    "aliases": ["maldon salt", "finishing salt"],
+    "aliases": [
+      "maldon salt",
+      "finishing salt"
+    ],
     "defaultUnit": "tsp",
     "notes": "Maldon or similar — for the top, where the crunch shows."
   },
@@ -1079,23 +1532,226 @@
     "id": "seasoned-salt",
     "name": "seasoned salt",
     "aisle": "spices",
-    "aliases": ["season salt", "lawry's"],
+    "aliases": [
+      "season salt",
+      "lawry's"
+    ],
     "defaultUnit": "tsp"
   },
   {
     "id": "garlic-herb-seasoning",
     "name": "garlic & herb seasoning",
     "aisle": "spices",
-    "aliases": ["garlic plus seasoning", "garlic and herb seasoning"],
+    "aliases": [
+      "garlic plus seasoning",
+      "garlic and herb seasoning"
+    ],
     "defaultUnit": "tbsp",
     "notes": "Club House Garlic Plus in Canada, McCormick Garlic & Herb in the US."
   },
-
   {
     "id": "hickory-chips",
     "name": "hickory wood chips",
     "aisle": "other",
-    "aliases": ["hickory chips", "wood chips"],
+    "aliases": [
+      "hickory chips",
+      "wood chips"
+    ],
     "defaultUnit": "cup"
+  },
+  {
+    "id": "fresh-thyme",
+    "name": "fresh thyme",
+    "aisle": "produce",
+    "aliases": [
+      "thyme"
+    ],
+    "defaultUnit": "tbsp"
+  },
+  {
+    "id": "chocolate-chips",
+    "name": "semisweet chocolate chips",
+    "aisle": "pantry",
+    "aliases": [
+      "chocolate chips",
+      "chocolate morsels"
+    ],
+    "defaultUnit": "cup",
+    "gramsPerMl": 0.72,
+    "countWeights": {
+      "package": 340
+    },
+    "notes": "A 12 oz bag holds about 2 cups."
+  },
+  {
+    "id": "white-bread",
+    "name": "white bread",
+    "aisle": "bakery",
+    "aliases": [
+      "bread",
+      "sandwich bread",
+      "french bread",
+      "bread cubes"
+    ],
+    "defaultUnit": "lb",
+    "notes": "A 1 lb loaf makes about 10 cups of 1-inch cubes. Day-old is best for stuffing."
+  },
+  {
+    "id": "celery",
+    "name": "celery",
+    "aisle": "produce",
+    "aliases": [
+      "celery stalks"
+    ],
+    "defaultUnit": "stalk",
+    "countWeights": {
+      "stalk": 40,
+      "bunch": 450
+    }
+  },
+  {
+    "id": "dried-cranberries",
+    "name": "dried cranberries",
+    "aisle": "pantry",
+    "aliases": [
+      "craisins",
+      "sweetened dried cranberries"
+    ],
+    "defaultUnit": "cup",
+    "gramsPerMl": 0.51
+  },
+  {
+    "id": "dried-rosemary",
+    "name": "dried rosemary",
+    "aisle": "spices",
+    "aliases": [
+      "rosemary"
+    ],
+    "defaultUnit": "tsp",
+    "gramsPerMl": 0.14
+  },
+  {
+    "id": "orange",
+    "name": "orange",
+    "plural": "oranges",
+    "aisle": "produce",
+    "aliases": [
+      "navel orange",
+      "oranges"
+    ],
+    "defaultUnit": "each",
+    "countWeights": {
+      "each": 140
+    }
+  },
+  {
+    "id": "cranberries",
+    "name": "fresh cranberries",
+    "aisle": "produce",
+    "aliases": [
+      "cranberries",
+      "frozen cranberries"
+    ],
+    "defaultUnit": "oz",
+    "countWeights": {
+      "package": 340
+    },
+    "notes": "Sold in 12 oz bags. Frozen work too; dried do not."
+  },
+  {
+    "id": "pork-shoulder",
+    "name": "boneless pork shoulder",
+    "aisle": "meat",
+    "aliases": [
+      "pork butt",
+      "boston butt",
+      "pork shoulder roast"
+    ],
+    "defaultUnit": "lb"
+  },
+  {
+    "id": "apple-cider-vinegar",
+    "name": "apple cider vinegar",
+    "aisle": "pantry",
+    "aliases": [
+      "cider vinegar"
+    ],
+    "defaultUnit": "cup",
+    "gramsPerMl": 1.01
+  },
+  {
+    "id": "ketchup",
+    "name": "ketchup",
+    "aisle": "pantry",
+    "aliases": [
+      "catsup"
+    ],
+    "defaultUnit": "cup",
+    "gramsPerMl": 1.15
+  },
+  {
+    "id": "chili-sauce",
+    "name": "chili sauce",
+    "aisle": "pantry",
+    "aliases": [
+      "heinz chili sauce"
+    ],
+    "defaultUnit": "cup",
+    "gramsPerMl": 1.15,
+    "notes": "The ketchup-style bottled kind, not a hot sauce."
+  },
+  {
+    "id": "molasses",
+    "name": "molasses",
+    "aisle": "pantry",
+    "aliases": [],
+    "defaultUnit": "cup",
+    "gramsPerMl": 1.4
+  },
+  {
+    "id": "worcestershire-sauce",
+    "name": "Worcestershire sauce",
+    "aisle": "pantry",
+    "aliases": [
+      "worcestershire"
+    ],
+    "defaultUnit": "tbsp",
+    "gramsPerMl": 1.1
+  },
+  {
+    "id": "hamburger-buns",
+    "name": "hamburger bun",
+    "plural": "hamburger buns",
+    "aisle": "bakery",
+    "aliases": [
+      "buns",
+      "sandwich buns",
+      "rolls"
+    ],
+    "defaultUnit": "each",
+    "notes": "Usually sold in packs of 8."
+  },
+  {
+    "id": "chuck-roast",
+    "name": "beef chuck roast",
+    "aisle": "meat",
+    "aliases": [
+      "chuck roast",
+      "pot roast"
+    ],
+    "defaultUnit": "lb"
+  },
+  {
+    "id": "carrot",
+    "name": "carrot",
+    "plural": "carrots",
+    "aisle": "produce",
+    "aliases": [
+      "carrots"
+    ],
+    "defaultUnit": "each",
+    "countWeights": {
+      "each": 60
+    }
   }
 ]

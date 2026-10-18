@@ -1,0 +1,93 @@
+{
+  "id": "butternut-squash-soup",
+  "title": "Butternut Squash Soup",
+  "description": "A silky, slightly sweet squash soup simmered with red pepper, onion and garlic, then blended and finished with cream and fresh thyme.",
+  "servings": 6,
+  "prepMin": 15,
+  "cookMin": 35,
+  "restMin": 0,
+  "tags": [
+    "soup",
+    "vegetarian",
+    "fall"
+  ],
+  "sourceUrl": "https://www.onceuponachef.com/recipes/butternut-squash-soup.html",
+  "image": "/images/dishes/butternut-squash-soup.jpg",
+  "imageCredit": {
+    "author": "@joefoodie",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://www.flickr.com/photos/98178986@N00/3169759621",
+    "title": "Butternut Squash Soup"
+  },
+  "ingredients": [
+    {
+      "ingredientId": "butternut-squash",
+      "quantity": 2.5,
+      "unit": "lb",
+      "note": "peeled and cubed (about 8 cups; pre-cut is fine)"
+    },
+    {
+      "ingredientId": "bell-pepper",
+      "quantity": 1,
+      "unit": "each",
+      "note": "red, roughly chopped"
+    },
+    {
+      "ingredientId": "yellow-onion",
+      "quantity": 1,
+      "unit": "each",
+      "note": "medium, roughly chopped"
+    },
+    {
+      "ingredientId": "garlic",
+      "quantity": 3,
+      "unit": "clove",
+      "note": "smashed and peeled"
+    },
+    {
+      "ingredientId": "sea-salt",
+      "quantity": 2.5,
+      "unit": "tsp"
+    },
+    {
+      "ingredientId": "sugar",
+      "quantity": 2,
+      "unit": "tbsp"
+    },
+    {
+      "ingredientId": "heavy-cream",
+      "quantity": 1,
+      "unit": "cup",
+      "note": "plus a little extra for serving"
+    },
+    {
+      "ingredientId": "fresh-thyme",
+      "quantity": 1,
+      "unit": "tbsp",
+      "note": "chopped (or 1 tbsp curry powder instead)"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "Simmer",
+      "text": "Put the squash, pepper, onion, garlic, 5 cups of water, the salt and the sugar in a large pot. Bring to a boil, cover, and simmer gently about 35 minutes, until the squash is very soft."
+    },
+    {
+      "heading": "Blend",
+      "text": "Purée with a stick blender until smooth. With a countertop blender, work in batches and leave the lid's vent open so the steam can escape."
+    },
+    {
+      "heading": "Add the Cream",
+      "text": "Stir in the cream and bring the soup back to a gentle simmer."
+    },
+    {
+      "heading": "Season",
+      "text": "Stir in the thyme (or curry powder), then taste and add more salt if needed."
+    },
+    {
+      "heading": "Serve",
+      "text": "Ladle into bowls and swirl a little extra cream on top."
+    }
+  ]
+}

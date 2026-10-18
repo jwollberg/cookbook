@@ -1,0 +1,116 @@
+{
+  "id": "pumpkin-chocolate-chip-muffins",
+  "title": "Pumpkin Chocolate Chip Muffins",
+  "description": "Soft, moist pumpkin muffins with warm spice and semisweet chocolate chips. Makes two dozen and freezes well.",
+  "servings": 24,
+  "yieldNote": "24 muffins",
+  "prepMin": 15,
+  "cookMin": 15,
+  "restMin": 10,
+  "tags": [
+    "breakfast",
+    "dessert",
+    "vegetarian",
+    "baked",
+    "fall"
+  ],
+  "sourceUrl": "https://chefsavvy.com/pumpkin-chocolate-chip-muffins/",
+  "image": "/images/dishes/pumpkin-chocolate-chip-muffins.jpg",
+  "imageCredit": {
+    "author": "Pirate Alice",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "sourceUrl": "https://www.flickr.com/photos/27469126@N00/2857345512",
+    "title": "Pumpkin Muffins"
+  },
+  "ingredients": [
+    {
+      "ingredientId": "egg",
+      "quantity": 4,
+      "unit": "each"
+    },
+    {
+      "ingredientId": "sugar",
+      "quantity": 1,
+      "unit": "cup"
+    },
+    {
+      "ingredientId": "brown-sugar",
+      "quantity": 1,
+      "unit": "cup",
+      "note": "light, packed"
+    },
+    {
+      "ingredientId": "pumpkin-puree",
+      "quantity": 1,
+      "unit": "can",
+      "note": "15 oz, plain purée, not pie filling"
+    },
+    {
+      "ingredientId": "neutral-oil",
+      "quantity": 1.5,
+      "unit": "cup",
+      "note": "canola or vegetable"
+    },
+    {
+      "ingredientId": "all-purpose-flour",
+      "quantity": 3,
+      "unit": "cup"
+    },
+    {
+      "ingredientId": "baking-soda",
+      "quantity": 2,
+      "unit": "tsp"
+    },
+    {
+      "ingredientId": "baking-powder",
+      "quantity": 1,
+      "unit": "tsp"
+    },
+    {
+      "ingredientId": "pumpkin-pie-spice",
+      "quantity": 1,
+      "unit": "tbsp"
+    },
+    {
+      "ingredientId": "sea-salt",
+      "quantity": 0.5,
+      "unit": "tsp"
+    },
+    {
+      "ingredientId": "chocolate-chips",
+      "quantity": 1,
+      "unit": "cup"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "Heat the Oven",
+      "text": "Heat the oven to 400°F and grease two 12-cup muffin pans (or line them with paper cups)."
+    },
+    {
+      "heading": "Mix the Wet",
+      "text": "Whisk the eggs, both sugars, the pumpkin and the oil in a large bowl until smooth."
+    },
+    {
+      "heading": "Mix the Dry",
+      "text": "In another bowl, stir together the flour, baking soda, baking powder, pumpkin pie spice and salt."
+    },
+    {
+      "heading": "Fold Together",
+      "text": "Gently fold the dry mix into the wet just until no streaks of flour remain, then fold in the chocolate chips. Don't overmix."
+    },
+    {
+      "heading": "Fill",
+      "text": "Spoon the batter into the cups, about three-quarters full."
+    },
+    {
+      "heading": "Bake",
+      "text": "Bake about 15 minutes, until a toothpick in the middle comes out mostly clean. Slightly underbaked keeps them moist."
+    },
+    {
+      "heading": "Cool",
+      "text": "Leave them in the pan for 10 minutes, then move them to a rack to finish cooling."
+    }
+  ]
+}

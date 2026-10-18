@@ -1,0 +1,119 @@
+{
+  "id": "cranberry-stuffing",
+  "title": "Homemade Cranberry Stuffing",
+  "description": "Classic oven-baked stuffing of toasted bread cubes, butter-softened onion and celery, sage, thyme and rosemary, studded with sweet-tart dried cranberries.",
+  "servings": 10,
+  "prepMin": 20,
+  "cookMin": 70,
+  "restMin": 5,
+  "tags": [
+    "side",
+    "vegetarian",
+    "baked",
+    "fall",
+    "thanksgiving"
+  ],
+  "sourceUrl": "https://togetherasfamily.com/how-to-make-cranberry-stuffing-recipe/",
+  "image": "/images/dishes/cranberry-stuffing.jpg",
+  "imageCredit": {
+    "author": "goodiesfirst",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://www.flickr.com/photos/49215102@N00/4166917939",
+    "title": "belated thanksgiving stuffing"
+  },
+  "ingredients": [
+    {
+      "ingredientId": "white-bread",
+      "quantity": 1,
+      "unit": "lb",
+      "note": "day-old, cut into 1-inch cubes (about 10 cups)"
+    },
+    {
+      "ingredientId": "butter",
+      "quantity": 8,
+      "unit": "tbsp",
+      "note": "1 stick"
+    },
+    {
+      "ingredientId": "yellow-onion",
+      "quantity": 1,
+      "unit": "each",
+      "note": "sweet onion if you can, finely chopped"
+    },
+    {
+      "ingredientId": "celery",
+      "quantity": 2,
+      "unit": "stalk",
+      "note": "finely chopped (about 1 cup)"
+    },
+    {
+      "ingredientId": "dried-cranberries",
+      "quantity": 1,
+      "unit": "cup"
+    },
+    {
+      "ingredientId": "dried-sage",
+      "quantity": 1,
+      "unit": "tsp"
+    },
+    {
+      "ingredientId": "dried-thyme",
+      "quantity": 1,
+      "unit": "tsp"
+    },
+    {
+      "ingredientId": "dried-rosemary",
+      "quantity": 1,
+      "unit": "tsp"
+    },
+    {
+      "ingredientId": "sea-salt",
+      "quantity": 0.5,
+      "unit": "tsp"
+    },
+    {
+      "ingredientId": "black-pepper",
+      "quantity": 0.5,
+      "unit": "tsp"
+    },
+    {
+      "ingredientId": "broth",
+      "quantity": 1.75,
+      "unit": "cup",
+      "note": "chicken or vegetable; use only as much as you need (1½–2 cups)"
+    },
+    {
+      "ingredientId": "egg",
+      "quantity": 2,
+      "unit": "each",
+      "note": "beaten"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "Toast the Bread",
+      "text": "Heat the oven to 350°F and grease a 9x13 dish. Spread the bread cubes on a sheet pan and toast 10 to 15 minutes until dry and golden, then let them cool."
+    },
+    {
+      "heading": "Soften the Vegetables",
+      "text": "Melt the butter in a large skillet over medium heat. Cook the onion and celery 8 to 10 minutes, until soft and translucent."
+    },
+    {
+      "heading": "Combine",
+      "text": "In a large bowl, toss the bread with the onion and celery (and all the butter), the herbs, salt, pepper and cranberries."
+    },
+    {
+      "heading": "Moisten",
+      "text": "Pour in the broth a little at a time, folding gently, until the bread is damp but not mushy. Then stir in the eggs."
+    },
+    {
+      "heading": "Bake Covered",
+      "text": "Spread it in the dish, cover with foil and bake 30 minutes."
+    },
+    {
+      "heading": "Crisp the Top",
+      "text": "Uncover and bake about 20 minutes more, until golden and crunchy on top. Let it sit a few minutes before serving."
+    }
+  ]
+}

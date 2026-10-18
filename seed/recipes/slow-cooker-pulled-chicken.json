@@ -1,0 +1,93 @@
+{
+  "id": "slow-cooker-pulled-chicken",
+  "title": "Slow Cooker Pulled Chicken",
+  "subtitle": "BBQ pulled chicken",
+  "description": "Easy shredded BBQ chicken: breasts slow-cooked with onion, barbecue sauce and a splash of broth (or beer), then pulled and sauced for sandwiches.",
+  "servings": 8,
+  "prepMin": 10,
+  "cookMin": 390,
+  "restMin": 0,
+  "tags": [
+    "main",
+    "slow-cooker",
+    "chicken"
+  ],
+  "sourceUrl": "https://www.spendwithpennies.com/crock-pot-bbq-chicken/",
+  "image": "/images/dishes/slow-cooker-pulled-chicken.jpg",
+  "imageCredit": {
+    "author": "cjmemay",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://www.flickr.com/photos/82525232@N00/3662086075",
+    "title": "Caribbean Pulled Chicken Sandwich"
+  },
+  "ingredients": [
+    {
+      "ingredientId": "chicken-breast",
+      "quantity": 2,
+      "unit": "lb",
+      "note": "about 4 breasts"
+    },
+    {
+      "ingredientId": "garlic-powder",
+      "quantity": 0.5,
+      "unit": "tsp"
+    },
+    {
+      "ingredientId": "sea-salt",
+      "quantity": 0.5,
+      "unit": "tsp"
+    },
+    {
+      "ingredientId": "black-pepper",
+      "quantity": 0.25,
+      "unit": "tsp"
+    },
+    {
+      "ingredientId": "yellow-onion",
+      "quantity": 1,
+      "unit": "each",
+      "note": "finely diced"
+    },
+    {
+      "ingredientId": "bbq-sauce",
+      "quantity": 2,
+      "unit": "cup",
+      "note": "1 cup to cook, 1 cup to finish"
+    },
+    {
+      "ingredientId": "broth",
+      "quantity": 0.5,
+      "unit": "cup",
+      "note": "chicken, or light beer"
+    },
+    {
+      "ingredientId": "hamburger-buns",
+      "quantity": 8,
+      "unit": "each",
+      "group": "To serve"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "Season",
+      "text": "Lay the chicken in the slow cooker and sprinkle it with the garlic powder, salt and pepper."
+    },
+    {
+      "heading": "Add the Sauce",
+      "text": "Scatter the onion over the chicken, then pour on 1 cup of the barbecue sauce and the broth or beer."
+    },
+    {
+      "heading": "Slow Cook",
+      "text": "Cover and cook on low 6 to 7 hours (or high 3 to 4) until the chicken shreds easily."
+    },
+    {
+      "heading": "Shred",
+      "text": "Take out the chicken, pull it apart with two forks and spoon some of the cooking juices over it."
+    },
+    {
+      "heading": "Serve",
+      "text": "Toss with the remaining cup of barbecue sauce and pile onto buns, with coleslaw if you like."
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "id": "slow-cooker-pot-roast",
+  "title": "Slow Cooker Pot Roast",
+  "subtitle": "Chuck roast with potatoes, carrots and mushroom gravy",
+  "description": "Seared chuck roast slow-cooked with potatoes and carrots under a creamy mushroom, onion and celery sauce that becomes a rich gravy.",
+  "servings": 8,
+  "prepMin": 30,
+  "cookMin": 490,
+  "restMin": 10,
+  "tags": [
+    "main",
+    "slow-cooker",
+    "beef"
+  ],
+  "sourceUrl": "https://www.butterandbaggage.com/slow-cooker-pot-roast-with-mushroom-gravy/",
+  "image": "/images/dishes/slow-cooker-pot-roast.jpg",
+  "imageCredit": {
+    "author": "jeffreyw",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://www.flickr.com/photos/7927684@N03/7331360786",
+    "title": "Mmm... garlicy beef pot roast and roasted veggies"
+  },
+  "ingredients": [
+    {
+      "ingredientId": "chuck-roast",
+      "quantity": 4,
+      "unit": "lb"
+    },
+    {
+      "ingredientId": "sea-salt",
+      "quantity": 1,
+      "unit": "tsp",
+      "note": "to taste"
+    },
+    {
+      "ingredientId": "black-pepper",
+      "quantity": 0.5,
+      "unit": "tsp",
+      "note": "to taste"
+    },
+    {
+      "ingredientId": "neutral-oil",
+      "quantity": 2,
+      "unit": "tbsp"
+    },
+    {
+      "ingredientId": "carrot",
+      "quantity": 4,
+      "unit": "each",
+      "note": "peeled, cut into 3-inch pieces"
+    },
+    {
+      "ingredientId": "red-potato",
+      "quantity": 6,
+      "unit": "each",
+      "note": "small new potatoes, quartered"
+    },
+    {
+      "ingredientId": "celery",
+      "quantity": 2,
+      "unit": "stalk",
+      "note": "diced",
+      "group": "Mushroom sauce"
+    },
+    {
+      "ingredientId": "yellow-onion",
+      "quantity": 1,
+      "unit": "each",
+      "note": "medium, diced",
+      "group": "Mushroom sauce"
+    },
+    {
+      "ingredientId": "mushrooms",
+      "quantity": 1,
+      "unit": "package",
+      "note": "8 oz, sliced",
+      "group": "Mushroom sauce"
+    },
+    {
+      "ingredientId": "butter",
+      "quantity": 4,
+      "unit": "tbsp",
+      "group": "Mushroom sauce"
+    },
+    {
+      "ingredientId": "all-purpose-flour",
+      "quantity": 4,
+      "unit": "tbsp",
+      "group": "Mushroom sauce"
+    },
+    {
+      "ingredientId": "broth",
+      "quantity": 2,
+      "unit": "cup",
+      "note": "beef",
+      "group": "Mushroom sauce"
+    },
+    {
+      "ingredientId": "milk",
+      "quantity": 1,
+      "unit": "cup",
+      "group": "Mushroom sauce"
+    },
+    {
+      "ingredientId": "worcestershire-sauce",
+      "quantity": 1,
+      "unit": "tbsp",
+      "group": "Mushroom sauce"
+    },
+    {
+      "ingredientId": "cornstarch",
+      "quantity": 3,
+      "unit": "tbsp",
+      "note": "to thicken the gravy",
+      "group": "Gravy"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "Sear the Beef",
+      "text": "Pat the roast dry and season it with salt and pepper. Brown it in the hot oil over medium-high heat, about 3 minutes a side. Set it in the slow cooker with the potatoes and carrots tucked around it."
+    },
+    {
+      "heading": "Brown the Vegetables",
+      "text": "In the same pan, melt the butter and cook the onion, celery and mushrooms about 5 minutes, until browned."
+    },
+    {
+      "heading": "Build the Sauce",
+      "text": "Stir in the flour for a minute, then slowly whisk in the broth and milk until thickened. Add the Worcestershire and a little salt and pepper."
+    },
+    {
+      "heading": "Slow Cook",
+      "text": "Pour the sauce over the roast, cover and cook on low about 8 hours, until fork-tender."
+    },
+    {
+      "heading": "Rest",
+      "text": "Move the beef and vegetables to a platter and tent with foil."
+    },
+    {
+      "heading": "Make the Gravy",
+      "text": "Pour the cooking liquid into a skillet over medium-high heat. Whisk the cornstarch with a little of the liquid, stir it back in and simmer about 10 minutes until thick. Serve over the roast."
+    }
+  ]
+}

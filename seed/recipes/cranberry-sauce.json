@@ -1,0 +1,70 @@
+{
+  "id": "cranberry-sauce",
+  "title": "Cranberry Sauce",
+  "subtitle": "Chunky whole-berry sauce",
+  "description": "A bright, chunky whole-berry sauce of fresh cranberries simmered with orange juice, zest and sugar until the berries burst. Can be made days ahead.",
+  "servings": 8,
+  "yieldNote": "About 2¼ cups",
+  "prepMin": 5,
+  "cookMin": 12,
+  "restMin": 60,
+  "tags": [
+    "sauce",
+    "vegetarian",
+    "make-ahead",
+    "fall",
+    "thanksgiving"
+  ],
+  "sourceUrl": "https://www.onceuponachef.com/recipes/cranberry-sauce.html",
+  "image": "/images/dishes/cranberry-sauce.jpg",
+  "imageCredit": {
+    "author": "Veganbaking.net",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "sourceUrl": "https://www.flickr.com/photos/31104779@N02/3617909597",
+    "title": "Cranberry Sauce"
+  },
+  "ingredients": [
+    {
+      "ingredientId": "orange",
+      "quantity": 2,
+      "unit": "each",
+      "note": "juiced (½ cup juice); zest one first (2 tsp zest)"
+    },
+    {
+      "ingredientId": "sugar",
+      "quantity": 0.875,
+      "unit": "cup",
+      "note": "¾ cup plus 2 tbsp"
+    },
+    {
+      "ingredientId": "cranberries",
+      "quantity": 12,
+      "unit": "oz",
+      "note": "1 bag, rinsed and picked over; frozen is fine"
+    },
+    {
+      "ingredientId": "sea-salt",
+      "quantity": 1,
+      "unit": "pinch"
+    }
+  ],
+  "steps": [
+    {
+      "heading": "Make the Syrup",
+      "text": "Bring ½ cup water, the orange juice and the sugar to a boil in a saucepan."
+    },
+    {
+      "heading": "Add the Berries",
+      "text": "Stir in the cranberries, orange zest and salt, and bring back to a boil."
+    },
+    {
+      "heading": "Simmer",
+      "text": "Turn the heat to medium and let it bubble gently 10 to 12 minutes, until most of the berries have popped. Press a few against the side with the spoon if you like it a little softer; leave them for chunkier."
+    },
+    {
+      "heading": "Chill",
+      "text": "Spoon into a bowl, cover and refrigerate until cold. It thickens as it cools."
+    }
+  ]
+}
