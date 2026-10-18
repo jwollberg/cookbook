@@ -13,6 +13,7 @@
     "db:seed": "node scripts/seed.mjs && node scripts/apply-sql.mjs scripts/seed.sql"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0",
     "@astrojs/node": "^9.5.5",
     "@astrojs/react": "^4.2.0",
     "@dnd-kit/core": "^6.3.1",
@@ -21,8 +22,9 @@
     "astro": "^5.15.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.3.2",
-    "zod": "^3.24.1"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",

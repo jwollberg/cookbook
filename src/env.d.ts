@@ -20,6 +20,15 @@ interface Env {
   TIME_ZONE?: string;
   /** Shared by the Atheos containers on Vault; lets Home ask /internal/glance and /internal/forget. */
   INTERNAL_TOKEN?: string;
+  /** Claude's sign-in (Workload Identity Federation) and monthly cap: src/lib/server/claude.ts. */
+  ANTHROPIC_ORGANIZATION_ID?: string;
+  ANTHROPIC_FEDERATION_RULE_ID?: string;
+  ANTHROPIC_SERVICE_ACCOUNT_ID?: string;
+  ANTHROPIC_WORKSPACE_ID?: string;
+  CLAUDE_WIF_KEY_FILE?: string;
+  AI_MONTHLY_CAP_CENTS?: string;
+  /** "1" on the dev server: canned recipe drafts instead of Claude. */
+  AI_FAKE?: string;
 }
 
 declare namespace App {
