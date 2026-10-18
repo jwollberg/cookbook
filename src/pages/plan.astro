@@ -3,12 +3,12 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 import Planner, { type PlannerMeal, type PlannerRecipe } from "../components/Planner";
 import { loadKitchen, viewerToday } from "../lib/server/page";
 import { mealImages } from "../lib/format";
-import { mondayOf } from "../lib/plans";
+import { sundayOf } from "../lib/plans";
 
 const { library, planning, kitchen, owner, recipesById } = await loadKitchen(Astro.locals);
 const today = viewerToday(Astro.locals);
 const requested = Astro.url.searchParams.get("week");
-const monday = mondayOf(requested && /^\d{4}-\d{2}-\d{2}$/.test(requested) ? requested : today);
+const sunday = sundayOf(requested && /^\d{4}-\d{2}-\d{2}$/.test(requested) ? requested : today);
 
 // Only what the planner shows crosses to the browser.
 const recipes: PlannerRecipe[] = library.recipes.map((r) => ({
@@ -41,7 +41,7 @@ const meals: PlannerMeal[] = library.meals.map((m) => ({
       recipes={recipes}
       meals={meals}
       today={today}
-      monday={monday}
+      sunday={sunday}
     />
   </div>
 </SiteLayout>

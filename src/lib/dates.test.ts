@@ -21,18 +21,18 @@ describe("local date handling", () => {
 });
 
 describe("startOfWeek", () => {
-  it("returns the Monday of the containing week", () => {
+  it("returns the Sunday of the containing week", () => {
     // 2026-08-12 is a Wednesday.
-    expect(isoDate(startOfWeek(fromIso("2026-08-12")))).toBe("2026-08-10");
+    expect(isoDate(startOfWeek(fromIso("2026-08-12")))).toBe("2026-08-09");
   });
 
-  it("treats Sunday as the END of a week, not the start", () => {
-    // Sunday 2026-08-16 belongs to the week beginning Monday the 10th.
-    expect(isoDate(startOfWeek(fromIso("2026-08-16")))).toBe("2026-08-10");
+  it("treats Saturday as the END of a week", () => {
+    // Saturday 2026-08-15 belongs to the week beginning Sunday the 9th.
+    expect(isoDate(startOfWeek(fromIso("2026-08-15")))).toBe("2026-08-09");
   });
 
-  it("is a no-op on a Monday", () => {
-    expect(isoDate(startOfWeek(fromIso("2026-08-10")))).toBe("2026-08-10");
+  it("is a no-op on a Sunday", () => {
+    expect(isoDate(startOfWeek(fromIso("2026-08-16")))).toBe("2026-08-16");
   });
 });
 

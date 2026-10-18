@@ -57,9 +57,9 @@ function seedLibrary(target: D1Database, by: string | null = null) {
   for (const f of readdirSync(join(SEED, "meals"))) put("meals", read(join(SEED, "meals", f)));
 }
 
-const week = (monday: string, entries: { date: string; recipeId?: string; mealId?: string }[]): MealPlan => ({
-  id: `week-${monday}`,
-  name: `Week of ${monday}`,
+const week = (start: string, entries: { date: string; recipeId?: string; mealId?: string }[]): MealPlan => ({
+  id: `week-${start}`,
+  name: `Week of ${start}`,
   days: entries.map(({ date, ...ref }) => ({ date, entries: [{ slot: "dinner", ...ref }] })),
 });
 
@@ -101,7 +101,7 @@ describe("recipes shared, planning per person", () => {
     seedLibrary(db);
     josh = await upsertUser(db, { id: "google-sub-josh", email: "josh.wollberg@gmail.com", name: "Josh Wollberg" });
     reagen = await userForEmail(db, "reagenbrase@gmail.com");
-    await savePlan(db, josh.id, week("2026-10-12", [{ date: "2026-10-12", recipeId: "falafel" }]));
+    await savePlan(db, josh.id, week("2026-10-11", [{ date: "2026-10-12", recipeId: "falafel" }]));
     await mutateShopping(db, josh.id, (l) => applyListEdit(l, { type: "addDish", dish: { recipeId: "potato-soup" } }));
     await setTick(db, josh.id, "ingredient:tomato", true);
   });
@@ -115,11 +115,11 @@ describe("recipes shared, planning per person", () => {
     expect(planning.plans).toEqual([]);
     expect(planning.shopping.dishes).toEqual([]);
     expect(planning.ticked).toEqual([]);
-    expect(await loadPlan(db, reagen.id, "week-2026-10-12")).toBeNull();
+    expect(await loadPlan(db, reagen.id, "week-2026-10-11")).toBeNull();
   });
 
   it("keeps each person's writes to themselves", async () => {
-    await savePlan(db, reagen.id, week("2026-10-12", [{ date: "2026-10-13", mealId: "greek-dinner" }]));
+    await savePlan(db, reagen.id, week("2026-10-11", [{ date: "2026-10-13", mealId: "greek-dinner" }]));
     await setTick(db, reagen.id, "ingredient:lemon", true);
 
     const joshs = await loadPlanning(db, josh.id);
@@ -127,7 +127,29 @@ describe("recipes shared, planning per person", () => {
     expect(joshs.plans[0].days[0].entries[0].recipeId).toBe("falafel");
     expect(joshs.shopping.dishes).toEqual([{ recipeId: "potato-soup" }]);
     expect(joshs.ticked).toEqual(["ingredient:tomato"]);
-    expect((await loadPlan(db, reagen.id, "week-2026-10-12"))?.days[0].entries[0].mealId).toBe("greek-dinner");
+    expect((await loadPlan(db, reagen.id, "week-2026-10-11"))?.days[0].entries[0].mealId).toBe("greek-dinner");
+  });
+
+  it("turns Monday weeks into Sunday weeks on disk, even one saved by a tab open from before", async () => {
+    const ids = async () =>
+      (await db.prepare("SELECT id FROM plans WHERE user_id = ? ORDER BY id").bind(reagen.id).all<{ id: string }>()).results.map((r) => r.id);
+    // As stored before weeks began on Sunday: Monday the 5th to Sunday the 11th.
+    await savePlan(db, reagen.id, week("2026-10-05", [{ date: "2026-10-06", recipeId: "falafel" }, { date: "2026-10-11", mealId: "greek-dinner" }]));
+    const planning = await loadPlanning(db, reagen.id);
+    expect(planning.plans.map((p) => p.id)).toEqual(["week-2026-10-11", "week-2026-10-04"]);
+    expect(await ids()).toEqual(["week-2026-10-04", "week-2026-10-11"]);
+    expect((await loadPlan(db, reagen.id, "week-2026-10-11"))?.days[0]).toEqual({
+      date: "2026-10-11",
+      entries: [{ slot: "dinner", mealId: "greek-dinner" }],
+    });
+
+    // A tab still on the old code saves its Monday week after the deploy: read again, it is folded in.
+    await savePlan(db, reagen.id, week("2026-10-12", [{ date: "2026-10-13", recipeId: "potato-soup" }]));
+    const glanced = await loadPlan(db, reagen.id, "week-2026-10-11");
+    expect(glanced?.days.find((d) => d.date === "2026-10-13")?.entries[0].recipeId).toBe("potato-soup");
+    expect(await ids()).toEqual(["week-2026-10-04", "week-2026-10-11"]);
+    // Josh's week is untouched by Reagen's.
+    expect((await loadPlanning(db, josh.id)).plans.map((p) => p.id)).toEqual(["week-2026-10-11"]);
   });
 
   it("finds a person by address however Gmail spells it, and never splits them in two", async () => {
@@ -136,8 +158,8 @@ describe("recipes shared, planning per person", () => {
   });
 
   it("answers 404 from the plan route for a week named as someone else's", async () => {
-    const theirs = week("2026-10-12", [{ date: "2026-10-12", recipeId: "deviled-eggs" }]);
-    const request = new Request("https://kitchen.test/api/plans/week-2026-10-12", {
+    const theirs = week("2026-10-11", [{ date: "2026-10-12", recipeId: "deviled-eggs" }]);
+    const request = new Request("https://kitchen.test/api/plans/week-2026-10-11", {
       method: "PUT",
       body: JSON.stringify({ owner: josh.id, plan: theirs }),
     });
@@ -183,7 +205,7 @@ describe("Home's glance", () => {
     await savePlan(
       db,
       josh.id,
-      week("2026-10-12", [
+      week("2026-10-11", [
         { date: "2026-10-12", mealId: "greek-dinner" },
         { date: "2026-10-14", recipeId: "falafel" },
       ]),
@@ -241,7 +263,7 @@ describe("forgetting a person", () => {
       ["r-old", "reagen.brase@gmail.com"], // the same inbox, an older spelling
     ]) {
       await upsertUser(db, { id, email });
-      await savePlan(db, id, week("2026-10-12", [{ date: "2026-10-12", recipeId: "falafel" }]));
+      await savePlan(db, id, week("2026-10-11", [{ date: "2026-10-12", recipeId: "falafel" }]));
       await mutateShopping(db, id, (l) => applyListEdit(l, { type: "addDish", dish: { recipeId: "potato-soup" } }));
       await setTick(db, id, "ingredient:tomato", true);
       await db.prepare("INSERT INTO pantry (user_id, data, updated_at) VALUES (?, '[]', ?)").bind(id, STAMP).run();
@@ -389,7 +411,8 @@ describe("migration 0002: households to people", () => {
     const josh = await userForEmail(db, "josh.wollberg@gmail.com");
     expect(josh.id).toBe("josh-sub");
     const planning = await loadPlanning(db, josh.id);
-    expect(planning.plans.map((p) => p.id)).toEqual(["week-2026-10-12", "week-2026-10-05"]);
+    // Its Monday weeks come back as the Sunday weeks holding those Mondays.
+    expect(planning.plans.map((p) => p.id)).toEqual(["week-2026-10-11", "week-2026-10-04"]);
     expect(planning.shopping.dishes).toEqual([{ recipeId: "potato-soup", servings: 6 }]);
     expect(planning.ticked.sort()).toEqual(["ingredient:tomato", "item:i1"]);
     expect(planning.pantry).toEqual([{ ingredientId: "salt", quantity: 1, unit: "each" }]);

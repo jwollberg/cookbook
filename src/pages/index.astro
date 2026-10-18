@@ -5,13 +5,13 @@ import MealCard from "../components/MealCard.astro";
 import Icon from "../components/Icon";
 import { greeting, loadKitchen, viewerToday } from "../lib/server/page";
 import { mealImages, recipeCard } from "../lib/format";
-import { emptyPlan, entryCount, mondayOf, planIdFor } from "../lib/plans";
+import { emptyPlan, entryCount, sundayOf, planIdFor } from "../lib/plans";
 import { WEEKDAYS, formatRange, fromIso } from "../lib/dates";
 
 const { library, planning, owner, viewer, recipesById, mealsById } = await loadKitchen(Astro.locals);
 const today = viewerToday(Astro.locals);
-const monday = mondayOf(today);
-const week = planning.plans.find((p) => p.id === planIdFor(monday)) ?? emptyPlan(monday);
+const sunday = sundayOf(today);
+const week = planning.plans.find((p) => p.id === planIdFor(sunday)) ?? emptyPlan(sunday);
 const planned = entryCount(week);
 const onList = planning.shopping.dishes.length + planning.shopping.items.length;
 const range = formatRange(week.days[0].date, week.days[6].date);

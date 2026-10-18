@@ -5,7 +5,7 @@
  * match `KitchenGlance` in Website-Home.
  */
 
-import { entryCount, mondayOf, planIdFor } from "../plans";
+import { entryCount, sundayOf, planIdFor } from "../plans";
 import { countList, kitchenName, loadPlan, usersForEmail } from "./db";
 
 export interface KitchenGlance {
@@ -31,7 +31,7 @@ export async function kitchenGlance(env: Env, email: string, today: string): Pro
   if (!person) return { kitchen, tonight: [], plannedDays: 0, listCount: 0 };
 
   const [plan, listCount] = await Promise.all([
-    loadPlan(db, person.id, planIdFor(mondayOf(today))),
+    loadPlan(db, person.id, planIdFor(sundayOf(today))),
     countList(db, person.id),
   ]);
 

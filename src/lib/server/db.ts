@@ -29,6 +29,7 @@ import {
   type ShoppingExtras,
 } from "../schema";
 import { emptyExtras } from "../list";
+import { toSundayWeeks } from "../plans";
 import { ownerKey } from "./people";
 
 const now = () => new Date().toISOString();
@@ -289,14 +290,14 @@ export interface Planning {
 
 export async function loadPlanning(db: D1Database, userId: string): Promise<Planning> {
   const [plans, shopping, ticks, pantry] = await db.batch<Record<string, string>>([
-    db.prepare("SELECT data FROM plans WHERE user_id = ?").bind(userId),
+    db.prepare("SELECT data, updated_at FROM plans WHERE user_id = ?").bind(userId),
     db.prepare("SELECT data FROM shopping WHERE user_id = ?").bind(userId),
     db.prepare("SELECT line_key FROM shopping_ticks WHERE user_id = ?").bind(userId),
     db.prepare("SELECT data FROM pantry WHERE user_id = ?").bind(userId),
   ]);
   const pantryRow = pantry.results[0] as { data: string } | undefined;
   return {
-    plans: parseDocs(plans.results as { data: string }[], MealPlanSchema, "plan").sort((a, b) =>
+    plans: (await sundayWeeks(db, userId, plans.results as PlanRow[])).sort((a, b) =>
       (b.days[0]?.date ?? "").localeCompare(a.days[0]?.date ?? ""),
     ),
     shopping:
@@ -305,6 +306,43 @@ export async function loadPlanning(db: D1Database, userId: string): Promise<Plan
     ticked: (ticks.results as { line_key: string }[]).map((r) => r.line_key),
     pantry: pantryRow ? (parseDocs([pantryRow], PantryFileSchema, "pantry")[0] ?? []) : [],
   };
+}
+
+type PlanRow = { data: string; updated_at: string };
+
+/**
+ * A person's plans as Sunday-to-Saturday weeks. Plans still stored as Monday
+ * weeks (before 2026-10, or saved by a tab open from then) are regrouped and
+ * written back as Sunday weeks, the first time they are read. An old row is
+ * deleted only if nobody saved over it since this read; one that changed is
+ * regrouped on the next read instead.
+ */
+async function sundayWeeks(db: D1Database, userId: string, rows: PlanRow[]): Promise<MealPlan[]> {
+  const read = parseDocs(rows, MealPlanSchema, "plan");
+  const { plans, changed } = toSundayWeeks(read);
+  if (!changed) return plans;
+  const keep = new Set(plans.map((p) => p.id));
+  const stamps = new Map(rows.map((r) => [(JSON.parse(r.data) as { id?: string }).id, r.updated_at]));
+  const stamp = now();
+  await db.batch([
+    ...read
+      .filter((p) => !keep.has(p.id))
+      .map((p) =>
+        db
+          .prepare("DELETE FROM plans WHERE user_id = ? AND id = ? AND updated_at = ?")
+          .bind(userId, p.id, stamps.get(p.id) ?? ""),
+      ),
+    ...plans.map((p) =>
+      db
+        .prepare(
+          `INSERT INTO plans (user_id, id, data, updated_at, updated_by) VALUES (?, ?, ?, ?, ?)
+           ON CONFLICT(user_id, id) DO UPDATE SET
+             data = excluded.data, updated_at = excluded.updated_at, updated_by = excluded.updated_by`,
+        )
+        .bind(userId, p.id, JSON.stringify(p), stamp, userId),
+    ),
+  ]);
+  return plans;
 }
 
 export async function savePlan(db: D1Database, userId: string, plan: MealPlan): Promise<MealPlan> {
@@ -323,11 +361,8 @@ export async function savePlan(db: D1Database, userId: string, plan: MealPlan): 
 
 /** One of this person's week plans, or null: someone else's is not theirs to see. */
 export async function loadPlan(db: D1Database, userId: string, id: string): Promise<MealPlan | null> {
-  const row = await db
-    .prepare("SELECT data FROM plans WHERE user_id = ? AND id = ?")
-    .bind(userId, id)
-    .first<{ data: string }>();
-  return row ? (parseDocs([row], MealPlanSchema, "plan")[0] ?? null) : null;
+  const rows = await db.prepare("SELECT data, updated_at FROM plans WHERE user_id = ?").bind(userId).all<PlanRow>();
+  return (await sundayWeeks(db, userId, rows.results)).find((p) => p.id === id) ?? null;
 }
 
 /**

@@ -92,7 +92,7 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
 ## Whose data is whose
 
 - **Shared by everyone:** ingredients, recipes, meals — one recipe book any approved user edits.
-- **Each person's own:** week plans (`plans`, keyed `week-<monday>`), the shopping list
+- **Each person's own:** week plans (`plans`, keyed `week-<sunday>`: weeks run Sunday to Saturday; Monday-keyed weeks from before 2026-10-18 are regrouped and rewritten the first time they are read, `toSundayWeeks`), the shopping list
   (`shopping`), its ticks (`shopping_ticks`), the pantry — keyed by `users.id`. There are no
   households any more (migration 0002 gave each one's rows to whoever made it).
 - **The data layer does the filtering.** Every function in `db.ts` that touches planning takes the

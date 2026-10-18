@@ -29,11 +29,9 @@ export function addDays(date: Date, days: number): Date {
   return next;
 }
 
-/** Monday of the week containing `date`. */
+/** Sunday of the week containing `date`: weeks run Sunday to Saturday. */
 export function startOfWeek(date: Date): Date {
-  const day = date.getDay(); // 0 = Sunday
-  const backToMonday = day === 0 ? 6 : day - 1;
-  return addDays(date, -backToMonday);
+  return addDays(date, -date.getDay()); // 0 = Sunday
 }
 
 /** Seven local ISO dates starting at `start`. */

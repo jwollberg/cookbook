@@ -15,7 +15,7 @@ import Icon from "./Icon";
 import { SLOTS, type Slot } from "../lib/constants";
 import type { MealPlan, PlanEntry } from "../lib/schema";
 import { addDays, formatDayLabel, formatRange, fromIso, isoDate } from "../lib/dates";
-import { emptyPlan, entryCount, mondayOf, planIdFor } from "../lib/plans";
+import { emptyPlan, entryCount, sundayOf, planIdFor } from "../lib/plans";
 import { savePlan } from "../lib/api";
 
 export interface PlannerRecipe {
@@ -39,16 +39,16 @@ interface Props {
   recipes: PlannerRecipe[];
   meals: PlannerMeal[];
   today: string;
-  /** Monday of the week to open on. */
-  monday: string;
+  /** Sunday of the week to open on. */
+  sunday: string;
 }
 
 type SaveState = "saved" | "saving" | "error";
 
-export default function Planner({ owner, plans, recipes, meals, today, monday }: Props) {
+export default function Planner({ owner, plans, recipes, meals, today, sunday }: Props) {
   const [byId, setById] = useState(() => new Map(plans.map((p) => [p.id, p])));
-  const [week, setWeek] = useState(monday);
-  const [plan, setPlan] = useState<MealPlan>(() => byId.get(planIdFor(monday)) ?? emptyPlan(monday));
+  const [week, setWeek] = useState(sunday);
+  const [plan, setPlan] = useState<MealPlan>(() => byId.get(planIdFor(sunday)) ?? emptyPlan(sunday));
   const [dragging, setDragging] = useState<string | null>(null);
   const [saveState, setSaveState] = useState<SaveState>("saved");
   const [filter, setFilter] = useState("");
@@ -121,7 +121,7 @@ export default function Planner({ owner, plans, recipes, meals, today, monday }:
       days: p.days.map((d) => (d.date === date ? { ...d, entries: d.entries.filter((_, i) => i !== index) } : d)),
     }));
 
-  function goTo(nextMonday: string) {
+  function goTo(nextSunday: string) {
     if (dirty.current) {
       // Flush the pending save for the week being left before moving on.
       clearTimeout(timer.current);
@@ -130,10 +130,10 @@ export default function Planner({ owner, plans, recipes, meals, today, monday }:
       dirty.current = false;
       setSaveState("saved");
     }
-    setWeek(nextMonday);
-    setPlan(byId.get(planIdFor(nextMonday)) ?? emptyPlan(nextMonday));
+    setWeek(nextSunday);
+    setPlan(byId.get(planIdFor(nextSunday)) ?? emptyPlan(nextSunday));
     const url = new URL(window.location.href);
-    url.searchParams.set("week", nextMonday);
+    url.searchParams.set("week", nextSunday);
     window.history.replaceState(null, "", url);
   }
 
@@ -156,7 +156,7 @@ export default function Planner({ owner, plans, recipes, meals, today, monday }:
   }
 
   // Keyboard- and tap-friendly alternative to dragging: add to today when
-  // it is in this week, otherwise to the Monday.
+  // it is in this week, otherwise to the Sunday.
   const addTarget = plan.days.some((d) => d.date === today) ? today : plan.days[0].date;
 
   const dates = plan.days.map((d) => d.date);
@@ -195,7 +195,7 @@ export default function Planner({ owner, plans, recipes, meals, today, monday }:
             <Icon name="chevronRight" />
           </button>
           {!isThisWeek && (
-            <button className="btn btn-sm btn-ghost" onClick={() => goTo(mondayOf(today))}>
+            <button className="btn btn-sm btn-ghost" onClick={() => goTo(sundayOf(today))}>
               This week
             </button>
           )}
