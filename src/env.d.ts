@@ -31,6 +31,41 @@ interface Env {
   AI_FAKE?: string;
 }
 
+/** One line of the right-click menu (app-shell/menu.js; the shell's README, "Right-click menu"). */
+interface AtheosMenuItem {
+  label: string;
+  /** A name from atheosMenu.icons, or a Tabler icon's <path>s. */
+  icon?: string;
+  keys?: string;
+  run?: () => unknown;
+  href?: string;
+  newTab?: boolean;
+  danger?: boolean;
+  disabled?: boolean;
+  checked?: boolean;
+  /** One level of submenu (no gaps: a false here would break it). */
+  items?: AtheosMenuItem[];
+}
+type AtheosMenuEntry = AtheosMenuItem | "-" | { heading: string } | false | null | undefined;
+interface AtheosMenu {
+  add(
+    selector: string,
+    fn: (
+      el: HTMLElement,
+      ctx: { target: Element; selection: string; link: HTMLAnchorElement | null; image: HTMLImageElement | null },
+    ) => AtheosMenuEntry[] | null | undefined,
+  ): () => void;
+  key(combo: string, label: string, run: () => unknown, opts?: { group?: string; when?: () => boolean }): () => void;
+  search(label: string, run: (q: string) => unknown): void;
+  toast(text: string, bad?: boolean): void;
+  copy(text: string, said?: string): Promise<void>;
+  icons: Record<string, string>;
+}
+interface Window {
+  /** Loaded in SiteLayout's <head>, before any island. */
+  atheosMenu?: AtheosMenu;
+}
+
 declare namespace App {
   interface Locals {
     /** Set first by the middleware on every request (src/lib/server/platform.ts). */

@@ -7,6 +7,7 @@
 import "../styles/shell.css";
 import "../styles/global.css";
 import themeJs from "../lib/theme.js?raw";
+import menuJs from "../lib/menu.js?raw";
 import Icon from "../components/Icon";
 import bundled from "../lib/apps.json";
 import { appRegistry } from "../lib/server/apps";
@@ -73,6 +74,8 @@ const svg = (inner: string) =>
     />
     <!-- Light or dark, as chosen in any Atheos app's account menu (app-shell/theme.js). -->
     <script is:inline set:html={themeJs} />
+    <!-- The right-click menu and keyboard shortcuts every Atheos app shares (app-shell/menu.js). -->
+    <script is:inline set:html={menuJs} />
   </head>
   <body class={signedIn ? "as-body as-has-tabbar" : "as-body"}>
     <a class="skip" href="#main">Skip to content</a>
@@ -220,6 +223,57 @@ const svg = (inner: string) =>
           badge.hidden = count === 0;
         });
       });
+
+      // The right-click menu's Hestia items for the plain (server-rendered) cards and pages.
+      // The islands add their own: a recipe card's list button, the planner, the shopping list.
+      (() => {
+        const menu = window.atheosMenu;
+        if (!menu) return;
+        // Tabler Icons (MIT), the paths Icon.tsx draws, for the islands' menu items too.
+        Object.assign(menu.icons, {
+          pencil: '<path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"/><path d="M13.5 6.5l4 4"/>',
+          bag: '<path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304"/><path d="M9 11v-5a3 3 0 0 1 6 0v5"/>',
+          calendar: '<path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/>',
+          plus: '<path d="M12 5l0 14"/><path d="M5 12l14 0"/>',
+          minus: '<path d="M5 12l14 0"/>',
+          trash: '<path d="M4 7l16 0"/><path d="M10 11l0 6"/><path d="M14 11l0 6"/><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>',
+          printer: '<path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2"/><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4"/><path d="M7 15a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z"/>',
+        });
+        const link = (path) => new URL(path, location.origin).href;
+        // A recipe card a page drew (a meal's dishes); the recipe browser's cards add the list.
+        // Right-clicking a card's title link already offers its own "Copy link".
+        const copyItem = (ctx, path) =>
+          ctx.link?.pathname !== path && { label: "Copy link", icon: "link", run: () => menu.copy(link(path), "Link copied") };
+        menu.add("[data-recipe]", (el, ctx) => {
+          const id = el.dataset.recipe;
+          return [
+            { label: "Open recipe", href: `/recipes/${id}` },
+            { label: "Edit recipe", icon: "pencil", href: `/edit/recipe?id=${encodeURIComponent(id)}` },
+            copyItem(ctx, `/recipes/${id}`),
+          ];
+        });
+        menu.add("[data-meal]", (el, ctx) => [
+          { label: "Open meal", href: `/meals/${el.dataset.meal}` },
+          copyItem(ctx, `/meals/${el.dataset.meal}`),
+        ]);
+        // A recipe's own page: its Edit button, and the list button under its ingredients.
+        menu.add("[data-recipe-page]", (el) => {
+          const add = document.querySelector("[data-list-add]");
+          return [
+            { label: "Edit recipe", icon: "pencil", keys: "E", href: `/edit/recipe?id=${encodeURIComponent(el.dataset.recipePage)}` },
+            add && { label: add.textContent.trim(), icon: "bag", disabled: add.disabled, run: () => add.click() },
+          ];
+        });
+        menu.key("e", "Edit this recipe", () => document.querySelector("[data-recipe-page] [data-edit]")?.click(), {
+          group: "Recipe",
+          when: () => !!document.querySelector("[data-recipe-page]"),
+        });
+        menu.key("n", "New recipe", () => document.querySelector("[data-new-recipe]")?.click(), {
+          group: "Recipes",
+          when: () => !!document.querySelector("[data-new-recipe]"),
+        });
+        menu.search("Search recipes for", (q) => location.assign(`/recipes?q=${encodeURIComponent(q)}`));
+      })();
     </script>
   </body>
 </html>

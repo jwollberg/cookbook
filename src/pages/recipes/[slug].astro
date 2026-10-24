@@ -39,7 +39,7 @@ const stepGroups = recipe.steps.reduce(
 ---
 
 <SiteLayout title={recipe.title} description={recipe.description}>
-  <div class="as-main">
+  <div class="as-main" data-recipe-page={recipe.id}>
     <a class="as-back" href="/recipes"><Icon name="chevronLeft" /> Recipes</a>
     <header class="as-head">
       <div>
@@ -47,7 +47,7 @@ const stepGroups = recipe.steps.reduce(
         {recipe.subtitle && <p>{recipe.subtitle}</p>}
       </div>
       <div class="as-head-end">
-        <a class="btn" href={`/edit/recipe?id=${encodeURIComponent(recipe.id)}`}>
+        <a class="btn" href={`/edit/recipe?id=${encodeURIComponent(recipe.id)}`} data-edit>
           <Icon name="pencil" /> Edit
         </a>
       </div>

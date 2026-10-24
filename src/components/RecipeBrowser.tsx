@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Icon from "./Icon";
 import { Toast, useList } from "./useList";
 import type { RecipeCard } from "../lib/format";
@@ -28,6 +28,29 @@ export default function RecipeBrowser({
   const [query, setQuery] = useState(initialQuery);
   const [active, setActive] = useState<string[]>(initialTags);
   const list = useList(owner, extras);
+
+  // Right-click a card (app-shell/menu.js): its + button, and the recipe's pages.
+  const live = useRef({ list, recipes });
+  live.current = { list, recipes };
+  useEffect(() => {
+    const menu = window.atheosMenu;
+    if (!menu) return;
+    return menu.add("[data-recipe-card]", (el, ctx) => {
+      const { list, recipes } = live.current;
+      const r = recipes.find((x) => x.id === el.dataset.recipeCard);
+      if (!r) return null;
+      const href = `/recipes/${r.id}`;
+      return [
+        { label: "Open recipe", href },
+        list.has({ recipeId: r.id })
+          ? { label: "Remove from shopping list", icon: "x", disabled: list.busy, run: () => list.remove({ recipeId: r.id }, r.title) }
+          : { label: "Add to shopping list", icon: "bag", disabled: list.busy, run: () => list.add({ recipeId: r.id }, r.title) },
+        { label: "Edit recipe", icon: "pencil", href: `/edit/recipe?id=${encodeURIComponent(r.id)}` },
+        // Right-clicking the title link already offers its own "Copy link".
+        ctx.link?.pathname !== href && { label: "Copy link", icon: "link", run: () => menu.copy(new URL(href, location.origin).href, "Link copied") },
+      ];
+    });
+  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -94,7 +117,7 @@ export default function RecipeBrowser({
           {filtered.map((r) => {
             const onList = Boolean(list.has({ recipeId: r.id }));
             return (
-              <article key={r.id} className="as-tile rcard">
+              <article key={r.id} className="as-tile rcard" data-recipe-card={r.id}>
                 <div className="as-tile-media rcard-media">
                   {r.image ? (
                     <img src={r.image} alt="" loading="lazy" />

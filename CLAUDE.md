@@ -208,6 +208,12 @@ Hestia piece to `global.css` only for what only a kitchen has.
 - Min 44px tap targets: this gets used one-handed with wet hands.
 - Aisle colours are **data, not decoration** — a shopping list is only usable in a store if sections
   are distinguishable at a glance.
+- **Right-click menu and shortcuts**: `src/lib/menu.js`, a copy of the shell's, inlined in
+  `SiteLayout`'s `<head>` (README "Right-click menu"). Hestia's items: the plain cards
+  (`data-recipe`, `data-meal`) and a recipe page (`data-recipe-page`, `E`, `N` on Recipes) in
+  `SiteLayout`'s script; recipe cards' list button in `RecipeBrowser`; dishes, library and weeks
+  (`[` `]` `T`) in `Planner`; lines, dishes, items and the list (`A`) in `ShoppingList`. A new
+  button on a card gets its menu item the same way: a `data-*` id and the same handler.
 
 ## Commands
 

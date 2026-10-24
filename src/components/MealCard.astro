@@ -17,7 +17,7 @@ const titles = meal.components
 const time = formatMinutes(mealMinutes(meal, recipesById));
 ---
 
-<article class="as-tile rcard">
+<article class="as-tile rcard" data-meal={meal.id}>
   <div class="as-tile-media rcard-media">
     {
       images.length === 0 ? (
