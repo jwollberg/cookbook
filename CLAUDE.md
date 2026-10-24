@@ -83,7 +83,12 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
   until early November with `gcloud projects undelete kitchen-atheos` if ever needed.)
 - The dev server signs you in as "Dev Cook" (`import.meta.env.DEV`, compiled out of builds).
   Never add a bypass that is not behind that constant.
-- Writes must carry a same-origin `Origin` header (middleware).
+- Writes must carry a same-origin `Origin` header, and on the shared address a Referer inside
+  `/hestia` (`src/lib/server/shared-address.ts`, `refusesWrite`; `/internal/` is exempt). Every
+  answer carries a strict Content-Security-Policy (`POLICY` there, built with `security.ts`, a copy
+  of Oikos's `vault/app-platform/security.ts`): no inline script runs unless it is passed in by its
+  exact text (theme.js, menu.js), so no `is:inline` scripts, no `onclick=`, and a new outside host
+  (only Google's account pictures today) goes in `EXTRAS`.
 - **Oikos's calls.** Only the Home container on Vault reaches `/internal/`, with `INTERNAL_TOKEN`
   (the middleware); the tunnel never routes it.
   - `/internal/glance` (POST `{ email, today }` → `{ kitchen, tonight, plannedDays, listCount, aiCents }`)
