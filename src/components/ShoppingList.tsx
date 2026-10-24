@@ -15,6 +15,7 @@ import type {
   Recipe,
   ShoppingExtras,
 } from "../lib/schema";
+import { withBase } from "../lib/base";
 
 interface Props {
   /** Whose list this is (their user id), named on every edit. */
@@ -232,8 +233,8 @@ export default function ShoppingList(props: Props) {
         const ref = dish.recipeId ? { recipeId: dish.recipeId } : { mealId: dish.mealId };
         const servings = dish.servings ?? recipe?.servings ?? 4;
         return [
-          recipe && { label: "Open recipe", href: `/recipes/${recipe.id}` },
-          meal && { label: "Open meal", href: `/meals/${meal.id}` },
+          recipe && { label: "Open recipe", href: withBase(`/recipes/${recipe.id}`) },
+          meal && { label: "Open meal", href: withBase(`/meals/${meal.id}`) },
           recipe && { label: "More servings", icon: "plus", disabled: servings >= 99, run: () => edit({ type: "setServings", ref, servings: servings + 1 }) },
           recipe && { label: "Fewer servings", icon: "minus", disabled: servings <= 1, run: () => edit({ type: "setServings", ref, servings: servings - 1 }) },
           "-",
@@ -313,7 +314,7 @@ export default function ShoppingList(props: Props) {
                 <option value="none">No plan — just what I add</option>
               </select>
             </label>
-            <a className="small" href="/plan" style={{ color: "var(--accent)", fontWeight: 600 }}>
+            <a className="small" href={withBase("/plan")} style={{ color: "var(--accent)", fontWeight: 600 }}>
               Open the planner
             </a>
           </section>
@@ -340,9 +341,9 @@ export default function ShoppingList(props: Props) {
                       key={dish.recipeId ?? `m:${dish.mealId}`}
                       data-dish={dish.recipeId ? `r:${dish.recipeId}` : `m:${dish.mealId}`}
                     >
-                      {image ? <img className="source-thumb" src={image} alt="" /> : <span className="source-thumb" />}
+                      {image ? <img className="source-thumb" src={withBase(image)} alt="" /> : <span className="source-thumb" />}
                       <span className="source-title">
-                        <a href={recipe ? `/recipes/${recipe.id}` : meal ? `/meals/${meal.id}` : "#"} style={{ textDecoration: "none" }}>
+                        <a href={recipe ? withBase(`/recipes/${recipe.id}`) : meal ? withBase(`/meals/${meal.id}`) : "#"} style={{ textDecoration: "none" }}>
                           {title}
                         </a>
                         <span className="small muted" style={{ display: "block", fontWeight: 400 }}>
@@ -422,7 +423,7 @@ export default function ShoppingList(props: Props) {
                         onClick={() => pick(p)}
                       >
                         {p.image ? (
-                          <img className="source-thumb" style={{ width: 36, height: 36 }} src={p.image} alt="" />
+                          <img className="source-thumb" style={{ width: 36, height: 36 }} src={withBase(p.image)} alt="" />
                         ) : (
                           <span className="source-thumb" style={{ width: 36, height: 36 }} />
                         )}
@@ -530,10 +531,10 @@ export default function ShoppingList(props: Props) {
           <div className="empty" style={{ marginTop: 12 }}>
             <strong style={{ fontSize: 17, color: "var(--ink)" }}>Your list is empty.</strong>
             <div className="actions">
-              <a className="btn btn-primary" href="/recipes">
+              <a className="btn btn-primary" href={withBase("/recipes")}>
                 <Icon name="book" /> Browse recipes
               </a>
-              <a className="btn" href="/plan">
+              <a className="btn" href={withBase("/plan")}>
                 <Icon name="calendar" /> Plan the week
               </a>
             </div>

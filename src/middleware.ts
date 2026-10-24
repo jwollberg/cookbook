@@ -19,6 +19,7 @@ import { isInternal, platform } from "./lib/server/platform";
 import { accessFor } from "./lib/server/people";
 import { DEV_USER } from "./lib/server/context";
 import registry from "./lib/apps.json";
+import { routePath, withBase } from "./lib/base";
 import { loadViewer, refreshProfile, upsertUser, userForEmail } from "./lib/server/db";
 
 // The icons hold nothing private (Access still stands in front of them).
@@ -46,13 +47,15 @@ function refuse(path: string, message: string): Response {
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { url, request, locals } = context;
+  // The route's own path: under oikos.atheosstudios.com the request's starts with /hestia.
+  const path = routePath(url.pathname);
   locals.runtime = platform();
   // Home's calls (the glance, forget), from the Home container on Vault: the token, never a login.
-  if (url.pathname.startsWith("/internal/")) {
+  if (path.startsWith("/internal/")) {
     return isInternal(request, locals.runtime.env) ? next() : new Response("Not found", { status: 404 });
   }
-  if (PUBLIC.some((re) => re.test(url.pathname))) return next();
-  if (RETIRED.some((re) => re.test(url.pathname))) return context.redirect("/");
+  if (PUBLIC.some((re) => re.test(path))) return next();
+  if (RETIRED.some((re) => re.test(path))) return context.redirect(withBase("/"));
 
   const env = locals.runtime.env;
   let viewer;
@@ -62,14 +65,14 @@ export const onRequest = defineMiddleware(async (context, next) => {
     locals.apps = registry.apps.map((a) => a.id);
   } else {
     if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) {
-      return refuse(url.pathname, "The login isn't set up yet, so nobody can get in.");
+      return refuse(path, "The login isn't set up yet, so nobody can get in.");
     }
     // The People list is checked on every request (Home's answer is kept for
     // half a minute), so taking someone off it locks them out within that.
     const claims = await verifyAccessJwt(accessToken(request), env);
     const access = claims ? await accessFor(claims.email, "kitchen", env) : null;
     if (!claims || !access?.allowed) {
-      return refuse(url.pathname, "This account isn't on the list. Ask Josh to add you.");
+      return refuse(path, "This account isn't on the list. Ask Josh to add you.");
     }
     viewer = await refreshProfile(env.DB, await userForEmail(env.DB, claims.email), claims);
     locals.owner = access.owner;

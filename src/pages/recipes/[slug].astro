@@ -1,4 +1,5 @@
 ---
+import { withBase } from "../../lib/base";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import IngredientList, { type IngredientName } from "../../components/IngredientList";
 import Icon from "../../components/Icon";
@@ -40,14 +41,14 @@ const stepGroups = recipe.steps.reduce(
 
 <SiteLayout title={recipe.title} description={recipe.description}>
   <div class="as-main" data-recipe-page={recipe.id}>
-    <a class="as-back" href="/recipes"><Icon name="chevronLeft" /> Recipes</a>
+    <a class="as-back" href={withBase("/recipes")}><Icon name="chevronLeft" /> Recipes</a>
     <header class="as-head">
       <div>
         <h1>{recipe.title}</h1>
         {recipe.subtitle && <p>{recipe.subtitle}</p>}
       </div>
       <div class="as-head-end">
-        <a class="btn" href={`/edit/recipe?id=${encodeURIComponent(recipe.id)}`} data-edit>
+        <a class="btn" href={withBase(`/edit/recipe?id=${encodeURIComponent(recipe.id)}`)} data-edit>
           <Icon name="pencil" /> Edit
         </a>
       </div>
@@ -58,7 +59,7 @@ const stepGroups = recipe.steps.reduce(
         <figure class="recipe-photo">
           {
             recipe.image ? (
-              <img src={recipe.image} alt={recipe.title} />
+              <img src={withBase(recipe.image)} alt={recipe.title} />
             ) : (
               <div class="no-photo">
                 <Icon name="camera" />
@@ -83,7 +84,7 @@ const stepGroups = recipe.steps.reduce(
             recipe.tags.length > 0 && (
               <div class="chips">
                 {recipe.tags.map((tag) => (
-                  <a class="chip" href={`/recipes?tag=${encodeURIComponent(tag)}`}>
+                  <a class="chip" href={withBase(`/recipes?tag=${encodeURIComponent(tag)}`)}>
                     {tag}
                   </a>
                 ))}
@@ -113,7 +114,7 @@ const stepGroups = recipe.steps.reduce(
                 <span class="label">Part of</span>
                 <div class="chips">
                   {partOf.map((m) => (
-                    <a class="chip chip-green" href={`/meals/${m.id}`}>
+                    <a class="chip chip-green" href={withBase(`/meals/${m.id}`)}>
                       <Icon name="cloche" />
                       {m.name}
                     </a>

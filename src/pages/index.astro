@@ -1,4 +1,5 @@
 ---
+import { withBase } from "../lib/base";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import RecipeBrowser from "../components/RecipeBrowser";
 import MealCard from "../components/MealCard.astro";
@@ -37,11 +38,11 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
   if (entry.mealId) {
     const meal = mealsById.get(entry.mealId);
     return meal
-      ? { title: meal.name, href: `/meals/${meal.id}`, image: mealImages(meal, recipesById)[0] }
+      ? { title: meal.name, href: withBase(`/meals/${meal.id}`), image: mealImages(meal, recipesById)[0] }
       : null;
   }
   const recipe = entry.recipeId ? recipesById.get(entry.recipeId) : undefined;
-  return recipe ? { title: recipe.title, href: `/recipes/${recipe.id}`, image: recipe.image } : null;
+  return recipe ? { title: recipe.title, href: withBase(`/recipes/${recipe.id}`), image: recipe.image } : null;
 };
 ---
 
@@ -53,15 +54,15 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
         <p>{summary}</p>
       </div>
       <div class="as-head-end">
-        <a class="btn" href="/shopping">
+        <a class="btn" href={withBase("/shopping")}>
           <Icon name="bag" /> Shopping list
           {onList > 0 && <span class="count-badge">{onList}</span>}
         </a>
-        <a class="btn btn-primary" href="/plan"><Icon name="calendar" /> Plan the week</a>
+        <a class="btn btn-primary" href={withBase("/plan")}><Icon name="calendar" /> Plan the week</a>
       </div>
     </header>
 
-    <form class="search as-tools" action="/recipes" method="get" role="search" style="max-width: 520px;">
+    <form class="search as-tools" action={withBase("/recipes")} method="get" role="search" style="max-width: 520px;">
       <Icon name="search" />
       <input class="input" type="search" name="q" placeholder="Search recipes…" aria-label="Search recipes" />
     </form>
@@ -69,13 +70,13 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
     <section class="as-card as-pad">
       <div class="as-card-h">
         <h2>This week</h2>
-        <a href="/plan">Open the planner <Icon name="arrowRight" /></a>
+        <a href={withBase("/plan")}>Open the planner <Icon name="arrowRight" /></a>
       </div>
       {
         planned === 0 ? (
           <div class="as-empty">
             <p>Nothing planned for {range} yet.</p>
-            <a class="btn btn-primary" href="/plan">
+            <a class="btn btn-primary" href={withBase("/plan")}>
               <Icon name="calendar" /> Plan the week
             </a>
           </div>
@@ -92,7 +93,7 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
                   const dish = dishFor(entry);
                   return dish ? (
                     <a class="week-dish" href={dish.href}>
-                      {dish.image ? <img src={dish.image} alt="" loading="lazy" /> : <span class="thumb-empty" />}
+                      {dish.image ? <img src={withBase(dish.image)} alt="" loading="lazy" /> : <span class="thumb-empty" />}
                       {dish.title}
                     </a>
                   ) : null;
@@ -106,7 +107,7 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
 
     <div class="as-sec-h">
       <h2>Recipes</h2>
-      <a href="/recipes">All {library.recipes.length} recipes <Icon name="arrowRight" /></a>
+      <a href={withBase("/recipes")}>All {library.recipes.length} recipes <Icon name="arrowRight" /></a>
     </div>
     <RecipeBrowser client:load recipes={latest} owner={owner} extras={planning.shopping} searchable={false} />
 
@@ -115,7 +116,7 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
         <>
           <div class="as-sec-h">
             <h2>Meals</h2>
-            <a href="/meals">
+            <a href={withBase("/meals")}>
               All meals <Icon name="arrowRight" />
             </a>
           </div>

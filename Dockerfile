@@ -5,6 +5,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY . .
+# Built a second time for oikos.atheosstudios.com/hestia: SITE_URL and BASE_PATH (astro.config.mjs).
+ARG SITE_URL BASE_PATH
 RUN npm run ci
 
 FROM node:24-alpine

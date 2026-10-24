@@ -1,4 +1,5 @@
 ---
+import { withBase } from "../lib/base";
 /**
  * Photo credits: who took each starter photo, and under what license. Out of the way on
  * purpose (the account menu links it), but always there: the CC BY and BY-SA licenses ask for
@@ -34,9 +35,9 @@ const credited = library.recipes
             const c = r.imageCredit!;
             return (
               <div class="as-row">
-                <img class="credit-thumb" src={r.image} alt="" loading="lazy" width="48" height="36" />
+                <img class="credit-thumb" src={withBase(r.image)} alt="" loading="lazy" width="48" height="36" />
                 <div class="credit-text">
-                  <a href={`/recipes/${r.id}`}>{r.title}</a>
+                  <a href={withBase(`/recipes/${r.id}`)}>{r.title}</a>
                   <small>
                     {c.title ? `“${c.title}” by ` : "By "}
                     {c.sourceUrl ? (

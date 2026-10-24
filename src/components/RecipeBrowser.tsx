@@ -3,6 +3,7 @@ import Icon from "./Icon";
 import { Toast, useList } from "./useList";
 import type { RecipeCard } from "../lib/format";
 import type { ShoppingExtras } from "../lib/schema";
+import { withBase } from "../lib/base";
 
 interface Props {
   recipes: RecipeCard[];
@@ -39,13 +40,13 @@ export default function RecipeBrowser({
       const { list, recipes } = live.current;
       const r = recipes.find((x) => x.id === el.dataset.recipeCard);
       if (!r) return null;
-      const href = `/recipes/${r.id}`;
+      const href = withBase(`/recipes/${r.id}`);
       return [
         { label: "Open recipe", href },
         list.has({ recipeId: r.id })
           ? { label: "Remove from shopping list", icon: "x", disabled: list.busy, run: () => list.remove({ recipeId: r.id }, r.title) }
           : { label: "Add to shopping list", icon: "bag", disabled: list.busy, run: () => list.add({ recipeId: r.id }, r.title) },
-        { label: "Edit recipe", icon: "pencil", href: `/edit/recipe?id=${encodeURIComponent(r.id)}` },
+        { label: "Edit recipe", icon: "pencil", href: withBase(`/edit/recipe?id=${encodeURIComponent(r.id)}`) },
         // Right-clicking the title link already offers its own "Copy link".
         ctx.link?.pathname !== href && { label: "Copy link", icon: "link", run: () => menu.copy(new URL(href, location.origin).href, "Link copied") },
       ];
@@ -120,7 +121,7 @@ export default function RecipeBrowser({
               <article key={r.id} className="as-tile rcard" data-recipe-card={r.id}>
                 <div className="as-tile-media rcard-media">
                   {r.image ? (
-                    <img src={r.image} alt="" loading="lazy" />
+                    <img src={withBase(r.image)} alt="" loading="lazy" />
                   ) : (
                     <div className="no-photo">
                       <Icon name="pot" />
@@ -140,7 +141,7 @@ export default function RecipeBrowser({
                   </button>
                 </div>
                 <div className="as-tile-body">
-                  <a className="rcard-link" href={`/recipes/${r.id}`}>
+                  <a className="rcard-link" href={withBase(`/recipes/${r.id}`)}>
                     <h3>{r.title}</h3>
                   </a>
                   {r.subtitle && <p>{r.subtitle}</p>}

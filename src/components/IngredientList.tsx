@@ -4,6 +4,7 @@ import { Toast, useList } from "./useList";
 import { formatUnitQuantity, UNITS } from "../lib/units";
 import { scaleIngredient, scaleFactor } from "../lib/scaling";
 import type { RecipeIngredient, ShoppingExtras } from "../lib/schema";
+import { withBase } from "../lib/base";
 
 export interface IngredientName {
   name: string;
@@ -160,7 +161,7 @@ export default function IngredientList({
           </button>
         ) : (
           <div className="actions" style={{ justifyContent: "space-between" }}>
-            <a className="btn" href="/shopping" style={{ flex: 1 }}>
+            <a className="btn" href={withBase("/shopping")} style={{ flex: 1 }}>
               <Icon name="check" /> On the list · {listed} servings
             </a>
             <button

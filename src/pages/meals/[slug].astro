@@ -1,4 +1,5 @@
 ---
+import { withBase } from "../../lib/base";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import AddDish from "../../components/AddDish";
 import Icon from "../../components/Icon";
@@ -36,7 +37,7 @@ const images = mealImages(meal, recipesById).slice(0, 4);
 
 <SiteLayout title={meal.name} description={meal.description}>
   <div class="as-main">
-    <a class="as-back" href="/meals"><Icon name="chevronLeft" /> Meals</a>
+    <a class="as-back" href={withBase("/meals")}><Icon name="chevronLeft" /> Meals</a>
     <header class="as-head">
       <div>
         <h1>{meal.name}</h1>
@@ -50,11 +51,11 @@ const images = mealImages(meal, recipesById).slice(0, 4);
           images.length > 1 ? (
             <div class={`collage collage-${images.length}`}>
               {images.map((src) => (
-                <img src={src} alt="" />
+                <img src={withBase(src)} alt="" />
               ))}
             </div>
           ) : images.length === 1 ? (
-            <img src={images[0]} alt="" />
+            <img src={withBase(images[0])} alt="" />
           ) : (
             <div class="no-photo">
               <Icon name="cloche" />
@@ -105,7 +106,7 @@ const images = mealImages(meal, recipesById).slice(0, 4);
             <article class="as-tile rcard" data-recipe={recipe.id}>
               <div class="as-tile-media rcard-media">
                 {recipe.image ? (
-                  <img src={recipe.image} alt="" loading="lazy" />
+                  <img src={withBase(recipe.image)} alt="" loading="lazy" />
                 ) : (
                   <div class="no-photo">
                     <Icon name="pot" />
@@ -114,7 +115,7 @@ const images = mealImages(meal, recipesById).slice(0, 4);
                 <span class="rcard-tag">{component.role}</span>
               </div>
               <div class="as-tile-body">
-                <a class="rcard-link" href={`/recipes/${recipe.id}`}>
+                <a class="rcard-link" href={withBase(`/recipes/${recipe.id}`)}>
                   <h3>{recipe.title}</h3>
                 </a>
                 <div class="rcard-meta">
@@ -145,7 +146,7 @@ const images = mealImages(meal, recipesById).slice(0, 4);
                     {step.text}
                     {recipe && (
                       <div style="margin-top: 8px;">
-                        <a class="chip" href={`/recipes/${recipe.id}`}>
+                        <a class="chip" href={withBase(`/recipes/${recipe.id}`)}>
                           {recipe.title}
                         </a>
                       </div>

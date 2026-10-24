@@ -8,6 +8,9 @@ import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 
 const site = process.env.SITE_URL || "https://hestia.atheosstudios.com";
+// The folder the app is served from: "/" on hestia., "/hestia" when built for
+// oikos.atheosstudios.com/hestia (plan-one-address-one-app). Links go through src/lib/base.ts.
+const base = process.env.BASE_PATH || "/";
 
 /**
  * Work around a React 19 + Vite dev-server interop bug.
@@ -39,6 +42,7 @@ const reactJsxDevRuntime = join(
 
 export default defineConfig({
   site,
+  base,
   // Every page is rendered per request by the Node server on Vault, behind sign-in. A
   // prerendered page would be a static file, and static files skip the gate.
   output: "server",

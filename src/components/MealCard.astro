@@ -1,4 +1,5 @@
 ---
+import { withBase } from "../lib/base";
 import Icon from "./Icon";
 import { formatMinutes, mealImages, mealMinutes } from "../lib/format";
 import type { Meal, Recipe } from "../lib/schema";
@@ -25,18 +26,18 @@ const time = formatMinutes(mealMinutes(meal, recipesById));
           <Icon name="cloche" />
         </div>
       ) : images.length === 1 ? (
-        <img src={images[0]} alt="" loading="lazy" />
+        <img src={withBase(images[0])} alt="" loading="lazy" />
       ) : (
         <div class={`collage collage-${images.length}`}>
           {images.map((src) => (
-            <img src={src} alt="" loading="lazy" />
+            <img src={withBase(src)} alt="" loading="lazy" />
           ))}
         </div>
       )
     }
   </div>
   <div class="as-tile-body">
-    <a class="rcard-link" href={`/meals/${meal.id}`}>
+    <a class="rcard-link" href={withBase(`/meals/${meal.id}`)}>
       <h3>{meal.name}</h3>
     </a>
     <p>{titles}</p>

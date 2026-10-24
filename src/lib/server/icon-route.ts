@@ -3,7 +3,8 @@
  * the app list (apps.ts, `homeIcon`): change the icon or color in Home's apps.json and these follow.
  */
 
+import { routePath } from "../base";
 import type { APIRoute } from "astro";
 import { homeIcon } from "./apps";
 
-export const GET: APIRoute = ({ url }) => homeIcon(process.env, "kitchen", url.pathname.slice(1));
+export const GET: APIRoute = ({ url }) => homeIcon(process.env, "kitchen", routePath(url.pathname).slice(1));

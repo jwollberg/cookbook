@@ -28,6 +28,12 @@ Browser ──► Cloudflare Access ──► tunnel ──► Node on Vault (As
             /data/photos/      uploaded photos
 ```
 
+- **One build, two addresses** (`plan-one-address-one-app` in Telos, its pilot): built with
+  `BASE_PATH=/hestia` and `SITE_URL=https://oikos.atheosstudios.com`, the same code serves
+  `oikos.atheosstudios.com/hestia`. Write every link, API call and photo as a root path and pass
+  it through `withBase` (`src/lib/base.ts`); the middleware reads routes through `routePath`. The
+  database keeps photos as root paths (`/photos/…`, `/images/…`), so both addresses share it.
+  `/cdn-cgi/` is Cloudflare's, never under the folder.
 - **Everything is rendered by the server, behind sign-in.** Static files (`dist/client/`: JS, CSS,
   the starter photos in `public/images/`) are served *before* the middleware runs and skip its
   gate (Access still stands in front). So **nothing private may ever be a static file** — no
