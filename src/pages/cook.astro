@@ -1,4 +1,5 @@
 ---
+import { withBase } from "../lib/base";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import CookSheet from "../components/CookSheet";
 import Icon from "../components/Icon";
@@ -20,10 +21,10 @@ const others = planning.plans.filter((p) => entryCount(p) > 0 && p.id !== plan?.
         <p>{kitchen}: every dish in the plan, in order, at the servings you planned.</p>
       </div>
       <div class="as-head-end no-print">
-        <a class="btn btn-sm" href={plan ? `/plan?week=${plan.days[0].date}` : "/plan"}>
+        <a class="btn btn-sm" href={withBase(plan ? `/plan?week=${plan.days[0].date}` : "/plan")}>
           <Icon name="calendar" /> Plan
         </a>
-        <a class="btn btn-sm" href="/shopping"><Icon name="bag" /> Shopping list</a>
+        <a class="btn btn-sm" href={withBase("/shopping")}><Icon name="bag" /> Shopping list</a>
         <button class="btn btn-sm btn-icon" aria-label="Print" onclick="window.print()">
           <Icon name="printer" />
         </button>
@@ -37,7 +38,7 @@ const others = planning.plans.filter((p) => entryCount(p) > 0 && p.id !== plan?.
             Other weeks:
           </span>
           {others.map((p) => (
-            <a class="chip" href={`/cook?plan=${p.id}`}>
+            <a class="chip" href={withBase(`/cook?plan=${p.id}`)}>
               {formatRange(p.days[0].date, p.days[p.days.length - 1].date)}
             </a>
           ))}
@@ -51,7 +52,7 @@ const others = planning.plans.filter((p) => entryCount(p) > 0 && p.id !== plan?.
       ) : (
         <div class="empty">
           <p>Nothing to cook yet.</p>
-          <a class="btn btn-primary" href="/plan">
+          <a class="btn btn-primary" href={withBase("/plan")}>
             <Icon name="calendar" /> Plan the week
           </a>
         </div>

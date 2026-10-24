@@ -1,4 +1,5 @@
 ---
+import { withBase } from "../../lib/base";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import Icon from "../../components/Icon";
 import { loadLibrary } from "../../lib/server/db";
@@ -15,7 +16,7 @@ const deleted = Astro.url.searchParams.has("deleted");
         <p>The shared recipe book: anything changed here changes for everyone.</p>
       </div>
       <div class="as-head-end">
-        <a class="btn btn-primary" href="/edit/recipe"><Icon name="plus" /> New recipe</a>
+        <a class="btn btn-primary" href={withBase("/edit/recipe")}><Icon name="plus" /> New recipe</a>
       </div>
     </header>
 
@@ -25,17 +26,17 @@ const deleted = Astro.url.searchParams.has("deleted");
       {
         library.recipes.map((r) => (
           <div class="source-row">
-            {r.image ? <img class="source-thumb" src={r.image} alt="" loading="lazy" /> : <span class="source-thumb" />}
+            {r.image ? <img class="source-thumb" src={withBase(r.image)} alt="" loading="lazy" /> : <span class="source-thumb" />}
             <span class="source-title">
               {r.title}
               <span class="small muted" style="display: block; font-weight: 400;">
                 {r.ingredients.length} ingredients · serves {r.servings}
               </span>
             </span>
-            <a class="btn btn-sm btn-ghost" href={`/recipes/${r.id}`}>
+            <a class="btn btn-sm btn-ghost" href={withBase(`/recipes/${r.id}`)}>
               View
             </a>
-            <a class="btn btn-sm" href={`/edit/recipe?id=${encodeURIComponent(r.id)}`}>
+            <a class="btn btn-sm" href={withBase(`/edit/recipe?id=${encodeURIComponent(r.id)}`)}>
               <Icon name="pencil" /> Edit
             </a>
           </div>
@@ -58,7 +59,7 @@ const deleted = Astro.url.searchParams.has("deleted");
                     {m.components.length} dishes
                   </span>
                 </span>
-                <a class="btn btn-sm btn-ghost" href={`/meals/${m.id}`}>
+                <a class="btn btn-sm btn-ghost" href={withBase(`/meals/${m.id}`)}>
                   View
                 </a>
               </div>

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { editList } from "../lib/api";
 import { findDish, type DishRef } from "../lib/list";
 import type { ListDish, ListEdit, ShoppingExtras } from "../lib/schema";
+import { withBase } from "../lib/base";
 
 export interface ToastMessage {
   text: string;
@@ -44,7 +45,7 @@ export function useList(owner: string, initial: ShoppingExtras) {
     [owner, show],
   );
 
-  const toList = { href: "/shopping", label: "View list" };
+  const toList = { href: withBase("/shopping"), label: "View list" };
 
   const add = (dish: ListDish, title: string) =>
     run({ type: "addDish", dish }, { text: `${title} is on the list`, link: toList });

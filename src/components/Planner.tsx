@@ -17,6 +17,7 @@ import type { MealPlan, PlanEntry } from "../lib/schema";
 import { addDays, formatDayLabel, formatRange, fromIso, isoDate } from "../lib/dates";
 import { emptyPlan, entryCount, sundayOf, planIdFor } from "../lib/plans";
 import { savePlan } from "../lib/api";
+import { withBase } from "../lib/base";
 
 export interface PlannerRecipe {
   id: string;
@@ -199,7 +200,7 @@ export default function Planner({ owner, plans, recipes, meals, today, sunday }:
     if (!menu) return;
     const L = () => live.current;
     const day = (date: string) => `${formatDayLabel(date)}${date === L().today ? " · today" : ""}`;
-    const dishHref = (e: PlanEntry) => (e.mealId ? `/meals/${e.mealId}` : `/recipes/${e.recipeId}`);
+    const dishHref = (e: PlanEntry) => withBase(e.mealId ? `/meals/${e.mealId}` : `/recipes/${e.recipeId}`);
     const off = [
       menu.add("[data-entry]", (el) => {
         const { plan, patchEntry, removeEntry, moveEntry } = L();
@@ -249,8 +250,8 @@ export default function Planner({ owner, plans, recipes, meals, today, sunday }:
           { label: "Next week", keys: "]", run: () => shift(1) },
           !isThisWeek && { label: "This week", icon: "calendar", keys: "T", run: () => goTo(sundayOf(today)) },
           count === 0 && lastWeek && entryCount(lastWeek) > 0 && { label: "Copy last week", icon: "copy", run: copyLastWeek },
-          { label: "Cooking sheet", href: `/cook?plan=${plan.id}` },
-          { label: "Shopping list", icon: "bag", href: "/shopping" },
+          { label: "Cooking sheet", href: withBase(`/cook?plan=${plan.id}`) },
+          { label: "Shopping list", icon: "bag", href: withBase("/shopping") },
         ];
       }),
       menu.key("[", "Previous week", () => L().shift(-1), { group: "Plan" }),
@@ -299,10 +300,10 @@ export default function Planner({ owner, plans, recipes, meals, today, sunday }:
               Copy last week
             </button>
           )}
-          <a className="btn btn-sm" href={`/cook?plan=${plan.id}`}>
+          <a className="btn btn-sm" href={withBase(`/cook?plan=${plan.id}`)}>
             <Icon name="pot" /> Cooking sheet
           </a>
-          <a className="btn btn-sm btn-primary" href="/shopping">
+          <a className="btn btn-sm btn-primary" href={withBase("/shopping")}>
             <Icon name="bag" /> Shopping list
           </a>
         </div>
@@ -387,7 +388,7 @@ export default function Planner({ owner, plans, recipes, meals, today, sunday }:
 // ---------------------------------------------------------------------------
 
 function Thumb({ image }: { image?: string }) {
-  return image ? <img src={image} alt="" loading="lazy" /> : <span className="thumb-empty" />;
+  return image ? <img src={withBase(image)} alt="" loading="lazy" /> : <span className="thumb-empty" />;
 }
 
 function LibraryItem({

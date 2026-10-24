@@ -5,6 +5,7 @@ import { AISLES, type Aisle } from "../lib/constants";
 import type { Ingredient, Recipe } from "../lib/schema";
 import { slugify, uniqueSlug } from "../lib/slug";
 import { deleteRecipe, downsizePhoto, draftFromLink, draftFromPhoto, removePhoto, saveRecipe, uploadPhoto, type RecipeDraft } from "../lib/api";
+import { withBase } from "../lib/base";
 
 const NEW = "__new__";
 
@@ -147,7 +148,7 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds,
       setRecipe(saved);
       if (isNew) {
         setIsNew(false);
-        window.history.replaceState(null, "", `/edit/recipe?id=${encodeURIComponent(saved.id)}`);
+        window.history.replaceState(null, "", withBase(`/edit/recipe?id=${encodeURIComponent(saved.id)}`));
       }
       setResult({ tone: "ok", text: "Saved — live for everyone now." });
     } catch (error) {
@@ -202,7 +203,7 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds,
     if (!window.confirm(`Delete “${recipe.title}” for everyone? This cannot be undone.`)) return;
     try {
       await deleteRecipe(recipe.id);
-      window.location.assign("/edit?deleted=1");
+      window.location.assign(withBase("/edit?deleted=1"));
     } catch (error) {
       setResult({ tone: "bad", text: error instanceof Error ? error.message : "Could not delete." });
     }
@@ -225,7 +226,7 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds,
         <div style={{ display: "flex", gap: 18, flexWrap: "wrap", alignItems: "center" }}>
           <div className="rcard-media" style={{ width: 220, flex: "none" }}>
             {photo ? (
-              <img src={photo} alt="" />
+              <img src={withBase(photo)} alt="" />
             ) : (
               <div className="no-photo">
                 <Icon name="camera" />
@@ -277,7 +278,7 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds,
             />
           </Field>
           <Field label="Address">
-            <input className="input" value={`/recipes/${recipe.id || slugify(recipe.title)}`} readOnly style={{ color: "var(--muted)" }} />
+            <input className="input" value={withBase(`/recipes/${recipe.id || slugify(recipe.title)}`)} readOnly style={{ color: "var(--muted)" }} />
           </Field>
         </div>
         <Field label="Description">
@@ -401,7 +402,7 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds,
           {saving ? "Saving…" : isNew ? "Create recipe" : "Save changes"}
         </button>
         {!isNew && (
-          <a className="btn" href={`/recipes/${recipe.id}`}>
+          <a className="btn" href={withBase(`/recipes/${recipe.id}`)}>
             View
           </a>
         )}

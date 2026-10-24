@@ -1,6 +1,7 @@
 import Icon from "./Icon";
 import { Toast, useList } from "./useList";
 import type { ShoppingExtras } from "../lib/schema";
+import { withBase } from "../lib/base";
 
 /** "Add to shopping list" for a whole meal — every dish in it, at its own servings. */
 export default function AddDish({
@@ -21,7 +22,7 @@ export default function AddDish({
     <div className="actions">
       {onList ? (
         <>
-          <a className="btn" href="/shopping">
+          <a className="btn" href={withBase("/shopping")}>
             <Icon name="check" /> On your list
           </a>
           <button className="btn btn-ghost btn-sm" disabled={list.busy} onClick={() => list.remove({ mealId }, title)}>

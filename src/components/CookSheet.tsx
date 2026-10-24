@@ -8,6 +8,7 @@ import { formatDayLabel } from "../lib/dates";
 import { formatUnitQuantity, UNITS } from "../lib/units";
 import { scaleIngredients } from "../lib/scaling";
 import type { Ingredient, Meal, MealPlan, Recipe } from "../lib/schema";
+import { withBase } from "../lib/base";
 
 interface Dish {
   recipe: Recipe;
@@ -100,7 +101,7 @@ function DishBlock({ dish, byId }: { dish: Dish; byId: Map<string, Ingredient> }
               {dish.role}
             </span>
           )}
-          <a href={`/recipes/${recipe.id}`} style={{ textDecoration: "none" }}>
+          <a href={withBase(`/recipes/${recipe.id}`)} style={{ textDecoration: "none" }}>
             {recipe.title}
           </a>
         </h3>

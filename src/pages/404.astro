@@ -1,4 +1,5 @@
 ---
+import { withBase } from "../lib/base";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import Icon from "../components/Icon";
 ---
@@ -12,8 +13,8 @@ import Icon from "../components/Icon";
       </div>
     </header>
     <div class="actions">
-      <a class="btn btn-primary" href="/recipes"><Icon name="book" /> Browse recipes</a>
-      <a class="btn" href="/">Home</a>
+      <a class="btn btn-primary" href={withBase("/recipes")}><Icon name="book" /> Browse recipes</a>
+      <a class="btn" href={withBase("/")}>Home</a>
     </div>
   </div>
 </SiteLayout>

@@ -7,6 +7,7 @@
 
 import { LIST_EVENT, countExtras } from "./list";
 import type { Ingredient, ListEdit, MealPlan, Recipe, ShoppingExtras } from "./schema";
+import { withBase } from "./base";
 
 export class ApiError extends Error {
   constructor(
@@ -20,7 +21,7 @@ export class ApiError extends Error {
 
 async function send<T>(method: string, path: string, body?: unknown, contentType?: string): Promise<T> {
   const isJson = body !== undefined && contentType === undefined;
-  const res = await fetch(path, {
+  const res = await fetch(withBase(path), {
     method,
     credentials: "same-origin",
     headers: body === undefined ? undefined : { "Content-Type": contentType ?? "application/json" },
