@@ -53,7 +53,8 @@
     for (const a of links) {
       if (seen.has(a.href)) continue;
       seen.add(a.href);
-      const label = a.textContent.trim();
+      // A count badge in the link ("Activity 3") is not part of its name.
+      const label = a.dataset.label || a.getAttribute("aria-label") || a.textContent.trim().replace(/\s*\d+$/, "");
       const key = [...label.toLowerCase()].find((c) => c >= "a" && c <= "z" && !used.has(c));
       if (key) used.add(key);
       out.push({ label, href: a.href, key, current: a.getAttribute("aria-current") === "page" });
@@ -67,7 +68,8 @@
   function groups(target) {
     const ctx = { target, selection: String(getSelection() ?? "").trim(), link: target.closest("a[href]"), image: target.closest("img") };
     const out = [], used = new Set();
-    for (let el = target; el && el !== doc.documentElement; el = el.parentElement) {
+    // Below a short page the click lands on <html>: start from <body>, so "body" items still show.
+    for (let el = target === doc.documentElement ? doc.body : target; el && el !== doc.documentElement; el = el.parentElement) {
       for (const p of providers) {
         if (used.has(p) || !el.matches(p.sel)) continue;
         used.add(p);
@@ -150,6 +152,7 @@
     list.forEach((g, i) => {
       if (i) m.append(Object.assign(doc.createElement("div"), { className: "as-ctx-sep", role: "separator" }));
       for (const it of g) {
+        if (!it) continue;
         if (it === "-") m.append(Object.assign(doc.createElement("div"), { className: "as-ctx-sep", role: "separator" }));
         else if (it.heading) m.append(Object.assign(doc.createElement("div"), { className: "as-ctx-h", textContent: it.heading }));
         else m.append(itemEl(it));
