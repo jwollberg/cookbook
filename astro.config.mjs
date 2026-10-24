@@ -55,6 +55,9 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    // Every script a page runs is a file of Hestia's own: the Content-Security-Policy
+    // (src/lib/server/shared-address.ts) allows no inline script it doesn't name.
+    build: { assetsInlineLimit: 0 },
     // Client only. Applied to the SSR environment as well, the raw CJS file
     // reaches Vite's module runner, which provides no `require` and throws
     // "require is not defined" while server-rendering the islands.
