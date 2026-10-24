@@ -31,8 +31,13 @@ import visible from "astro/runtime/client/visible.prebuilt.js";
 import island from "astro/runtime/server/astro-island.prebuilt.js";
 import islandDev from "astro/runtime/server/astro-island.prebuilt-dev.js";
 
-/** A script's CSP hash source: exactly the text between its <script> and </script>. */
-export const scriptHash = (code: string) => `'sha256-${createHash("sha256").update(code, "utf8").digest("base64")}'`;
+/**
+ * A script's CSP hash source: the text between its <script> and </script>, with its line endings
+ * as the browser hashes them (its HTML parser turns CRLF and lone CR into LF; a Windows checkout
+ * without eol=lf has CRLF).
+ */
+export const scriptHash = (code: string) =>
+  `'sha256-${createHash("sha256").update(code.replace(/\r\n?/g, "\n"), "utf8").digest("base64")}'`;
 
 /** The inline scripts Astro writes into a page with a React island (its loader and the client: directives). */
 export const ASTRO_INLINE = [island, islandDev, idle, load, media, only, visible];
