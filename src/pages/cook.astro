@@ -25,7 +25,7 @@ const others = planning.plans.filter((p) => entryCount(p) > 0 && p.id !== plan?.
           <Icon name="calendar" /> Plan
         </a>
         <a class="btn btn-sm" href={withBase("/shopping")}><Icon name="bag" /> Shopping list</a>
-        <button class="btn btn-sm btn-icon" aria-label="Print" onclick="window.print()">
+        <button class="btn btn-sm btn-icon" type="button" aria-label="Print" data-print>
           <Icon name="printer" />
         </button>
       </div>

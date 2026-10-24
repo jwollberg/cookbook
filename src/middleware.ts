@@ -11,8 +11,12 @@
  * Static files (JS, CSS, the starter photos) are served by Cloudflare before
  * the Worker runs and never reach this — which is exactly why nothing private
  * is ever a static file.
+ *
+ * Every answer carries the Content-Security-Policy, and a write must come from one of Hestia's
+ * own pages, never another app's folder on oikos.atheosstudios.com (lib/server/shared-address.ts).
  */
 
+import type { APIContext, MiddlewareNext } from "astro";
 import { defineMiddleware } from "astro:middleware";
 import { accessToken, verifyAccessJwt } from "./lib/server/access";
 import { isInternal, platform } from "./lib/server/platform";
@@ -21,6 +25,8 @@ import { DEV_USER } from "./lib/server/context";
 import registry from "./lib/apps.json";
 import { routePath, withBase } from "./lib/base";
 import { loadViewer, refreshProfile, upsertUser, userForEmail } from "./lib/server/db";
+import { crossSite } from "./lib/server/security";
+import { POLICY, refusesWrite } from "./lib/server/shared-address";
 
 // The icons hold nothing private (Access still stands in front of them).
 const PUBLIC = [/^\/robots\.txt$/, /^\/(apple-touch-icon|icon-192|icon-512|icon-maskable-512)\.png$/, /^\/favicon\.svg$/];
@@ -46,9 +52,23 @@ function refuse(path: string, message: string): Response {
 }
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  const response = await gate(context, next);
+  try {
+    response.headers.set("Content-Security-Policy", POLICY);
+    // Our own pages' requests carry their full address as the Referer (refusesWrite reads it).
+    response.headers.set("Referrer-Policy", "same-origin");
+  } catch {
+    /* immutable headers */
+  }
+  return response;
+});
+
+const gate = async (context: APIContext, next: MiddlewareNext): Promise<Response> => {
   const { url, request, locals } = context;
   // The route's own path: under oikos.atheosstudios.com the request's starts with /hestia.
   const path = routePath(url.pathname);
+  // A write from another app's folder on the shared address, or from another site: refused first.
+  if (refusesWrite(request, path)) return crossSite();
   locals.runtime = platform();
   // Home's calls (the glance, forget), from the Home container on Vault: the token, never a login.
   if (path.startsWith("/internal/")) {
@@ -103,4 +123,4 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
   return response;
-});
+};

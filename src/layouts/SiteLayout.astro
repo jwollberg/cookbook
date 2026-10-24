@@ -13,7 +13,7 @@ import bundled from "../lib/apps.json";
 import { appRegistry } from "../lib/server/apps";
 import { SIGN_OUT_URL } from "../lib/server/access";
 import { countList } from "../lib/server/db";
-import { BASE, routePath, withBase } from "../lib/base";
+import { routePath, withBase } from "../lib/base";
 
 // The app list is Home's (apps.ts): a change there reaches this switcher within a minute.
 const registry = await appRegistry(Astro.locals.runtime.env, bundled);
@@ -204,14 +204,20 @@ const svg = (inner: string) =>
       )
     }
 
-    <script is:inline define:vars={{ base: BASE }}>
+    <script>
+      // A file of Hestia's own, not inline: the Content-Security-Policy runs no inline script it
+      // doesn't name (lib/server/shared-address.ts).
+      import { BASE as base } from "../lib/base";
+
       // Menus are <details>: they open with no JavaScript at all. This only
       // closes them on an outside click or Escape, like a menu should — and
       // one menu opening closes the others.
       document.addEventListener("click", (event) => {
         document.querySelectorAll("details[data-menu][open]").forEach((menu) => {
-          if (!menu.contains(event.target)) menu.removeAttribute("open");
+          if (!menu.contains(event.target as Node)) menu.removeAttribute("open");
         });
+        // A Print button (the cooking sheet): no inline onclick, which the policy wouldn't run.
+        if ((event.target as Element | null)?.closest?.("[data-print]")) window.print();
       });
       document.addEventListener("keydown", (event) => {
         if (event.key !== "Escape") return;
@@ -219,8 +225,8 @@ const svg = (inner: string) =>
       });
       // Islands announce list changes; keep both badges in step.
       window.addEventListener("kitchen:list-changed", (event) => {
-        const count = event.detail?.count ?? 0;
-        document.querySelectorAll("[data-list-count]").forEach((badge) => {
+        const count = (event as CustomEvent<{ count?: number }>).detail?.count ?? 0;
+        document.querySelectorAll<HTMLElement>("[data-list-count]").forEach((badge) => {
           badge.textContent = String(count);
           badge.hidden = count === 0;
         });
@@ -242,14 +248,14 @@ const svg = (inner: string) =>
           printer: '<path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2"/><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4"/><path d="M7 15a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z"/>',
         });
         // The folder this build is served from ("" or "/hestia", lib/base.ts): the paths below are the routes'.
-        const at = (path) => base + path;
-        const link = (path) => new URL(path, location.origin).href;
+        const at = (path: string) => base + path;
+        const link = (path: string) => new URL(path, location.origin).href;
         // A recipe card a page drew (a meal's dishes); the recipe browser's cards add the list.
         // Right-clicking a card's title link already offers its own "Copy link".
-        const copyItem = (ctx, path) =>
+        const copyItem = (ctx: { link: HTMLAnchorElement | null }, path: string) =>
           ctx.link?.pathname !== path && { label: "Copy link", icon: "link", run: () => menu.copy(link(path), "Link copied") };
         menu.add("[data-recipe]", (el, ctx) => {
-          const id = el.dataset.recipe;
+          const id = el.dataset.recipe ?? "";
           return [
             { label: "Open recipe", href: at(`/recipes/${id}`) },
             { label: "Edit recipe", icon: "pencil", href: at(`/edit/recipe?id=${encodeURIComponent(id)}`) },
@@ -262,17 +268,17 @@ const svg = (inner: string) =>
         ]);
         // A recipe's own page: its Edit button, and the list button under its ingredients.
         menu.add("[data-recipe-page]", (el) => {
-          const add = document.querySelector("[data-list-add]");
+          const add = document.querySelector<HTMLButtonElement>("[data-list-add]");
           return [
-            { label: "Edit recipe", icon: "pencil", keys: "E", href: at(`/edit/recipe?id=${encodeURIComponent(el.dataset.recipePage)}`) },
-            add && { label: add.textContent.trim(), icon: "bag", disabled: add.disabled, run: () => add.click() },
+            { label: "Edit recipe", icon: "pencil", keys: "E", href: at(`/edit/recipe?id=${encodeURIComponent(el.dataset.recipePage ?? "")}`) },
+            add && { label: (add.textContent ?? "").trim(), icon: "bag", disabled: add.disabled, run: () => add.click() },
           ];
         });
-        menu.key("e", "Edit this recipe", () => document.querySelector("[data-recipe-page] [data-edit]")?.click(), {
+        menu.key("e", "Edit this recipe", () => document.querySelector<HTMLElement>("[data-recipe-page] [data-edit]")?.click(), {
           group: "Recipe",
           when: () => !!document.querySelector("[data-recipe-page]"),
         });
-        menu.key("n", "New recipe", () => document.querySelector("[data-new-recipe]")?.click(), {
+        menu.key("n", "New recipe", () => document.querySelector<HTMLElement>("[data-new-recipe]")?.click(), {
           group: "Recipes",
           when: () => !!document.querySelector("[data-new-recipe]"),
         });
