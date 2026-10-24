@@ -143,6 +143,7 @@ export default function IngredientList({
         {listed === null ? (
           <button
             className="btn btn-primary btn-block"
+            data-list-add
             disabled={list.busy}
             onClick={() => list.add({ recipeId, servings: wanted }, recipeTitle)}
           >
@@ -151,6 +152,7 @@ export default function IngredientList({
         ) : listed !== servings ? (
           <button
             className="btn btn-primary btn-block"
+            data-list-add
             disabled={list.busy}
             onClick={() => list.add({ recipeId, servings: wanted }, recipeTitle)}
           >

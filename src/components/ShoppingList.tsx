@@ -144,6 +144,14 @@ export default function ShoppingList(props: Props) {
     );
   }
 
+  function clearAll() {
+    if (!window.confirm("Clear everything added to your list? The plan stays as it is.")) return;
+    send({ type: "clear" }, () => {
+      setExtras((x) => applyListEdit(x, { type: "clear" }));
+      setTicked(new Set());
+    });
+  }
+
   // --- adding things -----------------------------------------------------
 
   const parsed = useMemo(() => parseItem(itemText, ingredients), [itemText, ingredients]);
@@ -190,6 +198,66 @@ export default function ShoppingList(props: Props) {
     setDishQuery("");
     setPickerOpen(false);
   }
+
+  // --- right-click (app-shell/menu.js) -------------------------------------
+  // A line, a recipe or meal on the list, a typed item, or the list column: the same
+  // edits as their buttons. Refs keep the handlers reading this render's state.
+
+  const itemInput = useRef<HTMLInputElement>(null);
+  const live = useRef({ lines, ticked, extras, done, includeStaples, recipesById, mealsById, ingredientsById, toggle, edit, send, clearAll });
+  live.current = { lines, ticked, extras, done, includeStaples, recipesById, mealsById, ingredientsById, toggle, edit, send, clearAll };
+  useEffect(() => {
+    const menu = window.atheosMenu;
+    if (!menu) return;
+    const L = () => live.current;
+    const addItem = () => {
+      setBuilderOpen(true);
+      setTimeout(() => itemInput.current?.focus());
+    };
+    const off = [
+      menu.add("[data-line]", (el) => {
+        const { lines, ticked, toggle } = L();
+        const line = lines.find((l) => l.key === el.dataset.line);
+        if (!line || line.covered) return null;
+        return [ticked.has(line.key)
+          ? { label: "Uncheck", icon: "x", run: () => toggle(line) }
+          : { label: "Check off", icon: "check", run: () => toggle(line) }];
+      }),
+      menu.add("[data-dish]", (el) => {
+        const { extras, recipesById, mealsById, edit } = L();
+        const dish = extras.dishes.find((d) => (d.recipeId ? `r:${d.recipeId}` : `m:${d.mealId}`) === el.dataset.dish);
+        if (!dish) return null;
+        const recipe = dish.recipeId ? recipesById.get(dish.recipeId) : undefined;
+        const meal = dish.mealId ? mealsById.get(dish.mealId) : undefined;
+        const ref = dish.recipeId ? { recipeId: dish.recipeId } : { mealId: dish.mealId };
+        const servings = dish.servings ?? recipe?.servings ?? 4;
+        return [
+          recipe && { label: "Open recipe", href: `/recipes/${recipe.id}` },
+          meal && { label: "Open meal", href: `/meals/${meal.id}` },
+          recipe && { label: "More servings", icon: "plus", disabled: servings >= 99, run: () => edit({ type: "setServings", ref, servings: servings + 1 }) },
+          recipe && { label: "Fewer servings", icon: "minus", disabled: servings <= 1, run: () => edit({ type: "setServings", ref, servings: servings - 1 }) },
+          "-",
+          { label: "Remove from the list", icon: "trash", danger: true, run: () => edit({ type: "removeDish", ref }) },
+        ];
+      }),
+      menu.add("[data-item]", (el) => [
+        { label: "Remove from the list", icon: "trash", danger: true, run: () => L().edit({ type: "removeItem", id: el.dataset.item! }) },
+      ]),
+      menu.add(".shop-list", () => {
+        const { extras, done, includeStaples, send, clearAll } = L();
+        return [
+          { label: "Add an item", icon: "plus", keys: "A", run: addItem },
+          done > 0 && { label: "Uncheck all", run: () => send({ type: "clearTicks" }, () => setTicked(new Set())) },
+          { label: "Show staples", checked: includeStaples, run: () => setIncludeStaples((on) => !on) },
+          { label: "Print the list", icon: "printer", run: () => window.print() },
+          (extras.dishes.length > 0 || extras.items.length > 0) && "-",
+          (extras.dishes.length > 0 || extras.items.length > 0) && { label: "Clear the list…", icon: "trash", danger: true, run: clearAll },
+        ];
+      }),
+      menu.key("a", "Add an item", addItem, { group: "Shopping list" }),
+    ];
+    return () => off.forEach((f) => f());
+  }, []);
 
   // --- render --------------------------------------------------------------
 
@@ -267,7 +335,11 @@ export default function ShoppingList(props: Props) {
                       : undefined);
                   const servings = dish.servings ?? recipe?.servings ?? 4;
                   return (
-                    <div className="source-row" key={dish.recipeId ?? `m:${dish.mealId}`}>
+                    <div
+                      className="source-row"
+                      key={dish.recipeId ?? `m:${dish.mealId}`}
+                      data-dish={dish.recipeId ? `r:${dish.recipeId}` : `m:${dish.mealId}`}
+                    >
                       {image ? <img className="source-thumb" src={image} alt="" /> : <span className="source-thumb" />}
                       <span className="source-title">
                         <a href={recipe ? `/recipes/${recipe.id}` : meal ? `/meals/${meal.id}` : "#"} style={{ textDecoration: "none" }}>
@@ -380,6 +452,7 @@ export default function ShoppingList(props: Props) {
               }}
             >
               <input
+                ref={itemInput}
                 className="input"
                 value={itemText}
                 onChange={(e) => setItemText(e.target.value)}
@@ -400,7 +473,7 @@ export default function ShoppingList(props: Props) {
             {extras.items.length > 0 && (
               <div className="chips">
                 {extras.items.map((item) => (
-                  <span key={item.id} className="chip" style={{ paddingRight: 4 }}>
+                  <span key={item.id} className="chip" style={{ paddingRight: 4 }} data-item={item.id}>
                     {describeItem(item, ingredientsById)}
                     <button
                       className="btn btn-ghost btn-icon"
@@ -446,16 +519,7 @@ export default function ShoppingList(props: Props) {
               <Icon name="printer" />
             </button>
             {(extras.dishes.length > 0 || extras.items.length > 0) && (
-              <button
-                className="btn btn-sm btn-ghost btn-danger"
-                onClick={() => {
-                  if (!window.confirm("Clear everything added to your list? The plan stays as it is.")) return;
-                  send({ type: "clear" }, () => {
-                    setExtras((x) => applyListEdit(x, { type: "clear" }));
-                    setTicked(new Set());
-                  });
-                }}
-              >
+              <button className="btn btn-sm btn-ghost btn-danger" onClick={clearAll}>
                 Clear
               </button>
             )}
@@ -498,6 +562,7 @@ export default function ShoppingList(props: Props) {
                       <button
                         key={line.key}
                         className="shop-row"
+                        data-line={line.key}
                         role="checkbox"
                         aria-checked={on}
                         disabled={line.covered}

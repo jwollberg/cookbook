@@ -121,6 +121,23 @@ export default function Planner({ owner, plans, recipes, meals, today, sunday }:
       days: p.days.map((d) => (d.date === date ? { ...d, entries: d.entries.filter((_, i) => i !== index) } : d)),
     }));
 
+  // Remove from one day and add to the end of another: the right-click menu's "Move to".
+  const moveEntry = (from: string, index: number, to: string) =>
+    update((p) => {
+      const entry = p.days.find((d) => d.date === from)?.entries[index];
+      if (!entry) return p;
+      return {
+        ...p,
+        days: p.days.map((d) =>
+          d.date === from
+            ? { ...d, entries: d.entries.filter((_, i) => i !== index) }
+            : d.date === to
+              ? { ...d, entries: [...d.entries, entry] }
+              : d,
+        ),
+      };
+    });
+
   function goTo(nextSunday: string) {
     if (dirty.current) {
       // Flush the pending save for the week being left before moving on.
@@ -173,6 +190,76 @@ export default function Planner({ owner, plans, recipes, meals, today, sunday }:
       })()
     : null;
 
+  // Right-click (app-shell/menu.js): a planned dish, a library card, or the week. The same
+  // changes as the buttons, the selects and dragging onto a day; refs keep them current.
+  const live = useRef({ plan, today, addTarget, isThisWeek, count, lastWeek, addEntry, patchEntry, removeEntry, moveEntry, shift, goTo, copyLastWeek });
+  live.current = { plan, today, addTarget, isThisWeek, count, lastWeek, addEntry, patchEntry, removeEntry, moveEntry, shift, goTo, copyLastWeek };
+  useEffect(() => {
+    const menu = window.atheosMenu;
+    if (!menu) return;
+    const L = () => live.current;
+    const day = (date: string) => `${formatDayLabel(date)}${date === L().today ? " · today" : ""}`;
+    const dishHref = (e: PlanEntry) => (e.mealId ? `/meals/${e.mealId}` : `/recipes/${e.recipeId}`);
+    const off = [
+      menu.add("[data-entry]", (el) => {
+        const { plan, patchEntry, removeEntry, moveEntry } = L();
+        const date = el.dataset.date!;
+        const index = Number(el.dataset.entry);
+        const entry = plan.days.find((d) => d.date === date)?.entries[index];
+        if (!entry) return null;
+        const known = entry.mealId ? mealsById.has(entry.mealId) : recipesById.has(entry.recipeId ?? "");
+        return [
+          known && { label: entry.mealId ? "Open meal" : "Open recipe", href: dishHref(entry) },
+          {
+            label: "Move to",
+            icon: "calendar",
+            items: plan.days.map((d) => ({
+              label: day(d.date),
+              checked: d.date === date,
+              run: () => d.date !== date && moveEntry(date, index, d.date),
+            })),
+          },
+          {
+            label: "Slot",
+            items: SLOTS.map((s) => ({
+              label: s[0].toUpperCase() + s.slice(1),
+              checked: entry.slot === s,
+              run: () => patchEntry(date, index, { slot: s }),
+            })),
+          },
+          "-",
+          { label: "Remove from the day", icon: "trash", danger: true, run: () => removeEntry(date, index) },
+        ];
+      }),
+      menu.add("[data-lib]", (el) => {
+        const { plan, today, addTarget, addEntry } = L();
+        const [, kind, id] = el.dataset.lib!.split(":");
+        const entry: PlanEntry = kind === "meal" ? { slot: "dinner", mealId: id } : { slot: "dinner", recipeId: id };
+        return [
+          { label: addTarget === today ? "Add to today" : `Add to ${formatDayLabel(addTarget)}`, icon: "plus", run: () => addEntry(addTarget, entry) },
+          { label: "Add to", icon: "calendar", items: plan.days.map((d) => ({ label: day(d.date), run: () => addEntry(d.date, entry) })) },
+          { label: kind === "meal" ? "Open meal" : "Open recipe", href: dishHref(entry) },
+        ];
+      }),
+      menu.add("[data-planner-bar], .planner-week", (_el, ctx) => {
+        if (ctx.target.closest("[data-entry]")) return null;
+        const { plan, today, isThisWeek, count, lastWeek, shift, goTo, copyLastWeek } = L();
+        return [
+          { label: "Previous week", keys: "[", run: () => shift(-1) },
+          { label: "Next week", keys: "]", run: () => shift(1) },
+          !isThisWeek && { label: "This week", icon: "calendar", keys: "T", run: () => goTo(sundayOf(today)) },
+          count === 0 && lastWeek && entryCount(lastWeek) > 0 && { label: "Copy last week", icon: "copy", run: copyLastWeek },
+          { label: "Cooking sheet", href: `/cook?plan=${plan.id}` },
+          { label: "Shopping list", icon: "bag", href: "/shopping" },
+        ];
+      }),
+      menu.key("[", "Previous week", () => L().shift(-1), { group: "Plan" }),
+      menu.key("]", "Next week", () => L().shift(1), { group: "Plan" }),
+      menu.key("t", "This week", () => L().goTo(sundayOf(L().today)), { group: "Plan", when: () => !L().isThisWeek }),
+    ];
+    return () => off.forEach((f) => f());
+  }, [recipesById, mealsById]);
+
   return (
     <DndContext
       sensors={sensors}
@@ -182,6 +269,7 @@ export default function Planner({ owner, plans, recipes, meals, today, sunday }:
     >
       <div
         className="actions"
+        data-planner-bar
         style={{ justifyContent: "space-between", marginBottom: 20, rowGap: 14 }}
       >
         <div className="actions" style={{ gap: 6 }}>
@@ -318,7 +406,7 @@ function LibraryItem({
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id });
 
   return (
-    <div ref={setNodeRef} className="lib-item" style={{ opacity: isDragging ? 0.4 : 1 }}>
+    <div ref={setNodeRef} className="lib-item" data-lib={id} style={{ opacity: isDragging ? 0.4 : 1 }}>
       {/*
         Listeners go on an inner handle rather than the measured node. dnd-kit's
         attributes include role="button", and the add button below would then be
@@ -377,7 +465,7 @@ function DayCell({
           const recipe = entry.recipeId ? recipesById.get(entry.recipeId) : undefined;
           const label = meal?.name ?? recipe?.title ?? `Missing: ${entry.mealId ?? entry.recipeId}`;
           return (
-            <div key={i} className="entry">
+            <div key={i} className="entry" data-date={date} data-entry={i}>
               <Thumb image={meal?.image ?? recipe?.image} />
               <span className="entry-title">{label}</span>
               <button className="btn btn-ghost btn-icon btn-sm" onClick={() => onRemove(i)} aria-label={`Remove ${label}`}>
