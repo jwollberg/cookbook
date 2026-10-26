@@ -139,6 +139,17 @@ comes from the kitchen's time zone (`TIME_ZONE`, America/Chicago; see `viewerTod
 converts to UTC first and near midnight reports the wrong day — it silently moves a dinner onto the
 wrong day's shopping list.
 
+## Prices
+
+Each ingredient may carry `price` (`PriceSchema`): one package's cost, its size in any unit, a
+label, the store and the date checked. `src/lib/pricing.ts` turns it into two numbers on purpose:
+a **list line rounds up to whole packages** (what the register charges), a **recipe costs only the
+share it uses** (Cost and Each on the recipe page, shown only when at most a quarter of its lines
+are unpriced). An amount that can't reach the package's unit through `gramsPerMl`/`countWeights`
+stays unpriced, never guessed, same rule as the list. Prices are shared library data, edited on
+**Prices** (`/edit/prices`, `PUT /api/ingredients/<id>/price`). The first set (2026-10-26) is
+Walmart's online prices, from its search pages (`__NEXT_DATA__` JSON fetched in a signed-out tab).
+
 ## Data model
 
 - `ingredients` — one canonical registry. Recipes reference ingredients **by id**, never by free

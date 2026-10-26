@@ -23,6 +23,28 @@ const unitId = z.enum(UNIT_IDS as [string, ...string[]]);
 // Ingredient
 // ---------------------------------------------------------------------------
 
+/**
+ * What one package of an ingredient costs at the store: "$2.97 for a 24 oz
+ * jar" is { amount: 2.97, quantity: 24, unit: "oz" } (or quantity 1, unit
+ * "jar"). An estimate for the shopping list and recipe costs, never a receipt.
+ */
+export const PriceSchema = z.object({
+  /** Dollars for one package. */
+  amount: z.number().positive().max(10000),
+  /** How much one package holds, in `unit`. */
+  quantity: z.number().positive(),
+  unit: unitId,
+  /** The package as the shelf tag names it: "Great Value, 2 lb bag". */
+  label: z.string().max(120).optional(),
+  store: z.string().max(60).optional(),
+  /** YYYY-MM-DD the price was checked. */
+  asOf: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+});
+export type Price = z.infer<typeof PriceSchema>;
+
 export const IngredientSchema = z.object({
   id: slug,
   name: z.string().min(1),
@@ -42,6 +64,8 @@ export const IngredientSchema = z.object({
   /** Preferred unit when an editor adds this ingredient to a recipe. */
   defaultUnit: unitId.optional(),
   notes: z.string().optional(),
+  /** Estimated price of one package, for the shopping list's and recipes' costs. */
+  price: PriceSchema.optional(),
 });
 export type Ingredient = z.infer<typeof IngredientSchema>;
 

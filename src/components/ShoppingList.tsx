@@ -3,6 +3,7 @@ import Icon from "./Icon";
 import { Toast, type ToastMessage } from "./useList";
 import { announceList, editList, fetchList, type ListState } from "../lib/api";
 import { buildShoppingList, expandDishes, expandPlan, type ShoppingLine } from "../lib/shopping";
+import { formatMoney, priceList, type LinePrice } from "../lib/pricing";
 import { applyListEdit, describeItem, newItemId, parseItem } from "../lib/list";
 import { entryCount, pickCurrentPlan, resolvePlan } from "../lib/plans";
 import { formatRange } from "../lib/dates";
@@ -40,6 +41,19 @@ interface Pickable {
 
 const planLabel = (plan: MealPlan) =>
   `${formatRange(plan.days[0].date, plan.days[plan.days.length - 1].date)} · ${entryCount(plan)} planned`;
+
+/** A line's estimated cost, with how many packages when it's more than one. */
+function LineCost({ priced }: { priced: LinePrice | undefined }) {
+  if (!priced) return <span className="shop-price" />;
+  const { packages, price } = priced;
+  const tag = [price.label, price.store, price.asOf].filter(Boolean).join(" · ");
+  return (
+    <span className="shop-price" title={tag || undefined}>
+      {formatMoney(priced.cost)}
+      {packages > 1 && <span className="shop-from">{`${packages} × ${formatMoney(price.amount)}`}</span>}
+    </span>
+  );
+}
 
 export default function ShoppingList(props: Props) {
   const { owner, ingredients, recipes, meals, plans, pantry, today } = props;
@@ -80,6 +94,7 @@ export default function ShoppingList(props: Props) {
   const toBuy = lines.filter((l) => !l.covered);
   const done = toBuy.filter((l) => ticked.has(l.key)).length;
   const hasAnything = lines.length > 0;
+  const cost = useMemo(() => priceList(list, ingredientsById, ticked), [list, ingredientsById, ticked]);
 
   // An empty list opens the builder on a phone; a full one leads with the list.
   useEffect(() => setBuilderOpen(!hasAnything), []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -497,6 +512,13 @@ export default function ShoppingList(props: Props) {
         <div className="shop-toolbar no-print">
           <span className="num" style={{ fontWeight: 650 }}>
             {toBuy.length === 0 ? "Nothing to buy yet" : `${done} of ${toBuy.length} in the cart`}
+            {cost.total > 0 && (
+              <span className="muted" style={{ fontWeight: 400 }}>
+                {" · about "}
+                {formatMoney(cost.total)}
+                {done > 0 && cost.left < cost.total && `, ${formatMoney(cost.left)} to go`}
+              </span>
+            )}
           </span>
           <div className="actions" style={{ gap: 6 }}>
             <label className="small" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginRight: 4 }}>
@@ -577,6 +599,7 @@ export default function ShoppingList(props: Props) {
                           {line.name}
                           {from && <span className="shop-from">{from}</span>}
                         </span>
+                        <LineCost priced={cost.byLine.get(line.key)} />
                       </button>
                     );
                   })}
@@ -584,6 +607,14 @@ export default function ShoppingList(props: Props) {
               );
             })}
           </div>
+        )}
+
+        {cost.total > 0 && (
+          <p className="small muted" style={{ marginTop: 12 }}>
+            Prices are estimates for whole packages
+            {cost.unpriced > 0 && `; ${cost.unpriced} item${cost.unpriced === 1 ? " has" : "s have"} no price yet`}.{" "}
+            <a href={withBase("/edit/prices")}>Edit prices</a>
+          </p>
         )}
 
         {list.splitLines.length > 0 && (
