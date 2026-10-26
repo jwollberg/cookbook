@@ -1120,7 +1120,7 @@
 
   .shop-row {
     display: grid;
-    grid-template-columns: 28px 84px 1fr;
+    grid-template-columns: 28px 84px 1fr auto;
     align-items: baseline;
     gap: 12px;
     width: 100%;
@@ -1175,6 +1175,48 @@
     font-size: 12.5px;
     color: var(--muted);
     text-decoration: none;
+  }
+  .shop-price {
+    min-width: 52px;
+    text-align: right;
+    font-size: 14px;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .shop-row[aria-checked="true"] .shop-price {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  /* Prices page: name, $ amount, package size, package description, save. */
+  .price-row {
+    display: grid;
+    grid-template-columns: minmax(160px, 1fr) 96px auto minmax(140px, 200px) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .price-name {
+    min-width: 0;
+    color: var(--ink);
+  }
+  .price-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .price-field .input {
+    width: 72px;
+  }
+  @media (max-width: 760px) {
+    .price-row {
+      grid-template-columns: 1fr 1fr;
+    }
+    .price-name,
+    .price-label {
+      grid-column: 1 / -1;
+    }
   }
 
   .source-row {

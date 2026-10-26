@@ -1,0 +1,28 @@
+---
+import { withBase } from "../../lib/base";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import Icon from "../../components/Icon";
+import PriceEditor from "../../components/PriceEditor";
+import { loadLibrary } from "../../lib/server/db";
+import { viewerToday } from "../../lib/server/page";
+
+const library = await loadLibrary(Astro.locals.runtime.env.DB);
+const usage: Record<string, number> = {};
+for (const recipe of library.recipes) {
+  for (const id of new Set(recipe.ingredients.map((l) => l.ingredientId))) usage[id] = (usage[id] ?? 0) + 1;
+}
+---
+
+<SiteLayout title="Prices" description="What each ingredient costs, for the shopping list's and recipes' estimates.">
+  <div class="as-main">
+    <a class="as-back" href={withBase("/edit")}><Icon name="chevronLeft" /> Edit recipes</a>
+    <header class="as-head">
+      <div>
+        <h1>Prices</h1>
+        <p>One package's price per ingredient. Shared by everyone; the shopping list and recipes estimate from it.</p>
+      </div>
+    </header>
+
+    <PriceEditor client:load ingredients={library.ingredients} usage={usage} today={viewerToday(Astro.locals)} />
+  </div>
+</SiteLayout>

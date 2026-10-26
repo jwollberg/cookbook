@@ -16,6 +16,7 @@ const deleted = Astro.url.searchParams.has("deleted");
         <p>The shared recipe book: anything changed here changes for everyone.</p>
       </div>
       <div class="as-head-end">
+        <a class="btn" href={withBase("/edit/prices")}>Prices</a>
         <a class="btn btn-primary" href={withBase("/edit/recipe")}><Icon name="plus" /> New recipe</a>
       </div>
     </header>

@@ -5,6 +5,7 @@ import IngredientList, { type IngredientName } from "../../components/Ingredient
 import Icon from "../../components/Icon";
 import { loadKitchen } from "../../lib/server/page";
 import { formatMinutes } from "../../lib/format";
+import { formatMoney, recipeCost } from "../../lib/pricing";
 
 const { library, planning, owner, ingredientsById } = await loadKitchen(Astro.locals);
 const recipe = library.recipes.find((r) => r.id === Astro.params.slug);
@@ -19,11 +20,19 @@ const names: Record<string, IngredientName> = Object.fromEntries(
 );
 const partOf = library.meals.filter((m) => m.components.some((c) => c.recipeId === recipe.id));
 
+// The share of each package the recipe uses, at its own servings. Shown only
+// when most of it is priced: a cost missing the meat would mislead.
+const cost = recipeCost(recipe, ingredientsById);
+const costed = recipe.ingredients.filter((l) => !l.optional).length;
+const showCost = cost.total > 0 && cost.unpriced.length <= costed / 4;
+
 const stats = [
   { label: "Prep", value: formatMinutes(recipe.prepMin) },
   { label: "Cook", value: formatMinutes(recipe.cookMin) },
   { label: "Chill", value: formatMinutes(recipe.restMin) },
   { label: "Serves", value: String(recipe.servings) },
+  { label: "Cost", value: showCost ? `~${formatMoney(cost.total)}` : null },
+  { label: "Each", value: showCost ? `~${formatMoney(cost.perServing)}` : null },
 ].filter((s) => s.value);
 
 // Group steps the way the ingredients group, preserving authoring order.

@@ -25,6 +25,7 @@ import {
   type Meal,
   type MealPlan,
   type PantryItem,
+  type Price,
   type Recipe,
   type ShoppingExtras,
 } from "../schema";
@@ -217,6 +218,28 @@ export async function loadLibrary(db: D1Database): Promise<Library> {
     ),
     meals: parseDocs(meals.results, MealSchema, "meal").sort((a, b) => a.name.localeCompare(b.name)),
   };
+}
+
+/**
+ * Set or clear one ingredient's price, leaving the rest of it as it is. Null
+ * when there's no such ingredient. Ingredients are shared, like recipes, so
+ * the price changes for everyone.
+ */
+export async function saveIngredientPrice(
+  db: D1Database,
+  id: string,
+  price: Price | null,
+  userId: string,
+): Promise<Ingredient | null> {
+  const row = await db.prepare("SELECT data FROM ingredients WHERE id = ?").bind(id).first<{ data: string }>();
+  const current = row ? parseDocs([row], IngredientSchema, "ingredient")[0] : undefined;
+  if (!current) return null;
+  const doc = IngredientSchema.parse({ ...current, price: price ?? undefined });
+  await db
+    .prepare("UPDATE ingredients SET data = ?, updated_at = ?, updated_by = ? WHERE id = ?")
+    .bind(JSON.stringify(doc), now(), userId, id)
+    .run();
+  return doc;
 }
 
 export async function loadRecipe(db: D1Database, id: string): Promise<Recipe | null> {

@@ -6,7 +6,7 @@
  */
 
 import { LIST_EVENT, countExtras } from "./list";
-import type { Ingredient, ListEdit, MealPlan, Recipe, ShoppingExtras } from "./schema";
+import type { Ingredient, ListEdit, MealPlan, Price, Recipe, ShoppingExtras } from "./schema";
 import { withBase } from "./base";
 
 export class ApiError extends Error {
@@ -47,6 +47,10 @@ export const saveRecipe = (recipe: Recipe, newIngredients: Ingredient[]) =>
     recipe,
     newIngredients,
   });
+
+/** Set an ingredient's price, or clear it with null. */
+export const saveIngredientPrice = (id: string, price: Price | null) =>
+  send<{ ingredient: Ingredient }>("PUT", `/api/ingredients/${encodeURIComponent(id)}/price`, { price });
 
 export const deleteRecipe = (id: string) =>
   send<{ ok: true }>("DELETE", `/api/recipes/${encodeURIComponent(id)}`);
