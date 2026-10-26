@@ -223,10 +223,7 @@ export default function ShoppingList(props: Props) {
     const menu = window.atheosMenu;
     if (!menu) return;
     const L = () => live.current;
-    const addItem = () => {
-      setBuilderOpen(true);
-      setTimeout(() => itemInput.current?.focus());
-    };
+    const addItem = () => itemInput.current?.focus();
     const off = [
       menu.add("[data-line]", (el) => {
         const { lines, ticked, toggle } = L();
@@ -457,15 +454,9 @@ export default function ShoppingList(props: Props) {
           {/* loose items */}
           <section className="builder-section">
             <span className="field-label">Anything else</span>
-            <ItemPicker
-              ingredients={ingredients}
-              listed={listedItems}
-              today={today}
-              inputRef={itemInput}
-              onAdd={(item) => edit({ type: "addItem", item })}
-              onCreated={(ingredient) => setIngredients((all) => [...all, ingredient])}
-              onError={(text) => show({ text })}
-            />
+            {extras.items.length === 0 && (
+              <p className="small muted">Add other things with the box at the top of the list.</p>
+            )}
             {extras.items.length > 0 && (
               <div className="chips">
                 {extras.items.map((item) => (
@@ -527,6 +518,18 @@ export default function ShoppingList(props: Props) {
               </button>
             )}
           </div>
+        </div>
+
+        <div className="shop-add no-print">
+          <ItemPicker
+            ingredients={ingredients}
+            listed={listedItems}
+            today={today}
+            inputRef={itemInput}
+            onAdd={(item) => edit({ type: "addItem", item })}
+            onCreated={(ingredient) => setIngredients((all) => [...all, ingredient])}
+            onError={(text) => show({ text })}
+          />
         </div>
 
         {!hasAnything ? (

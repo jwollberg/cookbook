@@ -1342,6 +1342,9 @@
     box-shadow: var(--shadow-lg);
   }
 
+  .shop-add {
+    margin-bottom: 12px;
+  }
   /* The list's item picker: aisle filters pinned above a long scrolling list. */
   .item-picker {
     max-height: min(420px, 60vh);
@@ -1354,6 +1357,13 @@
     padding: 8px 2px;
     background: var(--surface);
     text-transform: capitalize;
+    /* One row that scrolls sideways, so the items start right under it on a phone. */
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .item-aisles .chip {
+    flex: none;
   }
   .item-picker .menu-item .small {
     text-transform: none;

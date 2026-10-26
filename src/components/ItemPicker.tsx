@@ -185,17 +185,6 @@ export default function ItemPicker({ ingredients, listed, today, inputRef, onAdd
               </button>
             ))}
           </div>
-          {name && !saved && (
-            <button type="button" className="menu-item" role="option" aria-selected={false} onClick={startNew}>
-              <Icon name="plus" />
-              <span className="grow">
-                Save “{name}” as a new item
-                <span className="small muted" style={{ display: "block" }}>
-                  It stays in this list for next time
-                </span>
-              </span>
-            </button>
-          )}
           {results.slice(0, SHOWN).map((i) => (
             <button
               key={i.id}
@@ -216,6 +205,17 @@ export default function ItemPicker({ ingredients, listed, today, inputRef, onAdd
               {listed.has(i.id) && <Icon name="check" />}
             </button>
           ))}
+          {name && !saved && (
+            <button type="button" className="menu-item" role="option" aria-selected={false} onClick={startNew}>
+              <Icon name="plus" />
+              <span className="grow">
+                Save “{name}” as a new item
+                <span className="small muted" style={{ display: "block" }}>
+                  It stays in this list for next time
+                </span>
+              </span>
+            </button>
+          )}
           {results.length > SHOWN && (
             <p className="small muted" style={{ padding: "6px 10px" }}>
               {results.length - SHOWN} more: type to narrow them down.
