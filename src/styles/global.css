@@ -1209,9 +1209,12 @@
   .price-field .input {
     width: 72px;
   }
+  .price-field .select {
+    min-width: 76px;
+  }
   @media (max-width: 760px) {
     .price-row {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: auto 1fr;
     }
     .price-name,
     .price-label {
