@@ -12,6 +12,8 @@ export const AISLES = [
   "pantry",
   "spices",
   "frozen",
+  /** Not food: paper towels, detergent. Saved for the list, never offered to a recipe. */
+  "household",
   "other",
 ] as const;
 export type Aisle = (typeof AISLES)[number];

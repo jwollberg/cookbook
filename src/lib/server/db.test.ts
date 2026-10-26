@@ -30,6 +30,7 @@ import { PUT as putPlan } from "../../pages/api/plans/[id]";
 import { GET as getList, POST as postList } from "../../pages/api/shopping";
 import { POST as glanceRoute } from "../../pages/internal/glance";
 import { POST as forgetRoute } from "../../pages/internal/forget";
+import { POST as createItem } from "../../pages/api/ingredients/index";
 
 const MIGRATIONS = join(process.cwd(), "migrations");
 const SEED = join(process.cwd(), "seed");
@@ -440,5 +441,22 @@ describe("migration 0002: households to people", () => {
     db = openWith();
     expect(db.sqlite.prepare("SELECT COUNT(*) AS n FROM plans").get()).toEqual({ n: 0 });
     expect((await loadLibrary(db)).meals.length).toBe(readdirSync(join(SEED, "meals")).length);
+  });
+});
+
+describe("saving an item from the list", () => {
+  it("adds it to everyone's library, and refuses a second one with the same id", async () => {
+    db = openWith();
+    seedLibrary(db);
+    const josh = await upsertUser(db, { id: "google-sub-josh", email: "josh.wollberg@gmail.com", name: "Josh Wollberg" });
+    const towels = { id: "paper-towels", name: "Paper towels", aisle: "household", aliases: [], isStaple: false, defaultUnit: "package" };
+
+    const res = await call(createItem, josh, post("/api/ingredients", { ingredient: towels }));
+    expect(res.status).toBe(201);
+    expect((await loadLibrary(db)).ingredients.find((i) => i.id === "paper-towels")?.aisle).toBe("household");
+
+    const again = await call(createItem, josh, post("/api/ingredients", { ingredient: { ...towels, name: "Towels" } }));
+    expect(again.status).toBe(409);
+    expect((await loadLibrary(db)).ingredients.find((i) => i.id === "paper-towels")?.name).toBe("Paper towels");
   });
 });

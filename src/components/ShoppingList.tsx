@@ -4,7 +4,8 @@ import { Toast, type ToastMessage } from "./useList";
 import { announceList, editList, fetchList, type ListState } from "../lib/api";
 import { buildShoppingList, expandDishes, expandPlan, type ShoppingLine } from "../lib/shopping";
 import { formatMoney, priceList, type LinePrice } from "../lib/pricing";
-import { applyListEdit, describeItem, newItemId, parseItem } from "../lib/list";
+import { applyListEdit, describeItem, newItemId } from "../lib/list";
+import ItemPicker from "./ItemPicker";
 import { entryCount, pickCurrentPlan, resolvePlan } from "../lib/plans";
 import { formatRange } from "../lib/dates";
 import type {
@@ -56,14 +57,15 @@ function LineCost({ priced }: { priced: LinePrice | undefined }) {
 }
 
 export default function ShoppingList(props: Props) {
-  const { owner, ingredients, recipes, meals, plans, pantry, today } = props;
+  const { owner, recipes, meals, plans, pantry, today } = props;
 
+  // The library grows when an item is saved from the picker; the list needs it to name and price that line.
+  const [ingredients, setIngredients] = useState(props.ingredients);
   const [extras, setExtras] = useState(props.extras);
   const [ticked, setTicked] = useState(() => new Set(props.ticked));
   const [includeStaples, setIncludeStaples] = useState(false);
   const [toast, setToast] = useState<ToastMessage | null>(null);
   const [builderOpen, setBuilderOpen] = useState(false);
-  const [itemText, setItemText] = useState("");
   const [dishQuery, setDishQuery] = useState("");
   const [pickerOpen, setPickerOpen] = useState(false);
 
@@ -170,15 +172,10 @@ export default function ShoppingList(props: Props) {
 
   // --- adding things -----------------------------------------------------
 
-  const parsed = useMemo(() => parseItem(itemText, ingredients), [itemText, ingredients]);
-  const preview = parsed ? describeItem({ id: "preview", ...parsed }, ingredientsById) : "";
-  const previewAisle = parsed?.ingredientId ? ingredientsById.get(parsed.ingredientId)?.aisle : undefined;
-
-  function addTyped() {
-    if (!parsed) return;
-    edit({ type: "addItem", item: parsed });
-    setItemText("");
-  }
+  const listedItems = useMemo(
+    () => new Set(extras.items.flatMap((i) => (i.ingredientId ? [i.ingredientId] : []))),
+    [extras.items],
+  );
 
   const pickables: Pickable[] = useMemo(
     () => [
@@ -460,32 +457,15 @@ export default function ShoppingList(props: Props) {
           {/* loose items */}
           <section className="builder-section">
             <span className="field-label">Anything else</span>
-            <form
-              style={{ display: "flex", gap: 8 }}
-              onSubmit={(e) => {
-                e.preventDefault();
-                addTyped();
-              }}
-            >
-              <input
-                ref={itemInput}
-                className="input"
-                value={itemText}
-                onChange={(e) => setItemText(e.target.value)}
-                placeholder="2 lb ground beef, milk, paper towels…"
-                aria-label="Add an item"
-                enterKeyHint="done"
-              />
-              <button className="btn btn-dark btn-icon" disabled={!parsed} aria-label="Add item">
-                <Icon name="plus" />
-              </button>
-            </form>
-            {parsed && (
-              <p className="small muted" aria-live="polite">
-                Adds <strong style={{ color: "var(--ink)" }}>{preview}</strong>
-                {previewAisle ? ` · ${previewAisle}` : " · other"}
-              </p>
-            )}
+            <ItemPicker
+              ingredients={ingredients}
+              listed={listedItems}
+              today={today}
+              inputRef={itemInput}
+              onAdd={(item) => edit({ type: "addItem", item })}
+              onCreated={(ingredient) => setIngredients((all) => [...all, ingredient])}
+              onError={(text) => show({ text })}
+            />
             {extras.items.length > 0 && (
               <div className="chips">
                 {extras.items.map((item) => (
