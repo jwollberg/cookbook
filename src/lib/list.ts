@@ -8,6 +8,7 @@
  */
 
 import { fromBase, resolveUnit, toBase, UNITS, dimensionOf, formatUnitQuantity } from "./units";
+import { AISLES, type Aisle } from "./constants";
 import type { Ingredient, ListDish, ListEdit, ListItem, ShoppingExtras } from "./schema";
 
 /** Dispatched on window when the list changes, so the nav badge can follow. */
@@ -202,6 +203,50 @@ function matchQuantity(text: string): { value: number; rest: string } | null {
   if (m) return { value: GLYPHS[m[1]], rest: m[2] };
 
   return null;
+}
+
+/**
+ * What's typed, minus a leading amount: "2 lb ground beef" → "ground beef",
+ * "3 paper towels" → "paper towels". A unit is only dropped when a name is
+ * left after it, as in parseItem.
+ */
+export function stripAmount(text: string): string {
+  const raw = text.trim().replace(/\s+/g, " ");
+  const q = matchQuantity(raw);
+  if (!q || !q.rest) return raw;
+  const words = q.rest.split(" ");
+  for (const n of [2, 1]) {
+    if (words.length > n && resolveUnit(words.slice(0, n).join(" "))) return words.slice(n).join(" ");
+  }
+  return q.rest;
+}
+
+const aisleOrder = (aisle: Aisle) => AISLES.indexOf(aisle);
+
+/**
+ * The saved items a list's picker shows for what's typed: every registry
+ * entry whose name, plural or an alias contains it, names that start with it
+ * first. Nothing typed lists them all in store order. `aisle` narrows to one.
+ */
+export function searchItems(ingredients: Ingredient[], text: string, aisle?: Aisle): Ingredient[] {
+  const term = normalise(stripAmount(text));
+  const pool = aisle ? ingredients.filter((i) => i.aisle === aisle) : ingredients;
+  if (!term) {
+    return [...pool].sort((a, b) => aisleOrder(a.aisle) - aisleOrder(b.aisle) || a.name.localeCompare(b.name));
+  }
+  const scored: [number, Ingredient][] = [];
+  for (const ingredient of pool) {
+    const keys = keysFor(ingredient);
+    if (keys.some((k) => k.startsWith(term) || k.includes(` ${term}`))) scored.push([0, ingredient]);
+    else if (keys.some((k) => k.includes(term))) scored.push([1, ingredient]);
+  }
+  return scored.sort((a, b) => a[0] - b[0] || a[1].name.localeCompare(b[1].name)).map(([, i]) => i);
+}
+
+/** True when the typed name is already saved under that exact name, plural or alias. */
+export function isSavedName(ingredients: Ingredient[], text: string): boolean {
+  const term = normalise(stripAmount(text));
+  return Boolean(term) && ingredients.some((i) => keysFor(i).includes(term));
 }
 
 function normalise(text: string): string {

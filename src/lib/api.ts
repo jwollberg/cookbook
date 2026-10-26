@@ -48,6 +48,10 @@ export const saveRecipe = (recipe: Recipe, newIngredients: Ingredient[]) =>
     newIngredients,
   });
 
+/** Save a new item to the shared library (409 when its id is taken). */
+export const createIngredient = (ingredient: Ingredient) =>
+  send<{ ingredient: Ingredient }>("POST", "/api/ingredients", { ingredient });
+
 /** Set an ingredient's price, or clear it with null. */
 export const saveIngredientPrice = (id: string, price: Price | null) =>
   send<{ ingredient: Ingredient }>("PUT", `/api/ingredients/${encodeURIComponent(id)}/price`, { price });

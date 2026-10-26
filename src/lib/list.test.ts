@@ -13,14 +13,52 @@ import {
   applyListEdit,
   describeItem,
   emptyExtras,
+  isSavedName,
   matchIngredient,
   parseItem,
+  searchItems,
+  stripAmount,
 } from "./list";
 import { IngredientsFileSchema, type ShoppingExtras } from "./schema";
 
 const INGREDIENTS = IngredientsFileSchema.parse(
   JSON.parse(readFileSync(join(process.cwd(), "seed", "ingredients.json"), "utf8")),
 );
+
+describe("saved items for the list's picker", () => {
+  const TOWELS = { id: "paper-towels", name: "paper towels", aisle: "household" as const, aliases: ["kitchen roll"], isStaple: false, defaultUnit: "package" };
+  const LIBRARY = [...INGREDIENTS, TOWELS];
+
+  it("drops a leading amount before searching", () => {
+    expect(stripAmount("2 lb ground beef")).toBe("ground beef");
+    expect(stripAmount("3 paper towels")).toBe("paper towels");
+    expect(stripAmount("milk")).toBe("milk");
+  });
+
+  it("finds an item by any word of its name or an alias, names that start with it first", () => {
+    expect(searchItems(LIBRARY, "towel")[0].id).toBe("paper-towels");
+    expect(searchItems(LIBRARY, "kitchen roll").map((i) => i.id)).toContain("paper-towels");
+    const lemons = searchItems(LIBRARY, "lemon").map((i) => i.id);
+    expect(lemons[0]).toMatch(/^lemon/);
+  });
+
+  it("narrows to one aisle, and lists everything in store order when nothing's typed", () => {
+    expect(searchItems(LIBRARY, "", "household").map((i) => i.id)).toEqual(["paper-towels"]);
+    const all = searchItems(LIBRARY, "");
+    expect(all).toHaveLength(LIBRARY.length);
+    expect(all[0].aisle).toBe("produce");
+  });
+
+  it("knows a name that's already saved, so it isn't offered as new", () => {
+    expect(isSavedName(LIBRARY, "2 paper towels")).toBe(true);
+    expect(isSavedName(LIBRARY, "paper towel")).toBe(false);
+    expect(isSavedName(LIBRARY, "dish soap")).toBe(false);
+  });
+
+  it("counts a bare number of a saved item in packages", () => {
+    expect(parseItem("2 paper towels", LIBRARY)).toEqual({ ingredientId: "paper-towels", quantity: 2, unit: "package" });
+  });
+});
 const byId = new Map(INGREDIENTS.map((i) => [i.id, i]));
 const match = (text: string) => matchIngredient(text, INGREDIENTS)?.id;
 

@@ -46,7 +46,11 @@ export default function RecipeEditor({ initial, ingredients: registry, takenIds,
   const fileInput = useRef<HTMLInputElement>(null);
 
   const byId = useMemo(() => new Map(ingredients.map((i) => [i.id, i])), [ingredients]);
-  const sorted = useMemo(() => [...ingredients].sort((a, b) => a.name.localeCompare(b.name)), [ingredients]);
+  // Household items (paper towels) live in the same library for the list, but never go in a recipe.
+  const sorted = useMemo(
+    () => ingredients.filter((i) => i.aisle !== "household").sort((a, b) => a.name.localeCompare(b.name)),
+    [ingredients],
+  );
 
   /** Claude's draft replaces the form; nothing is saved until Create recipe. */
   function useDraft({ recipe: draft, created: needed }: RecipeDraft) {

@@ -125,6 +125,12 @@ Extras (`ShoppingExtras`) are recipes and meals added directly (with servings) a
   ground-beef ingredient and **merges** with the pound a recipe asked for. Anything the registry
   does not know ("paper towels") stays free text under Other. **Ambiguity returns no match** ("oil"
   could be olive or neutral) — a wrong merge is worse than a loose line.
+- **Saved items** (`ItemPicker`, the box at the top of the list): typing filters the whole
+  library (`searchItems`; a leading "2 lb" is ignored and carried to what's picked), the dropdown
+  browses it by aisle, and a name not saved yet can be **saved** (`POST /api/ingredients`, 409 if
+  the id is taken) or added once as free text. Non-food things are ingredients in the
+  **household** aisle, bought by the `package` (their `defaultUnit`), and the recipe editor never
+  offers them.
 - Hand-added items go on **after** pantry subtraction and show even if they are staples.
 - Edits are **operations** (`ListEditSchema`), applied server-side to the latest copy with
   optimistic concurrency on `updated_at` (`mutateShopping`) — two phones adding at once both keep

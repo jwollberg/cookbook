@@ -221,6 +221,22 @@ export async function loadLibrary(db: D1Database): Promise<Library> {
 }
 
 /**
+ * Save a new library item on its own, outside any recipe: an ingredient, or a
+ * household thing like paper towels that a list keeps coming back to.
+ * Refuses an id that's taken rather than overwriting someone's item.
+ */
+export async function createIngredient(db: D1Database, ingredient: Ingredient, userId: string): Promise<Ingredient> {
+  const doc = IngredientSchema.parse(ingredient);
+  const taken = await db.prepare("SELECT 1 AS one FROM ingredients WHERE id = ?").bind(doc.id).first();
+  if (taken) throw new ConflictError(`“${doc.name}” is already saved.`);
+  await db
+    .prepare("INSERT INTO ingredients (id, data, updated_at, updated_by) VALUES (?, ?, ?, ?)")
+    .bind(doc.id, JSON.stringify(doc), now(), userId)
+    .run();
+  return doc;
+}
+
+/**
  * Set or clear one ingredient's price, leaving the rest of it as it is. Null
  * when there's no such ingredient. Ingredients are shared, like recipes, so
  * the price changes for everyone.
