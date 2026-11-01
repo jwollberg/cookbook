@@ -43,8 +43,11 @@ beforeEach(() => {
   mkdirSync(migrations);
   for (const name of readdirSync(MIGRATIONS)) copyFileSync(join(MIGRATIONS, name), join(migrations, name));
   db = openD1(join(dir, "app.sqlite"), migrations);
+  // One transaction, not a disk flush per ingredient (db.test.ts's seedLibrary says why).
   const insert = db.sqlite.prepare("INSERT INTO ingredients (id, data, updated_at) VALUES (?, ?, ?)");
+  db.sqlite.exec("BEGIN");
   for (const i of REGISTRY) insert.run(i.id, JSON.stringify(i), "2026-10-01T00:00:00.000Z");
+  db.sqlite.exec("COMMIT");
   keyFile = join(dir, "claude-wif.key");
   writeFileSync(keyFile, generateKeyPairSync("rsa", { modulusLength: 2048 }).privateKey.export({ type: "pkcs8", format: "pem" }));
 });
