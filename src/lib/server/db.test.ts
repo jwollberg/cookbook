@@ -47,15 +47,21 @@ function openWith(names = readdirSync(MIGRATIONS).filter((n) => n.endsWith(".sql
   return openD1(join(dir, "app.sqlite"), migrations);
 }
 
+/**
+ * The starter library, in one transaction: a commit per row is a disk flush per row, which on
+ * Vault's Docker disk took seconds a test and timed out the deploy's build under load.
+ */
 function seedLibrary(target: D1Database, by: string | null = null) {
   const read = (path: string) => JSON.parse(readFileSync(path, "utf8"));
   const put = (table: string, doc: { id: string }) =>
     target.sqlite
       .prepare(`INSERT INTO ${table} (id, data, updated_at, updated_by) VALUES (?, ?, ?, ?)`)
       .run(doc.id, JSON.stringify(doc), STAMP, by);
+  target.sqlite.exec("BEGIN");
   for (const i of read(join(SEED, "ingredients.json"))) put("ingredients", i);
   for (const f of readdirSync(join(SEED, "recipes"))) put("recipes", read(join(SEED, "recipes", f)));
   for (const f of readdirSync(join(SEED, "meals"))) put("meals", read(join(SEED, "meals", f)));
+  target.sqlite.exec("COMMIT");
 }
 
 const week = (start: string, entries: { date: string; recipeId?: string; mealId?: string }[]): MealPlan => ({
