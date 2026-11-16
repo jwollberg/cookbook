@@ -402,6 +402,7 @@
   // Back to the GET form's action with no query at all (never "?q="), once: a page that loaded with
   // a query (its field's defaultValue), or `always` (Enter on an empty field). Live forms never go.
   let leaving = false;
+  addEventListener("pageshow", () => { leaving = false; }); // back from the browser's back-forward cache
   function goBack(f, always = false) {
     if (leaving || f.hasAttribute("data-as-live") || !(always || f.querySelector("input")?.defaultValue)) return false;
     leaving = true;
