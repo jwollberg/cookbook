@@ -4,15 +4,16 @@ import { Toast, useList } from "./useList";
 import type { RecipeCard } from "../lib/format";
 import type { ShoppingExtras } from "../lib/schema";
 import { withBase } from "../lib/base";
+import { barSearchValue, onBarSearch } from "../lib/barsearch";
 
 interface Props {
   recipes: RecipeCard[];
   tags?: string[];
   owner: string;
   extras: ShoppingExtras;
-  /** Show the search box and tag filters. Off for the home page's short grid. */
+  /** Follow the bar's search and show the tag filters. Off for the home page's short grid. */
   searchable?: boolean;
-  /** Pre-fill the search, e.g. from /recipes?q=. */
+  /** The search to start with, e.g. from /recipes?q= (the bar's field holds the same). */
   initialQuery?: string;
   initialTags?: string[];
 }
@@ -29,6 +30,14 @@ export default function RecipeBrowser({
   const [query, setQuery] = useState(initialQuery);
   const [active, setActive] = useState<string[]>(initialTags);
   const list = useList(owner, extras);
+
+  // The search is the bar's (app-shell README "Search in the bar"): it starts from the bar's
+  // field and follows it as you type.
+  useEffect(() => {
+    if (!searchable) return;
+    setQuery(barSearchValue());
+    return onBarSearch(setQuery);
+  }, [searchable]);
 
   // Right-click a card (app-shell/menu.js): its + button, and the recipe's pages.
   const live = useRef({ list, recipes });
@@ -76,17 +85,6 @@ export default function RecipeBrowser({
     <div>
       {searchable && (
         <div style={{ display: "grid", gap: 12, marginBottom: 16 }}>
-          <div className="search" style={{ maxWidth: 520 }}>
-            <Icon name="search" />
-            <input
-              className="input"
-              type="search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search recipes, ingredients, tags…"
-              aria-label="Search recipes"
-            />
-          </div>
           {tags.length > 0 && (
             <div className="chips" role="group" aria-label="Filter by tag">
               {tags.map((tag) => (

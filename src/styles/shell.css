@@ -86,6 +86,10 @@
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--as-line);
 }
+/* Content fades under the bar instead of meeting a hard edge (README "Page layouts"): the page
+   color, solid behind the bar, then 16px fading to nothing below its hairline. Takes no clicks. */
+.as-top::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--as-page); pointer-events: none; }
+.as-top::after { content: ""; position: absolute; left: 0; right: 0; top: calc(100% + 1px); height: 16px; background: linear-gradient(var(--as-page), transparent); pointer-events: none; }
 .as-top-in { max-width: var(--as-maxw); margin: 0 auto; padding: 0 22px; height: var(--as-bar-h); display: flex; align-items: center; gap: 14px; }
 .as-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--as-ink); font: 750 16px/1 var(--as-font); letter-spacing: -0.01em; white-space: nowrap; }
 .as-brand small { font-weight: 550; color: var(--as-muted); font-size: 14px; margin-left: 2px; }
@@ -105,6 +109,54 @@
 .as-avatar { background: var(--app); color: var(--app-ink); font: 700 15px/1 var(--as-font); overflow: hidden; }
 .as-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .as-avatar svg { width: 20px; height: 20px; }
+
+/* ---------- search in the bar (README "Search in the bar") ----------
+   An app with search shows it first in .as-end. Over 760px: a 38px pill, 220px wide, giving way
+   to 150px before anything else in the bar does. At 760px and under: a round magnifier that opens
+   the field across the bar (menu.js puts .as-searching on header.as-top). Three variants, one
+   look: a GET form, a live form (data-as-live) and a button (.as-search-btn). */
+.as-end:has(> .as-search) { min-width: 0; } /* so the search can give way before anything else */
+.as-search { flex: 0 1 auto; width: 220px; min-width: 150px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; }
+.as-search-open, .as-search-close { display: none; border: 0; padding: 0; background: var(--as-sunk); color: var(--as-ink-2); }
+.as-search-close { background: none; }
+.as-search-open:hover, .as-search-close:hover { color: var(--as-ink); }
+.as-search-close:hover { background: var(--as-sunk); }
+.as-search-open svg, .as-search-close svg { width: 20px; height: 20px; }
+.as-search-field { flex: 1 1 auto; min-width: 0; }
+.as-search-field, .as-search-btn {
+  box-sizing: border-box; height: 38px; display: flex; align-items: center; gap: 8px;
+  margin: 0; padding: 0 8px 0 13px; border: 0; border-radius: 999px; background: var(--as-sunk); color: var(--as-muted);
+  font: 500 14px/1 var(--as-font); cursor: text;
+}
+.as-search-field svg, .as-search-btn svg { width: 18px; height: 18px; flex: none; }
+.as-search-field:focus-within { background: var(--as-card); outline: 2px solid var(--as-focus); outline-offset: 0; }
+.as-search-field input {
+  flex: 1; min-width: 0; height: 100%; margin: 0; padding: 0 6px 0 0; border: 0; background: none; outline: none;
+  color: var(--as-ink); font: 500 14px/1 var(--as-font);
+}
+.as-search-field input::placeholder { color: var(--as-muted); opacity: 1; }
+.as-search-btn { cursor: pointer; text-align: left; }
+.as-search-btn:hover { color: var(--as-ink-2); }
+.as-search-btn span { flex: 1; white-space: nowrap; }
+.as-search-btn kbd { flex: none; padding: 2px 6px; border: 1px solid var(--as-line-strong); border-radius: 6px; background: var(--as-raise); font: 600 11px/1.2 var(--as-font); color: var(--as-muted); }
+@media (max-width: 760px) {
+  .as-search { flex: none; width: auto; min-width: 0; }
+  .as-search-field { display: none; }
+  .as-search-field input { font-size: 16px; } /* under 16px an iPhone zooms the page into the field */
+  .as-search-field input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; } /* the close button clears */
+  .as-search-open { display: grid; }
+  .as-search-btn { width: 38px; padding: 0; justify-content: center; border-radius: 50%; color: var(--as-ink-2); }
+  .as-search-btn svg { width: 20px; height: 20px; }
+  .as-search-btn span, .as-search-btn kbd { display: none; }
+  /* Open: the field fills the bar, the close button at its right; the brand, switcher and avatar
+     step aside. The bar keeps its height. */
+  .as-top.as-searching .as-brand, .as-top.as-searching .as-end > :not(.as-search) { display: none; }
+  .as-top.as-searching .as-end { flex: 1; min-width: 0; margin-left: 0; }
+  .as-top.as-searching .as-search { flex: 1; }
+  .as-top.as-searching .as-search-open { display: none; }
+  .as-top.as-searching .as-search-field { display: flex; }
+  .as-top.as-searching .as-search-close { display: grid; }
+}
 
 /* ---------- app switcher (a <details>: works with no script) ---------- */
 .as-switch { position: relative; }
@@ -164,17 +216,25 @@
     background: color-mix(in srgb, var(--as-card) 94%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--as-line); border-radius: 24px; padding: 6px; box-shadow: var(--as-shadow-lg);
   }
-  .as-tabbar a { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; min-height: 52px; text-decoration: none; color: var(--as-muted); font: 650 11px/1.2 var(--as-font); border-radius: 18px; position: relative; }
+  .as-tabbar a { box-sizing: border-box; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; min-height: 52px; text-decoration: none; color: var(--as-muted); font: 650 11px/1.2 var(--as-font); border-radius: 18px; position: relative; }
   .as-tabbar a[aria-current="page"] { color: var(--app); background: var(--app-soft); }
   .as-tabbar svg { width: 22px; height: 22px; }
   .as-tabbar .as-badge { position: absolute; top: 3px; left: calc(50% + 6px); }
-  body.as-has-tabbar { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+  body.as-has-tabbar { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
+  /* The fade under the tab bar (66px tall, 10px up): the page color, solid from the screen's
+     bottom edge to the bar's middle, then nothing by 24px above it. Over the page (29), under
+     the tab bar (40) and the top bar with its menus (30). Takes no clicks. */
+  body.as-has-tabbar::after {
+    content: ""; position: fixed; left: 0; right: 0; bottom: 0; z-index: 29; pointer-events: none;
+    height: calc(100px + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, var(--as-page) calc(43px + env(safe-area-inset-bottom)), transparent);
+  }
 }
 
 /* ---------- page + cards ---------- */
 .as-body { margin: 0; background: var(--as-page); color: var(--as-ink); font: 15px/1.45 var(--as-font); -webkit-font-smoothing: antialiased; }
 .as-main { max-width: var(--as-maxw); margin: 0 auto; padding: 20px 22px 40px; }
-@media (max-width: 760px) { .as-main { padding: 14px 14px 40px; } }
+@media (max-width: 760px) { .as-main { padding: 16px 14px 40px; } }
 .as-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
 .as-head h1 { margin: 0; font: 750 24px/1.2 var(--as-font); letter-spacing: -0.02em; }
 .as-head p { margin: 2px 0 0; color: var(--as-ink-2); font-size: 14px; }
@@ -238,7 +298,7 @@
 .as-row:first-child { border-top: 0; }
 a.as-row:hover { background: var(--as-raise); }
 
-/* the bar above a list or collection: search, filters, a segmented control */
+/* the bar above a list or collection: filter chips, a segmented control (search lives in the top bar) */
 .as-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
 
 /* Detail and Workbench: the main column beside a 340px side column; one column on a phone */
@@ -280,10 +340,11 @@ a.as-row:hover { background: var(--as-raise); }
 .as-keys { width: min(560px, calc(100vw - 24px)); max-height: calc(100vh - 48px); padding: 0; border: 1px solid var(--as-line); border-radius: var(--as-r-lg); background: var(--as-card); color: var(--as-ink); box-shadow: var(--as-shadow-lg); font: 500 14px/1.4 var(--as-font); }
 .as-keys::backdrop { background: rgba(12, 14, 20, 0.45); }
 .as-keys-h { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; padding: 16px 18px 10px 22px; background: var(--as-card); }
+.as-keys-h::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 16px; background: linear-gradient(var(--as-card), transparent); pointer-events: none; }
 .as-keys-h h2 { margin: 0; font: 700 17px/1.2 var(--as-font); }
 .as-keys-x { display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--as-sunk); color: var(--as-ink-2); cursor: pointer; }
 .as-keys-x svg { width: 18px; height: 18px; }
-.as-keys-b { display: grid; gap: 18px; padding: 4px 22px 22px; }
+.as-keys-b { display: grid; gap: 18px; padding: 16px 22px 22px; }
 .as-keys h3 { margin: 0 0 6px; font: 700 11.5px/1 var(--as-font); color: var(--as-muted); text-transform: uppercase; letter-spacing: 0.06em; }
 .as-keys section > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; border-top: 1px solid var(--as-line); }
 .as-keys section > div > span:last-child { display: flex; gap: 4px; flex-shrink: 0; }

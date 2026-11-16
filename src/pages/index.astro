@@ -62,11 +62,6 @@ const dishFor = (entry: (typeof week.days)[number]["entries"][number]) => {
       </div>
     </header>
 
-    <form class="search as-tools" action={withBase("/recipes")} method="get" role="search" style="max-width: 520px;">
-      <Icon name="search" />
-      <input class="input" type="search" name="q" placeholder="Search recipes…" aria-label="Search recipes" />
-    </form>
-
     <section class="as-card as-pad">
       <div class="as-card-h">
         <h2>This week</h2>

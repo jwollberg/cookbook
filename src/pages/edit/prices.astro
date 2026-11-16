@@ -13,7 +13,11 @@ for (const recipe of library.recipes) {
 }
 ---
 
-<SiteLayout title="Prices" description="What each ingredient costs, for the shopping list's and recipes' estimates.">
+<SiteLayout
+  title="Prices"
+  description="What each ingredient costs, for the shopping list's and recipes' estimates."
+  search={{ action: "/edit/prices", placeholder: "Search ingredients", live: true }}
+>
   <div class="as-main">
     <a class="as-back" href={withBase("/edit")}><Icon name="chevronLeft" /> Edit recipes</a>
     <header class="as-head">

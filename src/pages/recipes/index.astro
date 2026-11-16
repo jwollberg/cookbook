@@ -12,7 +12,11 @@ const query = Astro.url.searchParams.get("q") ?? "";
 const tag = Astro.url.searchParams.get("tag");
 ---
 
-<SiteLayout title="Recipes" description="Every recipe in the kitchen, searchable and filterable by tag.">
+<SiteLayout
+  title="Recipes"
+  description="Every recipe in the kitchen, searchable and filterable by tag."
+  search={{ action: "/recipes", placeholder: "Search recipes", value: query, live: true }}
+>
   <div class="as-main">
     <header class="as-head">
       <div>
