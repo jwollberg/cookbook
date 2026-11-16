@@ -14,6 +14,7 @@ import { appRegistry } from "../lib/server/apps";
 import { SIGN_OUT_URL } from "../lib/server/access";
 import { countList } from "../lib/server/db";
 import { routePath, withBase } from "../lib/base";
+import { MAIN_SEARCH, type BarSearch } from "../lib/barsearch";
 
 // The app list is Home's (apps.ts): a change there reaches this switcher within a minute.
 const registry = await appRegistry(Astro.locals.runtime.env, bundled);
@@ -21,9 +22,18 @@ const registry = await appRegistry(Astro.locals.runtime.env, bundled);
 interface Props {
   title: string;
   description?: string;
+  /**
+   * The bar's search (app-shell README "Search in the bar"). Every page gets Hestia's main
+   * search (Enter goes to /recipes?q=); Recipes and Edit → Prices pass their own, live.
+   */
+  search?: BarSearch;
 }
 
-const { title, description = "Recipes, meal plans, and a shopping list that adds itself up." } = Astro.props;
+const {
+  title,
+  description = "Recipes, meal plans, and a shopping list that adds itself up.",
+  search = MAIN_SEARCH,
+} = Astro.props;
 
 const { viewer } = Astro.locals;
 const signedIn = Boolean(viewer);
@@ -52,6 +62,11 @@ const apps = registry.apps.filter((a) => a.id === "home" || viewerApps.includes(
 const self = registry.apps.find((a) => a.id === "kitchen")!;
 const svg = (inner: string) =>
   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+// The bar's search icons carry their own size (Tabler search and x).
+const sized = (inner: string, px: number) =>
+  `<svg width="${px}" height="${px}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+const SEARCH_ICON = '<path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/>';
+const CLOSE_ICON = '<path d="M18 6l-12 12"/><path d="M6 6l12 12"/>';
 ---
 
 <!doctype html>
@@ -105,6 +120,16 @@ const svg = (inner: string) =>
             </nav>
 
             <div class="as-end">
+              <form class="as-search" role="search" action={withBase(search.action)} method="get" data-as-live={search.live || undefined}>
+                <button type="button" class="as-round as-search-open" aria-label={search.placeholder} aria-expanded="false" set:html={sized(SEARCH_ICON, 20)} />
+                <label class="as-search-field">
+                  <Fragment set:html={sized(SEARCH_ICON, 18)} />
+                  <input type="search" name="q" value={search.value ?? ""} placeholder={search.placeholder} aria-label={search.placeholder} autocomplete="off" enterkeyhint="search" />
+                </label>
+                {Object.entries(search.keep ?? {}).map(([name, value]) => <input type="hidden" name={name} value={value} />)}
+                <button type="button" class="as-round as-search-close" aria-label="Close search" set:html={sized(CLOSE_ICON, 20)} />
+              </form>
+
               <details class="as-switch" data-menu>
                 <summary class="as-round" aria-label="Switch app" set:html={svg(registry.switcherIcon)} />
                 <nav class="as-menu" aria-label="Apps">

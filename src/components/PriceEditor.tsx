@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { saveIngredientPrice } from "../lib/api";
 import { formatMoney } from "../lib/pricing";
 import { UNITS, UNIT_IDS } from "../lib/units";
 import type { Ingredient, Price } from "../lib/schema";
+import { barSearchValue, onBarSearch } from "../lib/barsearch";
 
 interface Props {
   ingredients: Ingredient[];
@@ -40,6 +41,12 @@ export default function PriceEditor({ ingredients: initial, usage, today }: Prop
   const [missingOnly, setMissingOnly] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<{ id: string; text: string } | null>(null);
+
+  // The search is the bar's ("Search ingredients", app-shell README "Search in the bar").
+  useEffect(() => {
+    setQuery(barSearchValue());
+    return onBarSearch(setQuery);
+  }, []);
 
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -91,14 +98,6 @@ export default function PriceEditor({ ingredients: initial, usage, today }: Prop
   return (
     <div>
       <div className="shop-toolbar" style={{ marginBottom: 12 }}>
-        <input
-          className="input"
-          type="search"
-          placeholder="Find an ingredient"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          style={{ maxWidth: 320 }}
-        />
         <label className="small" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
           <input type="checkbox" className="check" checked={missingOnly} onChange={(e) => setMissingOnly(e.target.checked)} />
           No price yet

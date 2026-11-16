@@ -311,8 +311,11 @@
   function shortcuts() {
     const list = keys.filter((k) => !k.when || k.when());
     list.push({ combo: "?", label: "Keyboard shortcuts", group: "Anywhere", run: help });
-    const s = searchBox();
-    if (s) list.push({ combo: "/", label: "Search", group: "Anywhere", run: () => { s.focus(); s.select?.(); } });
+    // The bar's search when the app has one (README "Search in the bar"), else one on the page.
+    const bs = doc.querySelector(".as-top .as-search");
+    const s = bs ? null : searchBox();
+    if (bs) list.push({ combo: "/", label: "Search", group: "Anywhere", run: () => (bs.matches("button") ? bs.click() : openSearch(bs)) });
+    else if (s) list.push({ combo: "/", label: "Search", group: "Anywhere", run: () => { s.focus(); s.select?.(); } });
     for (const n of navLinks()) if (n.key) list.push({ combo: `g ${n.key}`, label: n.label, group: "Go to", run: () => location.assign(n.href) });
     return list;
   }
@@ -373,6 +376,101 @@
     d.replaceChildren(head, body);
     d.showModal();
   }
+
+  // ---------- the bar's search (README "Search in the bar") ----------
+  // form.as-search: a GET form (Enter goes to its action with ?q=), or live with data-as-live
+  // (every keystroke fires window "as-search" { q }; Enter only puts the keyboard away). At 760px
+  // and under only its round magnifier shows: it opens the field across the bar (.as-searching on
+  // header.as-top) and the close button or Esc takes the bar back, clearing the search. A GET page
+  // that loaded with a query goes back to its action with none when the search is cleared on
+  // purpose (the close button, Esc, the field's own ×, Enter on an empty field), at any width, so
+  // old results never sit under an empty field; emptying it by typing stays (backspace to retype).
+  const topOf = (f) => f.closest(".as-top");
+  const shown = (el) => !!el && getComputedStyle(el).display !== "none";
+  function openSearch(f) {
+    const b = f.querySelector(".as-search-open");
+    if (shown(b)) { topOf(f)?.classList.add("as-searching"); b.setAttribute("aria-expanded", "true"); }
+    const i = f.querySelector("input");
+    i?.focus();
+    i?.select?.();
+  }
+  function clearSearch(i) {
+    if (!i?.value) return;
+    i.value = "";
+    i.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+  // Back to the GET form's action with no query at all (never "?q="), once: a page that loaded with
+  // a query (its field's defaultValue), or `always` (Enter on an empty field). Live forms never go.
+  let leaving = false;
+  function goBack(f, always = false) {
+    if (leaving || f.hasAttribute("data-as-live") || !(always || f.querySelector("input")?.defaultValue)) return false;
+    leaving = true;
+    location.assign(f.action);
+    return true;
+  }
+  function closeSearch(f) {
+    const i = f.querySelector("input");
+    clearSearch(i);
+    if (goBack(f)) return;
+    topOf(f)?.classList.remove("as-searching");
+    const b = f.querySelector(".as-search-open");
+    b?.setAttribute("aria-expanded", "false");
+    b?.focus();
+  }
+  // aria-expanded is true only while the field really lies open across a phone's bar.
+  function syncExpanded() {
+    for (const f of doc.querySelectorAll(".as-top form.as-search")) {
+      f.querySelector(".as-search-open")?.setAttribute("aria-expanded", String(!!topOf(f)?.classList.contains("as-searching") && shown(f.querySelector(".as-search-close"))));
+    }
+  }
+  doc.addEventListener("click", (e) => {
+    const b = e.target.closest?.(".as-search-open, .as-search-close");
+    const f = b?.closest("form.as-search");
+    if (!f) return;
+    e.preventDefault();
+    if (b.matches(".as-search-open")) openSearch(f);
+    else closeSearch(f);
+  });
+  doc.addEventListener("input", (e) => {
+    if (!e.target.matches?.("form.as-search[data-as-live] input")) return;
+    dispatchEvent(new CustomEvent("as-search", { detail: { q: e.target.value } }));
+  });
+  // The field's own × (and Enter) fire "search"; an empty value means the × cleared it on purpose.
+  doc.addEventListener("search", (e) => {
+    if (!e.target.matches?.("form.as-search input") || e.target.value) return;
+    goBack(e.target.closest("form.as-search"));
+  }, true);
+  doc.addEventListener("submit", (e) => {
+    const f = e.target;
+    if (!f.matches?.("form.as-search") || e.defaultPrevented) return;
+    const i = f.querySelector("input");
+    if (f.hasAttribute("data-as-live")) { e.preventDefault(); i?.blur(); return; }
+    // Enter on an empty field: the action itself, not "?q=".
+    if (!i?.value.trim()) { e.preventDefault(); goBack(f, true); }
+  });
+  doc.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape" || e.isComposing || !e.target.matches?.("form.as-search input")) return;
+    const f = e.target.closest("form.as-search");
+    e.preventDefault();
+    if (shown(f.querySelector(".as-search-close"))) closeSearch(f); // open across a phone's bar
+    else {
+      const had = !!e.target.value;
+      clearSearch(e.target);
+      if (!goBack(f) && !had) e.target.blur();
+    }
+  });
+  // A page that loads with a query in the field starts open, so the active search is never hidden.
+  function startOpen() {
+    for (const f of doc.querySelectorAll(".as-top form.as-search")) {
+      if (!f.querySelector("input")?.value) continue;
+      topOf(f)?.classList.add("as-searching");
+    }
+    syncExpanded();
+  }
+  if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", startOpen);
+  else startOpen();
+  addEventListener("resize", syncExpanded);
+  addEventListener("load", syncExpanded); // once the styles are surely in
 
   // ---------- a word on what happened ----------
 
